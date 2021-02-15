@@ -7,6 +7,7 @@ $HOME/bin:\
 /home/linuxbrew/.linuxbrew/bin:\
 /usr/bin:\
 /usr/sbin:\
+/usr/share:\
 /usr/lib/python3.9/site-packages:\
 /usr/libexec:\
 /usr/local/bin:\
@@ -34,22 +35,22 @@ SPACESHIP_PROMPT_ORDER=(
   package       # Package version
   node          # Node.js section
   ruby          # Ruby section
-  # elixir        # Elixir section
-  # xcode         # Xcode section
-  # swift         # Swift section
+  elixir        # Elixir section
+  xcode         # Xcode section
+  swift         # Swift section
   golang        # Go section
-  # php           # PHP section
+  php           # PHP section
   rust          # Rust section
   haskell       # Haskell Stack section
   julia         # Julia section
   docker        # Docker section
-  # aws           # Amazon Web Services section
+  aws           # Amazon Web Services section
   gcloud        # Google Cloud Platform section
   venv          # virtualenv section
   conda         # conda virtualenv section
   pyenv         # Pyenv section
   dotnet        # .NET section
-  # ember         # Ember.js section
+  ember         # Ember.js section
   kubectl       # Kubectl context section
   terraform     # Terraform workspace section
   # exec_time     # Execution time
@@ -67,9 +68,13 @@ SPACESHIP_PROMPT_ORDER=(
 plugins=(
   bgnotify
   git
-  sudo
+  zsh-256color
+  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
-  # zsh-autocomplete
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ffffff,bold"
+# autoload -U compinit && compinit
 # }}}
 
 # {{{
@@ -123,6 +128,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Misc. {{{
 
+ZSH_AUTOSUGGEST_USE_ASYNC=1
 HISTCONTROL=ignoreboth
 HISTFILESIZE=10000
 HISTSIZE=10000
@@ -130,6 +136,7 @@ HISTSIZE=10000
 
 # Exports{{{
 
+export MANPAGER="nvim -c 'set ft=man' -"
 export BRIDGE_JASMINE_TIMEOUT=600000
 export KUBECONFIG="$HOME/c/auth/kubeconfig"
 export GOPATH="$HOME/go"
@@ -192,15 +199,15 @@ alias l='ls -p1'
 alias la='ls -hlpAX'
 alias ll='ls -pA1'
 alias meet='/usr/libexec/xdg-desktop-portal -r & /usr/libexec/xdg-desktop-portal-wlr'
+alias nv='nvim'
 alias oi='openshift-install'
 alias sshd='sudo /usr/sbin/sshd'
 alias szr='source ~/.zshrc'
-alias vi='nvim'
 alias vif='nvim `fzf`'
-alias vim='nvim'
 alias vp="nvim --cmd 'profile start vimrc.profile' --cmd 'profile! file ~/.vimrc' -c"
 alias vpn="nmcli con up uuid bd8183b3-3e15-4c20-a27b-5500873fd9ea && nmcli con"
 alias vpnd="nmcli con down uuid bd8183b3-3e15-4c20-a27b-5500873fd9ea && nmcli con"
 alias vr="nvim ~/.vimrc"
 alias zr='nvim ~/.zshrc'
 # }}}
+

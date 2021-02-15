@@ -1,5 +1,12 @@
 " Author: @rexagod
 
+" TODO {{{
+
+" Install sneak
+" Setup debugger.
+" Use rg regexp for all fzf commands.
+" }}}
+
 " Notes {{{
 
 " Unmap replaced mappings when using newer ones in place of them.
@@ -28,24 +35,53 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " Navigation {{{
 
-Plug 'justinmk/vim-sneak'
+Plug 'phaazon/hop.nvim' " Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-unimpaired'
 Plug 'yangmillstheory/vim-snipe'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim'
+Plug 'Shougo/neomru.vim'
+Plug 'arithran/vim-delete-hidden-buffers'
 " }}}
 
 " Text Manipulations {{{
 
+Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-indent'
+	" {lhs}	{rhs}			~{{{
+	" -----	----------------------	~
+	" ai	<Plug>(textobj-indent-a) " includes blanks
+	" ii	<Plug>(textobj-indent-i)
+  " consecutive same level indents:
+	" aI	<Plug>(textobj-indent-same-a)
+	" iI	<Plug>(textobj-indent-same-i)
+"}}}
+Plug 'coderifous/textobj-word-column.vim'
+"{{{
+"                                                    *ac* *cac* *dac* *vac* *yac*
+" ac               "a column", a column based on "a word" |aw|.
+
+"                                                    *ic* *cic* *dic* *vic* *yic*
+" ic               "inner column", a column based on the "inner word" |iw|.
+
+"                                                    *aC* *caC* *daC* *vaC* *yaC*
+" aC               "a COLUMN", a column based on "a WORD" |aW|.
+
+"                                                    *iC* *ciC* *diC* *viC* *yiC*
+" iC               "inner COLUMN", a column based on "inner WORD" |iW|.
+"}}}
 Plug 'cohama/lexima.vim'
 Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'AndrewRadev/splitjoin.vim'
 " }}}
 
 " Visuals {{{
 
+Plug 'ryanoasis/vim-devicons'
+Plug 'ap/vim-css-color'
+Plug 'drzel/vim-repo-edit'
 Plug 'itchyny/lightline.vim'
 Plug 'voldikss/vim-floaterm'
 Plug 'junegunn/vim-peekaboo'
@@ -54,9 +90,13 @@ Plug 'editorconfig/editorconfig-vim'
 
 " Syntax {{{
 
-Plug 'morhetz/gruvbox'
-Plug 'joshdick/onedark.vim'
-" Plug 'sheerun/vim-polyglot'
+Plug 'ghifarit53/tokyonight-vim'
+" }}}
+
+" nvim-treesitter {{{
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-refactor'
 " }}}
 
 call plug#end()
@@ -64,11 +104,310 @@ call plug#end()
 
 " Theme {{{
 
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX))
+  if (has("nvim"))
+    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
+
 filetype plugin on
 filetype indent on
 syntax enable
-" color gruvbox
-color onedark
+
+set termguicolors
+
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 1
+
+colorscheme tokyonight
+" }}}
+
+" lightline.vim {{{
+
+function! LightlineFilename()
+  let root = fnamemodify(get(b:, 'git_dir'), ':h')
+  let path = expand('%:p')
+  if path[:len(root)-1] ==# root
+    return path[len(root)+1:]
+  endif
+  return expand('%')
+endfunction
+
+function! RowColNumber()
+  return line('.').':'.col('.')
+endfunction
+
+let g:lightline = {
+      \ 'colorscheme': 'jellybeans',
+      \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
+      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'filename', 'modified', 'coc'] ],
+      \   'right': [ [ 'rowcolnumber', 'percent' ],
+      \              [ 'gitbranch', 'filetype' ] ],
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead',
+      \   'coc': 'coc#status',
+      \   'filename': 'LightlineFilename',
+      \   'rowcolnumber': 'RowColNumber',
+      \ },
+      \ 'mode_map': {
+      \ 'n' : 'N',
+      \ 'i' : 'I',
+      \ 'R' : 'R',
+      \ 'v' : 'V',
+      \ 'V' : 'VL',
+      \ "\<C-v>": 'VB',
+      \ 'c' : 'C',
+      \ 's' : 'S',
+      \ 'S' : 'SL',
+      \ "\<C-s>": 'SB',
+      \ 't': 'T',
+      \ },
+      \ }
+" }}}
+
+" Variables {{{
+
+let loaded_netrwPlugin = 1
+" }}}
+
+" Functions {{{
+
+function! s:SourceScriptImplicit() " {{{
+  if !&readonly && &filetype !=# ''
+    w
+  endif
+  if &filetype ==# ''
+    return ''
+  endif
+  let l:bin=system("which " . &filetype)[:-2]
+  if l:bin==# ''
+    return ''
+  endif
+  let l:sourcecommand=
+        \ {
+        \ "vim":         "source %",
+        \ }
+  let l:ispresent=has_key(l:sourcecommand, split(l:bin, "/")[-1])
+  return l:ispresent ? l:sourcecommand[split(l:bin, "/")[-1]] : ''
+endfunction
+" }}}
+
+function! s:ToggleQuickFix() " {{{
+  if empty(filter(getwininfo(), 'v:val.quickfix'))
+    copen
+  else
+    cclose
+  endif
+endfunction
+" }}}
+
+function! s:ToggleLocationList() " {{{
+  if empty(filter(getwininfo(), 'v:val.quickfix'))
+    lopen
+  else
+    lclose
+  endif
+endfunction
+" }}}
+" }}}
+
+" Options {{{
+
+" set grepprg=rg\ --vimgrep
+set autoread
+set autowrite
+set background=dark
+set backupcopy=yes
+set clipboard+=unnamedplus
+set confirm
+set expandtab
+set fdm=marker
+set foldopen=
+set hidden
+set noignorecase
+set laststatus=2
+set matchtime=2
+set mouse=a
+set nobackup
+set nohlsearch
+set noincsearch
+set noshowmode
+set swapfile
+set nowrap
+set nowritebackup
+set number
+set omnifunc=syntaxcomplete#Complete
+set path=.,,
+set re=0
+set relativenumber
+set ruler
+set scroll=5
+set scrolloff=0
+set shiftwidth=2
+set shortmess+=c
+set showcmd
+set showmatch
+set sidescrolloff=0
+set signcolumn=auto
+set nosmartcase
+set smartindent
+set smarttab
+set ssop=blank,buffers,curdir,folds,globals,help,localoptions,options,tabpages,winsize
+set tabstop=2
+set tags+=.git/tags,../.git/tags
+set termguicolors
+set textwidth=0
+set undodir=~/.vim-undo-dir
+set undofile
+set updatetime=300
+set wildmenu
+set wildmode=longest,full
+" }}}
+
+" Maps {{{
+
+" Insert Mode Mappings {{{
+
+ino   <PageDown>  <Right>
+ino   <PageUp>    <Left>
+
+ino   <C-j>       <esc>5ja
+ino   <C-k>       <esc>5ka
+ino   <C-h>       <esc>5ha
+ino   <C-l>       <esc>5la
+
+imap  <C-Right>   <esc>5la
+imap  <C-Left>    <esc>5ha
+imap  <C-Up>      <esc>5ka
+imap  <C-Down>    <esc>5ja
+
+ino    <S-Right>   <Nop>
+ino    <S-Left>    <Nop>
+ino    <S-Up>      <Nop>
+ino    <S-Down>    <Nop>
+" }}}
+
+" Visual Mode Mappings {{{
+
+vn    <PageDown>  l
+vn    <PageUp>    h
+
+vn    <C-j>       5j
+vn    <C-k>       5k
+vn    <C-h>       5h
+vn    <C-l>       5l
+
+vm    <C-Right>   <C-l>
+vm    <C-Left>    <C-h>
+vm    <C-Up>      <C-k>
+vm    <C-Down>    <C-j>
+
+vn    <S-Right>   <Nop>
+vn    <S-Left>    <Nop>
+vn    <S-Up>      <Nop>
+vn    <S-Down>    <Nop>
+" }}}
+
+" Normal Mode Mappings {{{
+
+nn    <PageDown>  l
+nn    <PageUp>    h
+
+nn    <C-j>       5j
+nn    <C-k>       5k
+nn    <C-h>       5h
+nn    <C-l>       5l
+
+nm    <C-Right>   <C-l>
+nm    <C-Left>    <C-h>
+nm    <C-Up>      <C-k>
+nm    <C-Down>    <C-j>
+
+nn    <S-Right>   <Nop>
+nn    <S-Left>    <Nop>
+nn    <S-Up>      <Nop>
+nn    <S-Down>    <Nop>
+
+nn    <silent><F1>    :exec "bo 10new +normal!\\ G\ /etc/x/vrc.txt"<cr>
+nn    <silent><F2>    :messages<cr>
+nn    <silent><F4>    :only<cr>
+
+nn    <silent>QQ      :bd<cr>
+nn    <C-b>           :ls<cr>:b
+nn    n               N
+nn    N               n
+nn    #               *
+nn    *               #
+" nn    <silent>T       :exec "!trans".expand("\<cword>")<cr>
+" }}}
+
+" Leader Mappings {{{
+
+let mapleader="\<Space>"
+
+nn <silent><leader>zr :vsp $MYZSHRC<cr>
+nn <silent><leader>vr :vsp ~/.vimrc<cr>
+nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
+nn <silent><nowait><leader>q :call <SID>ToggleQuickFix()<cr>
+nn <silent><nowait><leader>l :call <SID>ToggleLocationList()<cr>
+nn <silent><nowait><leader>s :exec <SID>SourceScriptImplicit()<cr>
+" }}}
+
+" Localleader Mappings {{{
+
+let maplocalleader='\'
+
+nm \<tab> a<C-Space>
+
+" }}}
+" }}}
+
+" Aliases {{{
+
+com! QQ qall
+" }}}
+
+" Autocommands {{{
+
+aug JSTS
+  au!
+  au Filetype setl suffixesadd=.js,.ts,.jsx,.tsx
+  " Find a better alternative for this as it makes tsc go all fidgety
+  " au FileType typescriptreact setl filetype=typescript
+  " au FileType javascriptreact setl filetype=javascript
+aug END
+
+aug FOO
+  au!
+  au VimEnter * silent! !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+  au VimLeave * silent! !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Caps_Lock'
+  au Filetype help,qf nn <silent><buffer>q :q<cr>
+  au BufReadPost * let b:lexima_disabled=0
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exec "normal! g`\"" | endif
+  " au Filetype sh setl keywordprg=help
+  " au BufReadPost .vimrc source %
+  " au BufWinEnter,BufWinLeave * ++nested so $MYVIMRC 
+aug END
+" }}}
+
+" Commands {{{
+
+command! ClearMarksBuf delm!
+command! W retab | normal mxgg=G`xdmx | w
 " }}}
 
 " Plugin Configurations {{{
@@ -77,31 +416,16 @@ color onedark
 
 packadd! cfilter
 packadd! matchit
-nn <silent><leader>pg :
+nn <silent><leader><leader>P :
       \ PlugClean<bar>
       \ PlugInstall<bar>
       \ PlugUpdate<bar>
       \ PlugUpgrade<bar>
-      \ CocUpdate<bar>
       \ <cr>
-nn <silent><leader>pl :
+nn <silent><leader><leader>p :
       \ PlugClean<bar>
       \ PlugInstall<bar>
       \ <cr>
-" }}}
-
-" vim-floaterm {{{
-
-nn    <silent>   <F7>    :FloatermNew<CR>
-tno   <silent>   <F7>    <C-\><C-n>:FloatermNew<CR>
-nn    <silent>   <F8>    :FloatermPrev<CR>
-tno   <silent>   <F8>    <C-\><C-n>:FloatermPrev<CR>
-nn    <silent>   <F9>    :FloatermNext<CR>
-tno   <silent>   <F9>    <C-\><C-n>:FloatermNext<CR>
-nn    <silent>   <F10>   :FloatermToggle<CR>
-tno   <silent>   <F10>   <C-\><C-n>:FloatermToggle<CR>
-nn    <silent>   <F12>   :FloatermKill<CR>
-tno   <silent>   <F12>   <C-\><C-n>:FloatermKill<CR>
 " }}}
 
 " coc.nvim {{{
@@ -292,6 +616,36 @@ let g:coc_explorer_global_presets = {
 " nmap <space>el :CocList explPresets
 " }}}
 
+" nvim-treesitter {{{
+
+  " incremental_selection = {
+  "   enable = true,
+  "   keymaps = {
+  "     init_selection = "",
+  "     node_incremental = "g(",
+  "     scope_incremental = "",
+  "     node_decremental = "",
+  "   },
+  " },
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained",
+  context = { enable = true },
+  highlight = { enable = true, },
+  indent = { enable = true, },
+  refactor = {
+    highlight_definitions = { enable = true },
+    highlight_current_scope = { enable = false },
+    smart_rename = {
+      enable = true,
+      keymaps = {smart_rename = "grr"},
+    },
+  },
+}
+EOF
+" }}}
+
 " fzf.vim {{{
 
 " Vars {{{
@@ -301,15 +655,6 @@ let g:fzf_preview_window = [ g:preview_window_fmt ]
 " }}}
 
 " Functions {{{
-
-function! RipgrepFzf(query, fullscreen) " {{{
-  let command_fmt = 'rg --hidden --column --line-number --no-heading --color=always --smart-case -- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--preview-window='.g:preview_window_fmt, '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-" }}}
 
 " Delete buffers {{{
 
@@ -329,17 +674,25 @@ command! BD call fzf#run(fzf#wrap({
       \ 'sink*': { lines -> s:delete_buffers(lines) },
       \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
       \ }))
+" }}}
 
-nn \d :BD<cr>
+function! RipgrepFzf(query, fullscreen) " {{{
+  let command_fmt = 'rg --hidden --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--preview-window='.g:preview_window_fmt, '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
 " }}}
 " }}}
 
 " Commands {{{
 
-command! -bang -nargs=* RG
-      \ call fzf#vim#grep(
-      \   'rg --hidden --column --line-number --no-heading --follow --color=always --smart-case -- '.shellescape(<q-args>), 1,
-      \   fzf#vim#with_preview(), <bang>0)
+command! History call fzf#run({
+      \   'source': 'sed "1d" $HOME/.cache/neomru/file',
+      \   'sink': 'e ',
+      \   'down': '10'
+      \ })<CR>
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 " }}}
 
@@ -347,24 +700,24 @@ command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 " Normal mode maps {{{
 
-" nn \\ :Locate <cr>
-" nn \g :GFiles<cr>
-" nn \t :BTags<cr>
-nn \C :Commits<cr>
-nn \F :Filetypes<cr>
-nn \H :Helptags<cr>
-nn \L :Lines<cr>
-nn \M :Maps<cr>
 nn \\ :RG<cr>
 nn \b :Buffers<cr>
 nn \c :BCommits<cr>
+nn \C :Commits<cr>
+nn \d :BD<cr>
 nn \f :Files<cr>
+nn \F :Filetypes<cr>
 nn \g :GFiles?<cr>
+nn \G :GFiles<cr>
 nn \h :History<cr>
+nn \H :Helptags<cr>
 nn \k :Commands<cr>
 nn \l :BLines<cr>
-nn \m :Marks<cr>
-nn \t :Tags<cr>
+nn \L :Lines<cr>
+nn \m :Maps<cr>
+nn \M :Marks<cr>
+nn \t :BTags<cr>
+nn \T :Tags<cr>
 nn \w :Windows<cr>
 "}}}
 
@@ -375,12 +728,12 @@ nn \w :Windows<cr>
 "inoremap <expr> <c-x><c-l> fzf#vim#complete#line({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1  }})
 ""}}}
 
-" Maps for n,x,o modes {{{
+"" Maps for n,x,o modes {{{
 
-nmap <leader><tab> <plug>(fzf-maps-n)
-xmap <leader><tab> <plug>(fzf-maps-x)
-omap <leader><tab> <plug>(fzf-maps-o)
-"}}}
+"nmap <leader><tab> <plug>(fzf-maps-n)
+"xmap <leader><tab> <plug>(fzf-maps-x)
+"omap <leader><tab> <plug>(fzf-maps-o)
+""}}}
 " }}}
 " }}}
 
@@ -391,9 +744,36 @@ let g:fzf_checkout_git_options = '--sort=-committerdate'
 nm <silent>\B :GBranches<cr>
 " }}}
 
+" vim-floaterm {{{
+
+nn    <silent>   <F7>    :FloatermNew<CR>
+tno   <silent>   <F7>    <C-\><C-n>:FloatermNew<CR>
+nn    <silent>   <F8>    :FloatermPrev<CR>
+tno   <silent>   <F8>    <C-\><C-n>:FloatermPrev<CR>
+nn    <silent>   <F9>    :FloatermNext<CR>
+tno   <silent>   <F9>    <C-\><C-n>:FloatermNext<CR>
+nn    <silent>   <F10>   :FloatermToggle<CR>
+tno   <silent>   <F10>   <C-\><C-n>:FloatermToggle<CR>
+nn    <silent>   <F12>   :FloatermKill<CR>
+tno   <silent>   <F12>   <C-\><C-n>:FloatermKill<CR>
+" }}}
+
+" vim-delete-hidden-buffers {{{
+
+nn <silent><F5> :DeleteHiddenBuffers<cr>
+" }}}
+
+" editorconfig-vim {{{
+
+let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
+" }}}
+
 " vim-snipe {{{
 
-let g:snipe_jump_tokens = 'aoeuidhtns'
+let g:snipe_jump_tokens              = 'aoeuidhtns'
+let g:snipe_highlight_gui_color      = '#dfffaf'
+let g:snipe_highlight_cterm256_color = 'blue'
+let g:snipe_highlight_cterm_color    = 'red'
 
 " Find
 nm <leader><leader>f <Plug>(snipe-f)
@@ -421,29 +801,82 @@ nm <leader><leader>a <Plug>(snipe-f-a)
 nm <leader><leader>A <Plug>(snipe-F-a)
 " }}}
 
-" lexima.vim {{{
+" hop.nvim {{{
 
-let g:lexima_enable_endwise_rules=0
-
-nn <F5> :let b:lexima_disabled=
+nn <silent><M-w> :HopWord<cr>
+nn <silent><M-1> :HopChar1<cr>
+nn <silent><M-2> :HopChar2<cr>
+nn <silent><M-l> :HopLine<cr>
 " }}}
 
-" vim-sneak {{{
+" vim-go {{{
 
-let g:sneak#label=1
-let g:sneak#f_reset=1
-let g:sneak#t_reset=1
-" }}}
+let g:go_auto_sameids = 0
+let g:go_auto_type_info = 1
+let g:go_fmt_command = "goimports"
+let g:go_highlight_array_whitespace_error = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_chan_whitespace_error = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_function_parameters = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_space_tab_error = 1
+let g:go_highlight_trailing_whitespace_error = 1
+let g:go_highlight_types = 1
+let g:go_highlight_variable_assignments = 1
+let g:go_highlight_variable_declarations = 1
+let g:go_imports_autosave = 1
+let g:go_info_mode = 'gopls'
+let g:go_list_type = "quickfix"
+let g:go_metalinter_autosave = 0
+let g:go_metalinter_autosave_enabled = ['vet', 'golint']
+let g:go_metalinter_deadline = "5s"
+let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+let g:go_test_show_name = 0
+let g:go_test_timeout= '10s'
+let g:go_updatetime = 800
+let g:go_play_open_browser = 0
 
-" editorconfig-vim {{{
+" Use ctrl-t for :GoDefPop<cr> (see :GoDefStack){{{
+" Also see:
+" :GoDescribe
+" :GoImplements
+" :GoWhicherr -> all possible values err can return
+" :GoPeerChannels
+" :GoCallers
+" :GoCallees
+" :GoCallstack
+" :GoGuruScope
+" :GoBuildTags mycustomtag " // +build linux darwin OR +build mycustomtag (highlighted when detected)
+" This will pass this tag to guru and from now on it'll work as expected. And just like :GoGuruScope, you can clear it with:
+" :GoBuildTags ""
+" And finally if you wish you can make it permanent with the following setting:
+" let g:go_build_tags = "mycustomtag"
+" :GoRename
+" :GoFreevars
+" :GoImpl -> Util fns
+"}}}
 
-let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
-" }}}
+augroup lightline_hl
+  au!
+  au BufWinEnter,BufWinLeave * call lightline#disable() | call lightline#enable()
+augroup END
 
-" vim-peekaboo {{{
+aug GO
+  au!
+  au FileType go nm <silent>\t :GoDecls<cr>
+  au FileType go nm <silent>\T :GoDeclsDir<cr>
+  au FileType go nm <silent>' :call CocActionAsync('doHover')<cr>
+  au FileType go nm <silent>\' :GoSameIdsToggle<cr>
+  au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
+  au Filetype godoc nn <silent>q :q<cr>
+aug END
 
-let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
-let g:peekaboo_compact=0
 " }}}
 
 " undotree {{{
@@ -460,277 +893,16 @@ let g:undotree_RelativeTimestamp=1
 nn <silent><F3> :UndotreeToggle<CR>
 " }}}
 
-" onedark.vim {{{
+" vim-peekaboo {{{
 
-let g:onedark_terminal_italics = 1
-
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-if (empty($TMUX))
-  if (has("nvim"))
-    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-  if (has("termguicolors"))
-    set termguicolors
-  endif
-endif
+let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
+let g:peekaboo_compact=0
 " }}}
 
-" lightline.vim {{{
+" lexima.vim {{{
 
-function! LightlineFilename()
-  let root = fnamemodify(get(b:, 'git_dir'), ':h')
-  let path = expand('%:p')
-  if path[:len(root)-1] ==# root
-    return path[len(root)+1:]
-  endif
-  return expand('%')
-endfunction
+let g:lexima_enable_endwise_rules=0
 
-function! RowColNumber()
-  return line('.').':'.col('.')
-endfunction
-
-let g:lightline = {
-      \ 'colorscheme': 'onedark',
-      \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
-      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified', 'coc'] ],
-      \   'right': [ [ 'rowcolnumber', 'percent' ],
-      \              [ 'gitbranch', 'filetype'] ],
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead',
-      \   'coc': 'coc#status',
-      \   'filename': 'LightlineFilename',
-      \   'rowcolnumber': 'RowColNumber',
-      \ },
-      \ 'mode_map': {
-      \ 'n' : 'N',
-      \ 'i' : 'I',
-      \ 'R' : 'R',
-      \ 'v' : 'V',
-      \ 'V' : 'VL',
-      \ "\<C-v>": 'VB',
-      \ 'c' : 'C',
-      \ 's' : 'S',
-      \ 'S' : 'SL',
-      \ "\<C-s>": 'SB',
-      \ 't': 'T',
-      \ },
-      \ }
+" nn <F5> :let b:lexima_disabled=
 " }}}
 " }}}
-
-" Functions {{{
-
-function! s:SourceScriptImplicit() " {{{
-  if !&readonly && &filetype !=# ''
-    w
-  endif
-  if &filetype ==# ''
-    return ''
-  endif
-  let l:bin=system("which " . &filetype)[:-2]
-  if l:bin==# ''
-    return ''
-  endif
-  let l:sourcecommand=
-        \ {
-        \ "vim":         "source %",
-        \ }
-  let l:ispresent=has_key(l:sourcecommand, split(l:bin, "/")[-1])
-  return l:ispresent ? l:sourcecommand[split(l:bin, "/")[-1]] : ''
-endfunction
-" }}}
-
-function! s:ToggleQuickFix() " {{{
-  if empty(filter(getwininfo(), 'v:val.quickfix'))
-    copen
-  else
-    cclose
-  endif
-endfunction
-" }}}
-" }}}
-
-" Options {{{
-
-" set grepprg=rg\ --vimgrep
-set autoread
-set autowrite
-set background=dark
-set backupcopy=yes
-set clipboard+=unnamedplus
-set confirm
-set expandtab
-set fdm=marker
-set foldopen=
-set hidden
-set laststatus=2
-set matchtime=2
-set mouse=a
-set nobackup
-set nohlsearch
-set noincsearch
-set noshowmode
-set noswapfile
-set nowrap
-set nowritebackup
-set number
-set omnifunc=syntaxcomplete#Complete
-set path=.,,
-set re=0
-set relativenumber
-set ruler
-set scroll=5
-set scrolloff=0
-set shiftwidth=2
-set shortmess+=c
-set showcmd
-set showmatch
-set sidescrolloff=0
-set signcolumn=auto
-set smartindent
-set smarttab
-set ssop=blank,buffers,curdir,folds,globals,help,localoptions,options,tabpages,winsize
-set tabstop=2
-set tags+=.git/tags,../.git/tags
-set termguicolors
-set textwidth=0
-set undodir=~/.vim-undo-dir
-set undofile
-set updatetime=300
-set wildmenu
-set wildmode=longest,full
-" }}}
-
-" Maps {{{
-
-" Insert Mode Mappings {{{
-
-ino   <PageDown>  <Right>
-ino   <PageUp>    <Left>
-
-ino   <C-j>       <esc>5ja
-ino   <C-k>       <esc>5ka
-ino   <C-h>       <esc>5ha
-ino   <C-l>       <esc>5la
-
-imap  <C-Right>   <esc>5la
-imap  <C-Left>    <esc>5ha
-imap  <C-Up>      <esc>5ka
-imap  <C-Down>    <esc>5ja
-" }}}
-
-" Visual Mode Mappings {{{
-
-vn    <PageDown>  l
-vn    <PageUp>    h
-
-vn    <C-j>       5j
-vn    <C-k>       5k
-vn    <C-h>       5h
-vn    <C-l>       5l
-
-vm    <C-Right>   <C-l>
-vm    <C-Left>    <C-h>
-vm    <C-Up>      <C-k>
-vm    <C-Down>    <C-j>
-" }}}
-
-" Normal Mode Mappings {{{
-
-nn    <PageDown>  l
-nn    <PageUp>    h
-
-nn    <C-j>       5j
-nn    <C-k>       5k
-nn    <C-h>       5h
-nn    <C-l>       5l
-
-nm    <C-Right>   <C-l>
-nm    <C-Left>    <C-h>
-nm    <C-Up>      <C-k>
-nm    <C-Down>    <C-j>
-
-nn    <S-Right>   <Nop>
-nn    <S-Left>    <Nop>
-nn    <S-Up>      <Nop>
-nn    <S-Down>    <Nop>
-
-nn    <silent><F1>    :exec "bo 10new +normal!\\ G\ /etc/x/vrc.txt"<cr>
-nn    <silent><F2>    :messages<cr>
-nn    <silent><F4>    :only<cr>
-
-nn    <silent>QQ      :bd<cr>
-nn    <silent>T       :exec "!trans".expand("\<cword>")<cr>
-nn    <C-b>           :ls<cr>:b
-nm    <TAB>           a<C-Space>
-" }}}
-
-" Leader Mappings {{{
-
-let mapleader="\<Space>"
-
-nn <silent><leader>zr :vsp $MYZSHRC<cr>
-nn <silent><leader>vr :vsp ~/.vimrc<cr>
-nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
-nn <silent><nowait><leader>q :call <SID>ToggleQuickFix()<cr>
-nn <silent><nowait><leader>s :exec <SID>SourceScriptImplicit()<cr>
-" }}}
-
-" Localleader Mappings {{{
-
-" let maplocalleader='\'
-
-" }}}
-" }}}
-
-" Aliases {{{
-
-com! QQ qall
-" }}}
-
-" Autocommands {{{
-
-aug GO
-  au!
-  au FileType go nm <leader>b <Plug>(go-build)
-  au FileType go nm <leader>r <Plug>(go-run)
-aug END
-
-aug JSTS
-  au!
-  au Filetype  setl suffixesadd=.js,.ts,.jsx,.tsx
-  " Find a better alternative for this as it makes tsc go all fidgety
-  " au FileType typescriptreact setl filetype=typescript
-  " au FileType javascriptreact setl filetype=javascript
-aug END
-
-aug FOO
-  au!
-  au VimEnter * silent! !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
-  au VimLeave * silent! !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Caps_Lock'
-  au Filetype help,qf nn <silent><buffer>q :q<cr>
-  au BufReadPost * let b:lexima_disabled=0
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exec "normal! g`\"" | endif
-  " au Filetype sh setl keywordprg=help
-  " au BufReadPost .vimrc source %
-  " au BufWinEnter,BufWinLeave * ++nested so $MYVIMRC 
-aug END
-" }}}
-
-" Commands {{{
-
-command! ClearMarksBuf delm!
-command! W retab | normal mxgg=G`xdmx | w
-" }}}
-

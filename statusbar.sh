@@ -20,7 +20,7 @@ mic_is_muted=$(amixer sget Capture | grep "off" | wc -c)
 # Network
 network=$(ip route get 1.1.1.1 | grep -Po '(?<=dev\s)\w+' | cut -f1 -d ' ')
 interface_easyname=$(dmesg | grep $network | grep renamed | awk 'NF>1{print $NF}')
-ping="  $(ping -c 1 www.google.es | tail -1| awk '{print $4}' | cut -d '/' -f 2 | cut -d '.' -f 1) ms"
+ping="$(ping -c 1 www.google.es | tail -1| awk '{print $4}' | cut -d '/' -f 2 | cut -d '.' -f 1) ms" # 
 
 # Others
 # weather=$(env | grep WEATHER)
@@ -31,7 +31,7 @@ disk="  `df -h / | awk '/\// {print $(NF-1)}'`"
 # Icons taken from https://fontawesome.com/icons
 if [ "$battery_status" = "discharging" ];
 then
-    battery_pluggedin=' '
+    battery_pluggedin=''
 else
     battery_pluggedin=' '
 fi
@@ -61,4 +61,4 @@ fi
 
 pied_piper=' '
 
-echo "$network_active $interface_easyname | $ping | $ram | $cpu | $disk | $audio_active $audio_volume | $mic_active $mic_volume | $backlight | $battery_pluggedin $battery_charge | $date_and_week | $current_time | $pied_piper"
+echo "$network_active $ping | $mic_active $mic_volume | $backlight | $battery_pluggedin $battery_charge | $current_time | $date_and_week | $pied_piper"
