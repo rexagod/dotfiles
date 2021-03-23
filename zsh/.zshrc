@@ -116,6 +116,7 @@ source $ZSH/oh-my-zsh.sh
 # export WEATHER=$(curl -s wttr.in/Lucknow?format=4 | cut -d ':' -f2 | cut -c 2-)
 export AWS_PROFILE='openshift-dev'
 export BRIDGE_JASMINE_TIMEOUT=600000
+export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --color auto'
 export FZF_DEFAULT_OPTS=""
@@ -130,6 +131,9 @@ export MOZ_ENABLE_WAYLAND=1
 export MYBASHRC='~/.bashrc'
 export MYVIMRC='~/.vimrc'
 export MYZSHRC='~/.zshrc'
+export RANGER_LOAD_DEFAULT_RC="FALSE"
+export VISUAL="nvim"
+export PAGER="bat"
 export XDG_CURRENT_DESKTOP='sway'
 export XDG_SESSION_TYPE='wayland'
 #}}}
@@ -223,6 +227,8 @@ ZSH_AUTOSUGGEST_USE_ASYNC=1
 HISTCONTROL=ignoreboth
 HISTFILESIZE=10000
 HISTSIZE=10000
+
+if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 # }}}
 
 # PATH {{{
@@ -243,4 +249,5 @@ $GOPATH/src/k8s.io/kubernetes/third_party/etcd:\
 $PATH
 "
 # }}}
+
 # ~/.bin/ascii-arts/`ls ~/.bin/ascii-arts | sort -R | tail -$N | tail -n 1`

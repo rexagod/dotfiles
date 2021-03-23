@@ -41,6 +41,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim'
+Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
 " }}}
 
 " Text Manipulations {{{
@@ -356,8 +357,7 @@ nn <silent><nowait><leader>s :silent! exec <SID>SourceScriptImplicit()<cr>
 
 let maplocalleader='\'
 
-nm \<tab> a<C-Space>
-
+nn <silent>\e :RangerWorkingDirectory<cr>
 " }}}
 " }}}
 
@@ -403,6 +403,11 @@ nn <silent><leader><leader>p :
       \ PlugClean<bar>
       \ PlugInstall<bar>
       \ <cr>
+" }}}
+
+" bclose.vim {{{
+
+let g:bclose_no_plugin_maps=1
 " }}}
 
 " coc.nvim {{{
@@ -593,34 +598,9 @@ let g:coc_explorer_global_presets = {
 " nmap <space>el :CocList explPresets
 " }}}
 
-" nvim-treesitter {{{
+" editorconfig-vim {{{
 
-" incremental_selection = {
-"   enable = true,
-"   keymaps = {
-"     init_selection = "",
-"     node_incremental = "g(",
-"     scope_incremental = "",
-"     node_decremental = "",
-"   },
-" },
-
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
-  context = { enable = true },
-  highlight = { enable = true, },
-  indent = { enable = true, },
-  refactor = {
-  highlight_definitions = { enable = true },
-  highlight_current_scope = { enable = false },
-  smart_rename = {
-enable = false,
-keymaps = {smart_rename = "grr"},
-},
-},
-}
-EOF
+let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
 " }}}
 
 " fzf.vim {{{
@@ -708,6 +688,70 @@ let g:fzf_checkout_git_options = '--sort=-committerdate'
 nm <silent>\B :GBranches<cr>
 " }}}
 
+" hop.nvim {{{
+
+nn <silent><M-w> :HopWord<cr>
+nn <silent><M-1> :HopChar1<cr>
+nn <silent><M-2> :HopChar2<cr>
+nn <silent><M-l> :HopLine<cr>
+" }}}
+
+" nvim-treesitter {{{
+
+" incremental_selection = {
+"   enable = true,
+"   keymaps = {
+"     init_selection = "",
+"     node_incremental = "g(",
+"     scope_incremental = "",
+"     node_decremental = "",
+"   },
+" },
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained",
+  context = { enable = true },
+  highlight = { enable = true, },
+  indent = { enable = true, },
+  refactor = {
+  highlight_definitions = { enable = true },
+  highlight_current_scope = { enable = false },
+  smart_rename = {
+enable = false,
+keymaps = {smart_rename = "grr"},
+},
+},
+}
+EOF
+" }}}
+
+" ranger.vim {{{
+
+let g:ranger_map_keys = 0
+let g:ranger_replace_netrw = 1
+let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
+" }}}
+
+" undotree {{{
+
+let g:undotree_SetFocusWhenToggle=1
+let g:undotree_CursorLine=0
+let g:undotree_HelpLine=0
+let g:undotree_ShortIndicators=1
+let g:undotree_WindowLayout=2
+let g:undotree_SplitWidth=winwidth(0)/4
+let g:undotree_TreeNodeShape='*'
+let g:undotree_RelativeTimestamp=1
+
+nn <silent><F3> :UndotreeToggle<CR>
+" }}}
+
+" vim-delete-hidden-buffers {{{
+
+nn <silent><F5> :DeleteHiddenBuffers<cr>
+" }}}
+
 " vim-floaterm {{{
 
 nn    <silent>   <F6>   :FloatermKill<CR>
@@ -720,24 +764,6 @@ nn    <silent>   <F9>    :FloatermNext<CR>
 tno   <silent>   <F9>    <C-\><C-n>:FloatermNext<CR>
 nn    <silent>   <F10>   :FloatermToggle<CR>
 tno   <silent>   <F10>   <C-\><C-n>:FloatermToggle<CR>
-" }}}
-
-" vim-delete-hidden-buffers {{{
-
-nn <silent><F5> :DeleteHiddenBuffers<cr>
-" }}}
-
-" editorconfig-vim {{{
-
-let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
-" }}}
-
-" hop.nvim {{{
-
-nn <silent><M-w> :HopWord<cr>
-nn <silent><M-1> :HopChar1<cr>
-nn <silent><M-2> :HopChar2<cr>
-nn <silent><M-l> :HopLine<cr>
 " }}}
 
 " vim-go {{{
@@ -802,20 +828,6 @@ aug GO
   au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
 aug END
 
-" }}}
-
-" undotree {{{
-
-let g:undotree_SetFocusWhenToggle=1
-let g:undotree_CursorLine=0
-let g:undotree_HelpLine=0
-let g:undotree_ShortIndicators=1
-let g:undotree_WindowLayout=2
-let g:undotree_SplitWidth=winwidth(0)/4
-let g:undotree_TreeNodeShape='*'
-let g:undotree_RelativeTimestamp=1
-
-nn <silent><F3> :UndotreeToggle<CR>
 " }}}
 
 " vim-peekaboo {{{

@@ -1,0 +1,3 @@
+[submodule "ranger/.config/ranger/plugins/devicons2"]
+	path = ranger/.config/ranger/plugins/devicons2
+	url = https://github.com/cdump/ranger-devicons2
