@@ -185,6 +185,7 @@ cc () { # {{{
 
 # Aliases{{{
 
+alias rr="ranger"
 alias xx="xrandr -s 640x360 && xrandr -s 1920x1080"
 alias gs="git status"
 alias log='oc login "https://api.$CLUSTER_ID.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`'
