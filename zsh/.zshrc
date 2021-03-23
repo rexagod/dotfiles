@@ -131,9 +131,9 @@ export MOZ_ENABLE_WAYLAND=1
 export MYBASHRC='~/.bashrc'
 export MYVIMRC='~/.vimrc'
 export MYZSHRC='~/.zshrc'
+export PAGER="bat --theme='gruvbox-dark' --paging=auto --italic-text=always --color=always --number"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
 export VISUAL="nvim"
-export PAGER="bat"
 export XDG_CURRENT_DESKTOP='sway'
 export XDG_SESSION_TYPE='wayland'
 #}}}

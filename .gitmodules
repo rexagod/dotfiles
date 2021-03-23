@@ -1,6 +1,8 @@
 [submodule "ranger/.config/ranger/plugins/devicons2"]
 	path = ranger/.config/ranger/plugins/devicons2
 	url = https://github.com/cdump/ranger-devicons2
+  ignore = dirty
 [submodule "ranger/.config/ranger/colorschemes"]
 	path = ranger/.config/ranger/colorschemes
 	url = https://github.com/ranger/colorschemes
+  ignore = dirty
