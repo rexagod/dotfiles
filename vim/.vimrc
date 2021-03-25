@@ -28,6 +28,8 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " Internals {{{
 
+Plug 'aymericbeaumet/vim-symlink'
+Plug 'vim-test/vim-test'
 Plug 'Shougo/neomru.vim'
 Plug 'arithran/vim-delete-hidden-buffers'
 Plug 'drzel/vim-repo-edit'
@@ -81,12 +83,14 @@ Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'markonm/traces.vim'
 Plug 'ryanoasis/vim-devicons'
-Plug 'itchyny/lightline.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'junegunn/vim-peekaboo'
 " }}}
 
 " Syntax {{{
 
+Plug 'sainnhe/everforest'
 Plug 'arcticicestudio/nord-vim'
 Plug 'ghifarit53/tokyonight-vim'
 " }}}
@@ -102,84 +106,56 @@ call plug#end()
 
 " Theme {{{
 
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-if (empty($TMUX))
-  if (has("nvim"))
-    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-  if (has("termguicolors"))
-    set termguicolors
-  endif
-endif
-
 filetype plugin on
 filetype indent on
+set termguicolors
+set background=dark
 syntax enable
 
-set termguicolors
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-let g:tokyonight_style = 'night' " available: night, storm
-let g:tokyonight_enable_italic = 1
+" let g:tokyonight_style = 'night' " available: night, storm
+" let g:tokyonight_enable_italic = 1
 
-colorscheme nord
+let g:everforest_background = 'hard' " available: `'hard'`, `'medium'`, `'soft'`
+let g:everforest_better_performance = 0
+let g:everforest_current_word = 'bold' " available: 'grey background'`, `'bold'`, `'underline'`, `'italic'`
+let g:everforest_diagnostic_line_highlight = 1
+let g:everforest_diagnostic_text_highlight = 1
+let g:everforest_disable_italic_comment = 0
+let g:everforest_enable_italic = 1
+
+colorscheme everforest
 " }}}
 
-" Statusline (lightline.vim) {{{
+" Statusline (vim-airline) {{{
 
-function! LightlineFilename()
-  let root = fnamemodify(get(b:, 'git_dir'), ':h')
-  let path = expand('%:p')
-  if path[:len(root)-1] ==# root
-    return path[len(root)+1:]
+function! SanitizeModified() " {{{
+  if &modified
+    return ' [+]'
   endif
-  return expand('%')
+  return ''
 endfunction
+" }}}
 
-function! RowColNumber()
-  return line('.').':'.col('.')
-endfunction
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#formatter = 'default'
+let g:airline_left_sep="\ue0b8"
+let g:airline_right_sep="\ue0ba"
+let g:airline_inactive_alt_sep=1
 
-let g:lightline = {
-      \ 'colorscheme': 'nord',
-      \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
-      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified', 'coc'] ],
-      \   'right': [ [ 'rowcolnumber', 'percent' ],
-      \              [ 'gitbranch', 'filetype' ] ],
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead',
-      \   'coc': 'coc#status',
-      \   'filename': 'LightlineFilename',
-      \   'rowcolnumber': 'RowColNumber',
-      \ },
-      \ 'mode_map': {
-      \ 'n' : 'N',
-      \ 'i' : 'I',
-      \ 'R' : 'R',
-      \ 'v' : 'V',
-      \ 'V' : 'VL',
-      \ "\<C-v>": 'VB',
-      \ 'c' : 'C',
-      \ 's' : 'S',
-      \ 'S' : 'SL',
-      \ "\<C-s>": 'SB',
-      \ 't': 'T',
-      \ },
-      \ }
+let g:airline#extensions#whitespace#enabled = 1
+let g:airline#extensions#whitespace#checks = ['conflicts']
 
-augroup lightline_hl
-  au!
-  au BufWinEnter,BufWinLeave * call lightline#disable() | call lightline#enable()
-augroup END
+let g:airline_section_a = airline#section#create(['mode', 'iminsert'])
+let g:airline_section_b = airline#section#create(['%f', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
+let g:airline_section_c = airline#section#create(['readonly'])
+let g:airline_section_x = airline#section#create(['⎇  %{fugitive#head()}'])
+let g:airline_section_y = airline#section#create(['filetype'])
+let g:airline_section_z = airline#section#create(['%l', ':', '%v', '  ', '%p', '%%'])
+
+let g:airline_theme = 'everforest'
 " }}}
 
 " Functions {{{
@@ -229,7 +205,6 @@ endfunction
 set autoread
 set autowrite
 set autoindent
-set background=dark
 set backupcopy=yes
 set clipboard+=unnamedplus
 set confirm
@@ -834,5 +809,17 @@ aug END
 
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
 let g:peekaboo_compact=0
+" }}}
+
+" vim-test {{{
+
+let test#strategy = "floaterm"
+let g:test#preserve_screen = 0
+
+nm <silent> tn :TestNearest<CR>
+nm <silent> tf :TestFile<CR>
+nm <silent> ts :TestSuite<CR>
+nm <silent> tl :TestLast<CR>
+nm <silent> tv :TestVisit<CR>
 " }}}
 " }}}
