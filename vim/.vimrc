@@ -95,12 +95,6 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'ghifarit53/tokyonight-vim'
 " }}}
 
-" nvim-treesitter {{{
-
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'nvim-treesitter/nvim-treesitter-refactor'
-" }}}
-
 call plug#end()
 " }}}
 
@@ -669,36 +663,6 @@ nn <silent><M-w> :HopWord<cr>
 nn <silent><M-1> :HopChar1<cr>
 nn <silent><M-2> :HopChar2<cr>
 nn <silent><M-l> :HopLine<cr>
-" }}}
-
-" nvim-treesitter {{{
-
-" incremental_selection = {
-"   enable = true,
-"   keymaps = {
-"     init_selection = "",
-"     node_incremental = "g(",
-"     scope_incremental = "",
-"     node_decremental = "",
-"   },
-" },
-
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
-  context = { enable = true },
-  highlight = { enable = true, },
-  indent = { enable = true, },
-  refactor = {
-  highlight_definitions = { enable = true },
-  highlight_current_scope = { enable = false },
-  smart_rename = {
-enable = false,
-keymaps = {smart_rename = "grr"},
-},
-},
-}
-EOF
 " }}}
 
 " ranger.vim {{{
