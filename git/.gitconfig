@@ -1,7 +1,7 @@
 [user]
-	email = prasriva@redhat.com
+	email = rexagod@gmail.com
 	name = "Pranshu Srivastava"
-	signingkey = BCE84A7B99DE27CA
+	signingkey = 3CDBD4D4CEF89B86
 [diff]
 	tool = vimdiff
 	renamelimit = 50000

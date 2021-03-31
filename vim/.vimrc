@@ -10,6 +10,8 @@
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'bmatcuk/stylelint-lsp'
+
 " coc.nvim {{{
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -31,7 +33,6 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'aymericbeaumet/vim-symlink'
 Plug 'vim-test/vim-test'
 Plug 'Shougo/neomru.vim'
-Plug 'arithran/vim-delete-hidden-buffers'
 Plug 'drzel/vim-repo-edit'
 Plug 'voldikss/vim-floaterm'
 Plug 'editorconfig/editorconfig-vim'
@@ -39,11 +40,11 @@ Plug 'editorconfig/editorconfig-vim'
 
 " Navigation {{{
 
-Plug 'justinmk/vim-sneak'
 Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
+Plug 'rhysd/clever-f.vim'
 " }}}
 
 " Text Manipulations {{{
@@ -76,7 +77,7 @@ Plug 'godlygeek/tabular'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'AndrewRadev/splitjoin.vim'
+Plug 'flwyd/vim-conjoin'
 " }}}
 
 " Visuals {{{
@@ -108,8 +109,8 @@ syntax enable
 
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-" let g:tokyonight_style = 'night' " available: night, storm
-" let g:tokyonight_enable_italic = 1
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 1
 
 let g:everforest_background = 'hard' " available: `'hard'`, `'medium'`, `'soft'`
 let g:everforest_better_performance = 0
@@ -119,6 +120,7 @@ let g:everforest_diagnostic_text_highlight = 1
 let g:everforest_disable_italic_comment = 0
 let g:everforest_enable_italic = 1
 
+" colorscheme tokyonight
 colorscheme everforest
 " }}}
 
@@ -133,7 +135,7 @@ endfunction
 " }}}
 
 let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'default'
 let g:airline_left_sep="\ue0b8"
 let g:airline_right_sep="\ue0ba"
@@ -145,10 +147,11 @@ let g:airline#extensions#whitespace#checks = ['conflicts']
 let g:airline_section_a = airline#section#create(['mode', 'iminsert'])
 let g:airline_section_b = airline#section#create(['%f', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
 let g:airline_section_c = airline#section#create(['readonly'])
-let g:airline_section_x = airline#section#create(['⎇  %{fugitive#head()}'])
+let g:airline_section_x = airline#section#create(['%{coc#status()} ', '⎇  %{fugitive#head()}'])
 let g:airline_section_y = airline#section#create(['filetype'])
 let g:airline_section_z = airline#section#create(['%l', ':', '%v', '  ', '%p', '%%'])
 
+" let g:airline_theme = 'dark'
 let g:airline_theme = 'everforest'
 " }}}
 
@@ -299,8 +302,8 @@ nm    <C-Down>    <C-j>
 
 nn    <S-Right>   <Nop>
 nn    <S-Left>    <Nop>
-nn    <S-Up>      <C-e>
-nn    <S-Down>    <C-y>
+nn    <S-Up>      <C-y>
+nn    <S-Down>    <C-e>
 
 nn    <silent><F2>    :messages<cr>
 nn    <silent><F4>    :only<cr>
@@ -377,6 +380,18 @@ nn <silent><leader><leader>p :
 " bclose.vim {{{
 
 let g:bclose_no_plugin_maps=1
+" }}}
+
+" clever-f.vim {{{
+
+" Alt.: hop.nvim, fzf.vim
+
+" Use f<CR> to repeat previous search.
+
+let g:clever_f_mark_direct = 1
+let g:clever_f_across_no_line = 1
+let g:clever_f_fix_key_direction = 1
+let g:clever_f_chars_match_any_signs = ';' " f;
 " }}}
 
 " coc.nvim {{{
@@ -484,7 +499,8 @@ ino <silent><expr> <c-space> coc#refresh()
 
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <cr> could be remapped by other vim plugin
-ino <silent><expr> <CR> pumvisible() ? "\<CR>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" ino <silent><expr> <CR> pumvisible() ? "\<CR>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+ino <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Hacky workaround to avoid pum when navigating
 ino <Down> <Left><Right><Down>
@@ -511,60 +527,6 @@ vn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "
 ino <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
 ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
 "}}}
-" }}}
-
-" coc-explorer {{{
-
-" nn <C-n> :CocCommand explorer<cr>
-
-nmap <silent><C-n> :CocCommand explorer --preset floating<CR>
-" nmap <silent>\B :CocCommand explorer --preset buffer<CR>
-
-let g:coc_explorer_global_presets = {
-      \   '.vim': {
-      \     'root-uri': '~/.vim',
-      \   },
-      \   'cocConfig': {
-      \      'root-uri': '~/.config/coc',
-      \   },
-      \   'tab': {
-      \     'position': 'tab',
-      \     'quit-on-open': v:true,
-      \   },
-      \   'floating': {
-      \     'position': 'floating',
-      \     'open-action-strategy': 'sourceWindow',
-      \   },
-      \   'floatingTop': {
-      \     'position': 'floating',
-      \     'floating-position': 'center-top',
-      \     'open-action-strategy': 'sourceWindow',
-      \   },
-      \   'floatingLeftside': {
-      \     'position': 'floating',
-      \     'floating-position': 'left-center',
-      \     'floating-width': 50,
-      \     'open-action-strategy': 'sourceWindow',
-      \   },
-      \   'floatingRightside': {
-      \     'position': 'floating',
-      \     'floating-position': 'right-center',
-      \     'floating-width': 50,
-      \     'open-action-strategy': 'sourceWindow',
-      \   },
-      \   'simplify': {
-      \     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
-      \   },
-      \   'buffer': {
-      \     'sources': [{'name': 'buffer', 'expand': v:true}]
-      \   },
-      \ }
-
-" Use preset argument to open it
-" nmap <space>ef :CocCommand explorer --preset floating<CR>
-
-" List all presets
-" nmap <space>el :CocList explPresets
 " }}}
 
 " editorconfig-vim {{{
@@ -686,11 +648,6 @@ let g:undotree_RelativeTimestamp=1
 nn <silent><F3> :UndotreeToggle<CR>
 " }}}
 
-" vim-delete-hidden-buffers {{{
-
-nn <silent><F5> :DeleteHiddenBuffers<cr>
-" }}}
-
 " vim-floaterm {{{
 
 nn    <silent>   <F6>   :FloatermKill<CR>
@@ -736,6 +693,19 @@ let g:go_test_timeout= '10s'
 let g:go_updatetime = 800
 let g:go_play_open_browser = 0
 let g:go_doc_popup_window = 1
+let g:go_doc_keywordprg_enabled = 0
+
+aug GO
+  au!
+  au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
+" Mappings {{{
+  au FileType go nm <silent>'r :GoRun<cr>
+  au FileType go nm <silent>\t :GoDecls<cr>
+  au FileType go nm <silent>\T :GoDeclsDir<cr>
+  au FileType go nm <silent>K :call CocActionAsync('doHover')<cr>
+  au Filetype godoc nn <silent>q :q<cr>
+" }}}
+aug END
 
 " Use ctrl-t for :GoDefPop<cr> (see :GoDefStack){{{
 " Also see:
@@ -756,17 +726,6 @@ let g:go_doc_popup_window = 1
 " :GoFreevars
 " :GoImpl -> Util fns
 "}}}
-
-aug GO
-  au!
-  au FileType go nm <silent>\t :GoDecls<cr>
-  au FileType go nm <silent>\T :GoDeclsDir<cr>
-  au FileType go nm <silent>' :call CocActionAsync('doHover')<cr>
-  au FileType go nm <silent>\' :GoSameIdsToggle<cr>
-  au Filetype godoc nn <silent>q :q<cr>
-  au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
-aug END
-
 " }}}
 
 " vim-peekaboo {{{

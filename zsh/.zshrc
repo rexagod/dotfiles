@@ -123,9 +123,9 @@ export FZF_DEFAULT_OPTS=""
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 export GO111MODULE="auto"
 export GOBIN="$HOME/go/bin"
-export GOPATH="/usr/local/go"
+export GOPATH="$HOME/go"
 export GRIM_DEFAULT_DIR='~/Pictures'
-export KUBECONFIG="$HOME/c/auth/kubeconfig"
+export KUBECONFIG="$HOME/cc/auth/kubeconfig"
 export MANPAGER="nvim -c 'set ft=man' -"
 export MOZ_ENABLE_WAYLAND=1
 export MYBASHRC='~/.bashrc'
@@ -163,7 +163,7 @@ ocs() { # {{{
 
 cc () { # {{{
 
-  DIR='_c'                     # Cluster metadata directory
+  DIR='cc'                     # Cluster metadata directory
   USER='prasriva'
   CLUSTER_ID="$USER-$RANDOM"
   NAME='\[new\sname\shere\]'  # metadata > name value
@@ -174,7 +174,7 @@ cc () { # {{{
   mkdir "$DIR"
   cp .aws/"$CONF" "$DIR"/
   sed -i "s/$NAME/$CLUSTER_ID/" "$DIR"/"$CONF"
-  openshift-install create cluster --dir="$DIR"
+  openshift-install create cluster --dir="$DIR" --log-level="debug"
   oc login "https://api.$CLUSTER_ID.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`
   cd -
 
@@ -185,27 +185,27 @@ cc () { # {{{
 
 # Aliases{{{
 
-alias rr="ranger"
-alias xx="xrandr -s 640x360 && xrandr -s 1920x1080"
-alias gs="git status"
-alias log='oc login "https://api.$CLUSTER_ID.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`'
-alias soc="source ./contrib/oc-environment.sh"
-alias bb="./bin/bridge"
 alias bat='bat --theme="Dracula" --style grid,numbers,changes'
+alias bb="./bin/bridge"
+alias dm="dmenu_run -i -nb '#191919' -nf '#3ea6a3' -sb '#3ea6a3' -sf '#191919' -fn 'FantasqueSansMono Nerd Font Mono-12' -l 56 -i"
+alias gs="git status"
 alias hgrep='history | grep '
 alias l='ls -p1'
 alias la='ls -hlpAX'
 alias ll='ls -pA1'
-# alias meet='/usr/libexec/xdg-desktop-portal -r & /usr/libexec/xdg-desktop-portal-wlr'
+alias log='oc login "https://api.$CLUSTER_ID.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`'
 alias nv='nvim'
 alias pacman='sudo pacman'
+alias rr="ranger"
+alias soc="source ./contrib/oc-environment.sh"
 alias sshd='sudo /usr/sbin/sshd'
 alias szr='source ~/.zshrc'
-alias vif='nvim `fzf --preview-window=right:50% --preview="bat --color always {}"`'
-# alias vp="nvim --cmd 'profile start vimrc.profile' --cmd 'profile! file ~/.vimrc' -c"
+# fzf --bind 'f1:execute(less -f {}),ctrl-y:execute-silent(echo {} | pbcopy)+abort'
+alias vif='fzf --preview-window=right:50% --preview="bat --color always {}" --bind "enter:execute(nvim {})"'
 alias vpn="nmcli con up uuid bd8183b3-3e15-4c20-a27b-5500873fd9ea && nmcli con"
 alias vpnd="nmcli con down uuid bd8183b3-3e15-4c20-a27b-5500873fd9ea && nmcli con"
 alias vr="nvim ~/.vimrc"
+alias xx="xrandr -s 640x360 && xrandr -s 1920x1080"
 alias zr='nvim ~/.zshrc'
 # }}}
 
@@ -247,7 +247,6 @@ $HOME/bin:\
 /usr/share:\
 $GOPATH/bin:\
 $GOPATH/src/k8s.io/kubernetes/third_party/etcd:\
-$PATH
 "
 # }}}
 

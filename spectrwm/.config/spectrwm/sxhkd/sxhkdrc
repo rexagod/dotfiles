@@ -135,6 +135,10 @@ XF86MonBrightnessUp
 XF86MonBrightnessDown
     xbacklight -dec 5
 
+#dmenu
+super + i
+    rofi -show combi -modi "window,combi,ssh,run" -font "FantasqueSansMono Nerd Font 14" -run-shell-command '{terminal} -e " {cmd}; read -n 1 -s"' -show-icons -theme "gruvbox-dark-hard" -fullscreen -terminal alacritty -sort -a -fake-transparency   
+
 #########################
 #        POLYBAR        #
 #########################
@@ -142,9 +146,6 @@ XF86MonBrightnessDown
 #Hide polybar
 super + y
     polybar-msg cmd toggle
-
-super + i
-    dmenu_run -i -nb '#191919' -nf '#3ea6a3' -sb '#3ea6a3' -sf '#191919' -fn 'FantasqueSansMono Nerd Font Mono-12' -l 56 -i
 
 #################################################################
 #################################################################
