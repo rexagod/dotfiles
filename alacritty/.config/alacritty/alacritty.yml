@@ -12,13 +12,13 @@ scrolling:
 
 font:
   normal:
-    family: FantasqueSansMono Nerd Font Mono
+    family: Source Code Pro
     style: Regular
   bold:
-    family: FantasqueSansMono Nerd Font Mono
+    family: Source Code Pro
     style: Bold
   italic:
-    family: FantasqueSansMono Nerd Font Mono
+    family: Source Code Pro
     style: Italic
   size: 7.0
   offset:
@@ -32,34 +32,32 @@ font:
 draw_bold_text_with_bright_colors: true
 
 colors:
+  name: astromouse
+  author: ""
+  primary:
+    background: "#000000"
+    foreground: "#ffffff"
+  cursor:
+    text: "#000000"
+    cursor: "#ffffff"
   normal:
-    black:   '0x000000'
-    red:     '0xc62828'
-    green:   '0x558b2f'
-    yellow:  '0xf9a825'
-    blue:    '0x1565c0'
-    magenta: '0x6a1e9a'
-    cyan:    '0x00838f'
-    white:   '0xf2f2f2'
+    black: "#1c1c1c"
+    red: "#d770af"
+    green: "#9acc79"
+    yellow: "#d0d26b"
+    blue: "#77b6c5"
+    magenta: "#a488d9"
+    cyan: "#7fcab3"
+    white: "#8d8d8d"
   bright:
-    black:   '0x545454'
-    red:     '0xef5350'
-    green:   '0x8bc34a'
-    yellow:  '0xffeb3b'
-    blue:    '0x64b5f6'
-    magenta: '0xba68c8'
-    cyan:    '0x26c6da'
-    white:   '0xe0e0e0'
-  dim:
-    black:   '0x333333'
-    red:     '0xf2777a'
-    green:   '0x99cc99'
-    yellow:  '0xffcc66'
-    blue:    '0x6699cc'
-    magenta: '0xcc99cc'
-    cyan:    '0x66cccc'
-    white:   '0xdddddd'
-  indexed_colors: []
+    black: "#3d3a3a"
+    red: "#d28abf"
+    green: "#8fb676"
+    yellow: "#c8bc45"
+    blue: "#8fa7b9"
+    magenta: "#bd89de"
+    cyan: "#6ec2a8"
+    white: "#dad3d3"
 
 bell:
   animation: EaseOutExpo
@@ -69,11 +67,11 @@ bell:
 background_opacity: 1.0
 
 key_bindings:
--  {  key  :  V,         mods    :  Command,          action  :  Paste            }
--  {  key  :  C,         mods    :  Command,          action  :  Copy             }
--  {  key  :  Equals,    mods    :  Command,          action  :  IncreaseFontSize }
--  {  key  :  Minus,     mods    :  Command,          action  :  DecreaseFontSize }
--  {  key  :  F11,       action  :  ToggleFullscreen                              }
+  - { key: V, mods: Command, action: Paste }
+  - { key: C, mods: Command, action: Copy }
+  - { key: Equals, mods: Command, action: IncreaseFontSize }
+  - { key: Minus, mods: Command, action: DecreaseFontSize }
+  - { key: F11, action: ToggleFullscreen }
 
 mouse:
   double_click: { threshold: 300 }

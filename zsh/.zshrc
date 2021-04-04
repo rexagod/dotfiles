@@ -125,7 +125,7 @@ export GO111MODULE="auto"
 export GOBIN="$HOME/go/bin"
 export GOPATH="$HOME/go"
 export GRIM_DEFAULT_DIR='~/Pictures'
-export KUBECONFIG="$HOME/cc/auth/kubeconfig"
+export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
 export MANPAGER="nvim -c 'set ft=man' -"
 export MOZ_ENABLE_WAYLAND=1
 export MYBASHRC='~/.bashrc'
@@ -163,10 +163,10 @@ ocs() { # {{{
 
 cc () { # {{{
 
-  DIR='cc'                     # Cluster metadata directory
+  export DIR='openshift-cluster'     # Cluster metadata directory
   USER='prasriva'
-  CLUSTER_ID="$USER-$RANDOM"
-  NAME='\[new\sname\shere\]'  # metadata > name value
+  export CLUSTER_ID="$USER-$RANDOM"
+  NAME='new\sname\shere'  # metadata > name value
   CONF='install-config.yaml'  # Original config filename in .aws
 
   cd ~
@@ -174,11 +174,9 @@ cc () { # {{{
   mkdir "$DIR"
   cp .aws/"$CONF" "$DIR"/
   sed -i "s/$NAME/$CLUSTER_ID/" "$DIR"/"$CONF"
-  openshift-install create cluster --dir="$DIR" --log-level="debug"
+  openshift-install create cluster --dir="$DIR"
   oc login "https://api.$CLUSTER_ID.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`
   cd -
-
-  ocs
 }
 # }}}
 # }}}
@@ -223,7 +221,7 @@ alias zr='nvim ~/.zshrc'
 # export PATH
 # # }}}
 
-ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 HISTCONTROL=ignoreboth
 HISTFILESIZE=10000

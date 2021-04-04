@@ -41,6 +41,7 @@ Plug 'editorconfig/editorconfig-vim'
 
 " Navigation {{{
 
+Plug 'psliwka/vim-smoothie'
 Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim'
@@ -79,6 +80,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'flwyd/vim-conjoin'
+Plug 'jiangmiao/auto-pairs'
 " }}}
 
 " Visuals {{{
@@ -112,6 +114,8 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 let g:tokyonight_style = 'night' " available: night, storm
 let g:tokyonight_enable_italic = 1
+let g:airline_theme = 'dark'
+colorscheme tokyonight
 
 let g:everforest_background = 'hard' " available: `'hard'`, `'medium'`, `'soft'`
 let g:everforest_better_performance = 0
@@ -120,9 +124,8 @@ let g:everforest_diagnostic_line_highlight = 1
 let g:everforest_diagnostic_text_highlight = 1
 let g:everforest_disable_italic_comment = 0
 let g:everforest_enable_italic = 1
-
-" colorscheme tokyonight
-colorscheme everforest
+let g:airline_theme = 'everforest'
+" colorscheme everforest
 " }}}
 
 " Statusline (vim-airline) {{{
@@ -137,23 +140,25 @@ endfunction
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'default'
-let g:airline_left_sep="\ue0b8"
-let g:airline_right_sep="\ue0ba"
-let g:airline_inactive_alt_sep=1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline_left_sep = ""
+let g:airline_left_alt_sep = ""
+let g:airline_right_sep = ""
+let g:airline_right_alt_sep = ""
+let g:airline_inactive_alt_sep = 1
+let airline#extensions#tabline#current_first = 0
+let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#show_buffers = 1
 
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline#extensions#whitespace#checks = ['conflicts']
 
 let g:airline_section_a = airline#section#create(['mode', 'iminsert'])
-let g:airline_section_b = airline#section#create(['%f', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
+let g:airline_section_b = airline#section#create(['%-0.60{getcwd()}', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
 let g:airline_section_c = airline#section#create(['readonly'])
 let g:airline_section_x = airline#section#create(['%{coc#status()} ', '⎇  %{fugitive#head()}'])
 let g:airline_section_y = airline#section#create(['filetype'])
 let g:airline_section_z = airline#section#create(['%l', ':', '%v', '  ', '%p', '%%'])
-
-" let g:airline_theme = 'dark'
-let g:airline_theme = 'everforest'
 " }}}
 
 " Functions {{{
@@ -200,9 +205,9 @@ endfunction
 " Options {{{
 
 " set grepprg=rg\ --vimgrep
+set autoindent
 set autoread
 set autowrite
-set autoindent
 set backupcopy=yes
 set clipboard+=unnamedplus
 set confirm
@@ -210,15 +215,16 @@ set expandtab
 set fdm=marker
 set foldopen=
 set hidden
+set hlsearch
+set incsearch
 set laststatus=2
 set matchtime=2
 set mouse=a
 set nobackup
-set nohlsearch
 set noignorecase
-set noincsearch
 set noshowmode
 set nosmartcase
+set noswapfile
 set nowrap
 set nowritebackup
 set number
@@ -239,7 +245,6 @@ set smartindent
 set smarttab
 set softtabstop=2
 set ssop=blank,buffers,curdir,folds,globals,help,localoptions,options,tabpages,winsize
-set swapfile
 set tabstop=2
 set tags+=.git/tags,../.git/tags
 set termguicolors
@@ -387,6 +392,20 @@ nn <silent><leader><leader>p :
       \ PlugClean<bar>
       \ PlugInstall<bar>
       \ <cr>
+" }}}
+
+" auto-pairs {{{
+
+" <CR>  : Insert new indented line after return if cursor in blank brackets or quotes.
+" <BS>  : Delete brackets in pair
+" <M-p> : Toggle Autopairs (g:AutoPairsShortcutToggle)
+" <M-e> : Fast Wrap (g:AutoPairsShortcutFastWrap)
+" <M-n> : Jump to next closed pair (g:AutoPairsShortcutJump)
+" <M-b> : BackInsert (g:AutoPairsShortcutBackInsert)
+" <M-(bracket)> : Put succeeding character after nearest (bracket).
+" <M-;> : Jump to next closing bracket (of a pair).
+
+let g:AutoPairsShortcutFastWrap = '<M-z>'
 " }}}
 
 " bclose.vim {{{
