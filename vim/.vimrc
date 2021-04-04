@@ -2,6 +2,7 @@
 
 " Notes {{{
 
+" Rename
 " Mappings for Go.
 " {range}norm <normal mode keystrokes>
 " }}}
@@ -254,51 +255,61 @@ set wildmode=longest,full
 
 " Insert Mode Mappings {{{
 
-ino   <C-j>       <esc>5ja
-ino   <C-k>       <esc>5ka
-ino   <C-h>       <esc>5ha
-ino   <C-l>       <esc>5la
+ino   <C-j>         <esc>5ja
+ino   <C-k>         <esc>5ka
+ino   <C-h>         <esc>5ha
+ino   <C-l>         <esc>5la
+imap  <C-Right>     <esc>5la
+imap  <C-Left>      <esc>5ha
+imap  <C-Up>        <esc>5ka
+imap  <C-Down>      <esc>5ja
+imap  <C-PageUp>    <esc><C-b>a
+imap  <C-PageDown>  <esc><C-f>a
 
-imap  <C-Right>   <esc>5la
-imap  <C-Left>    <esc>5ha
-imap  <C-Up>      <esc>5ka
-imap  <C-Down>    <esc>5ja
+ino   <S-Right>   <Nop>
+ino   <S-Left>    <Nop>
+ino   <S-Up>      <esc><C-e>a
+ino   <S-Down>    <esc><C-y>a
 
-ino    <S-Right>   <Nop>
-ino    <S-Left>    <Nop>
-ino    <S-Up>      <esc><C-e>a
-ino    <S-Down>    <esc><C-y>a
+ino   <PageUp>    <NOP>
+ino   <PageDown>  <NOP>
 " }}}
 
 " Visual Mode Mappings {{{
 
-vn    <C-j>       5j
-vn    <C-k>       5k
-vn    <C-h>       5h
-vn    <C-l>       5l
-
-vm    <C-Right>   <C-l>
-vm    <C-Left>    <C-h>
-vm    <C-Up>      <C-k>
-vm    <C-Down>    <C-j>
+vn    <C-j>        5j
+vn    <C-k>        5k
+vn    <C-h>        5h
+vn    <C-l>        5l
+vm    <C-Right>    <C-l>
+vm    <C-Left>     <C-h>
+vm    <C-Up>       <C-k>
+vm    <C-Down>     <C-j>
+vn    <C-PageUp>   <C-b>
+vn    <C-PageDown> <C-f>
 
 vn    <S-Right>   <Nop>
 vn    <S-Left>    <Nop>
 vn    <S-Up>      <C-e>
 vn    <S-Down>    <C-y>
+
+vn    <PageUp>    <NOP>
+vn    <PageDown>  <NOP>
+
 " }}}
 
 " Normal Mode Mappings {{{
 
-nn    <C-j>       5j
-nn    <C-k>       5k
-nn    <C-h>       5h
-nn    <C-l>       5l
-
-nm    <C-Right>   <C-l>
-nm    <C-Left>    <C-h>
-nm    <C-Up>      <C-k>
-nm    <C-Down>    <C-j>
+nn    <C-j>        5j
+nn    <C-k>        5k
+nn    <C-h>        5h
+nn    <C-l>        5l
+nm    <C-Right>    <C-l>
+nm    <C-Left>     <C-h>
+nm    <C-Up>       <C-k>
+nm    <C-Down>     <C-j>
+nn    <C-PageUp>   <C-b>
+nn    <C-PageDown> <C-f>
 
 nn    <S-Right>   <Nop>
 nn    <S-Left>    <Nop>
@@ -307,9 +318,10 @@ nn    <S-Down>    <C-e>
 
 nn    <silent><F2>    :messages<cr>
 nn    <silent><F4>    :only<cr>
-
 nn    <silent>QQ      :bd<cr>
 nn    <F1>            <NOP>
+nn    <PageUp>        <NOP>
+nn    <PageDown>      <NOP>
 " }}}
 
 " Leader Mappings {{{
