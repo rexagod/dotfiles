@@ -27,26 +27,6 @@ compositing-overline = over
 compositing-underline = over
 compositing-border = over
 
-; Define fallback values used by all module formats
-format-foreground = #FF0000
-format-background = #00FF00
-format-underline =
-format-overline =
-format-spacing =
-format-padding =
-format-margin =
-format-offset =
-
-[colors]
-; Nord theme ============
-; background = #2F343F
-; foreground = #f3f4f5
-; alert = #d08770
-; volume-min = #a3be8c
-; volume-med = #ebcb8b
-; volume-max = #bf616a
-; =======================
-
 ; Gotham theme ==========
 background = #0a0f14
 foreground = #99d1ce
@@ -71,7 +51,7 @@ height = 30
 ;offset-y = 1%
 radius = 0.0
 fixed-center = true
-bottom = false
+bottom = true
 separator = |
 
 background = ${colors.background}

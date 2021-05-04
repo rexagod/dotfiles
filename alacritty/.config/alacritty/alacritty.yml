@@ -2,7 +2,7 @@ window:
   padding:
     x: 0
     y: 0
-  dynamic_padding: true
+  dynamic_padding: false
   decorations: none
   startup_mode: Windowed
 
@@ -20,7 +20,7 @@ font:
   italic:
     family: Source Code Pro
     style: Italic
-  size: 7.0
+  size: 8.0
   offset:
     x: 0
     y: 0
@@ -32,32 +32,31 @@ font:
 draw_bold_text_with_bright_colors: true
 
 colors:
-  name: astromouse
-  author: ""
+  # Default colors
   primary:
-    background: "#000000"
-    foreground: "#ffffff"
-  cursor:
-    text: "#000000"
-    cursor: "#ffffff"
+    background: '#000000'
+    foreground: '#ffffff'
+  # Normal colors
   normal:
-    black: "#1c1c1c"
-    red: "#d770af"
-    green: "#9acc79"
-    yellow: "#d0d26b"
-    blue: "#77b6c5"
-    magenta: "#a488d9"
-    cyan: "#7fcab3"
-    white: "#8d8d8d"
+    black: '#000000'
+    red: '#cd0000'
+    green: '#00cd00'
+    yellow: '#cdcd00'
+    blue: '#0000ee'
+    magenta: '#cd00cd'
+    cyan: '#00cdcd'
+    white: '#e5e5e5'
+
+  # Bright colors
   bright:
-    black: "#3d3a3a"
-    red: "#d28abf"
-    green: "#8fb676"
-    yellow: "#c8bc45"
-    blue: "#8fa7b9"
-    magenta: "#bd89de"
-    cyan: "#6ec2a8"
-    white: "#dad3d3"
+    black: '#7f7f7f'
+    red: '#ff0000'
+    green: '#00ff00'
+    yellow: '#ffff00'
+    blue: '#5c5cff'
+    magenta: '#ff00ff'
+    cyan: '#00ffff'
+    white: '#ffffff'
 
 bell:
   animation: EaseOutExpo

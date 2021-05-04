@@ -11,8 +11,6 @@
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'bmatcuk/stylelint-lsp'
-
 " coc.nvim {{{
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -34,14 +32,12 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'aymericbeaumet/vim-symlink'
 Plug 'vim-test/vim-test'
 Plug 'Shougo/neomru.vim'
-Plug 'drzel/vim-repo-edit'
 Plug 'voldikss/vim-floaterm'
 Plug 'editorconfig/editorconfig-vim'
 " }}}
 
 " Navigation {{{
 
-Plug 'psliwka/vim-smoothie'
 Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim'
@@ -62,17 +58,14 @@ Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-indent'
 "}}}
 Plug 'coderifous/textobj-word-column.vim'
 "{{{
-"                                                    *ac* *cac* *dac* *vac* *yac*
-" ac               "a column", a column based on "a word" |aw|.
-
-"                                                    *ic* *cic* *dic* *vic* *yic*
-" ic               "inner column", a column based on the "inner word" |iw|.
-
-"                                                    *aC* *caC* *daC* *vaC* *yaC*
-" aC               "a COLUMN", a column based on "a WORD" |aW|.
-
-"                                                    *iC* *ciC* *diC* *viC* *yiC*
-" iC               "inner COLUMN", a column based on "inner WORD" |iW|.
+"                                          *ac* *cac* *dac* *vac* *yac*
+" ac     "a column", a column based on "a word" |aw|.
+"                                          *ic* *cic* *dic* *vic* *yic*
+" ic     "inner column", a column based on the "inner word" |iw|.
+"                                          *aC* *caC* *daC* *vaC* *yaC*
+" aC     "a COLUMN", a column based on "a WORD" |aW|.
+"                                          *iC* *ciC* *diC* *viC* *yiC*
+" iC     "inner COLUMN", a column based on "inner WORD" |iW|.
 "}}}
 Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
@@ -94,9 +87,8 @@ Plug 'junegunn/vim-peekaboo'
 
 " Syntax {{{
 
-Plug 'sainnhe/everforest'
-Plug 'arcticicestudio/nord-vim'
-Plug 'ghifarit53/tokyonight-vim'
+Plug 'romainl/Apprentice'
+Plug 'NLKNguyen/papercolor-theme'
 " }}}
 
 call plug#end()
@@ -107,28 +99,267 @@ call plug#end()
 filetype plugin on
 filetype indent on
 set termguicolors
-set background=dark
 syntax enable
-
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+set t_Co=256
 
-let g:tokyonight_style = 'night' " available: night, storm
-let g:tokyonight_enable_italic = 1
-let g:airline_theme = 'dark'
-colorscheme tokyonight
+" set background=light
+" let g:airline_theme = 'papercolor'
+" colorscheme papercolor
 
-let g:everforest_background = 'hard' " available: `'hard'`, `'medium'`, `'soft'`
-let g:everforest_better_performance = 0
-let g:everforest_current_word = 'bold' " available: 'grey background'`, `'bold'`, `'underline'`, `'italic'`
-let g:everforest_diagnostic_line_highlight = 1
-let g:everforest_diagnostic_text_highlight = 1
-let g:everforest_disable_italic_comment = 0
-let g:everforest_enable_italic = 1
-let g:airline_theme = 'everforest'
-" colorscheme everforest
+set background=dark
+let g:airline_theme = 'apprentice'
+colorscheme apprentice
 " }}}
 
 " Statusline (vim-airline) {{{
+
+" Listed all themes for autocompletion {{{
+"     * alduin
+"     * angr
+"     * apprentice
+"     * atomic
+"     * ayu_light
+"     * ayu_mirage
+"     * ayu_dark
+"     * badwolf
+"     * base16 (|airline-theme-base16|)
+"     * base16_vim (|airline-theme-base16_vim|)
+"     * base16_shell (|airline-theme-base16_shell|)
+"     * base16_3024
+"     * base16_adwaita
+"     * base16_apathy
+"     * base16_ashes
+"     * base16_atelier_cave
+"     * base16_atelier_cave_light
+"     * base16_atelier_dune
+"     * base16_atelier_dune_light
+"     * base16_atelier_estuary
+"     * base16_atelier_estuary_light
+"     * base16_atelier_forest
+"     * base16_atelier_forest_light
+"     * base16_atelier_heath
+"     * base16_atelier_heath_light
+"     * base16_atelier_lakeside
+"     * base16_atelier_lakeside_light
+"     * base16_atelier_plateau
+"     * base16_atelier_plateau_light
+"     * base16_atelier_savanna
+"     * base16_atelier_savanna_light
+"     * base16_atelier_seaside
+"     * base16_atelier_seaside_light
+"     * base16_atelier_sulphurpool
+"     * base16_atelier_sulphurpool_light
+"     * base16_atelierdune
+"     * base16_atelierforest
+"     * base16_atelierheath
+"     * base16_atelierlakeside
+"     * base16_atelierseaside
+"     * base16_atlas
+"     * base16_bespin
+"     * base16_black_metal
+"     * base16_black_metal_bathory
+"     * base16_black_metal_burzum
+"     * base16_black_metal_dark_funeral
+"     * base16_black_metal_gorgoroth
+"     * base16_black_metal_immortal
+"     * base16_black_metal_khold
+"     * base16_black_metal_marduk
+"     * base16_black_metal_mayhem
+"     * base16_black_metal_nile
+"     * base16_black_metal_venom
+"     * base16_brewer
+"     * base16_bright
+"     * base16_brogrammer
+"     * base16_brushtrees
+"     * base16_brushtrees_dark
+"     * base16_chalk
+"     * base16_circus
+"     * base16_classic
+"     * base16_classic_dark
+"     * base16_classic_light
+"     * base16_codeschool
+"     * base16_colors
+"     * base16_cupcake
+"     * base16_cupertino
+"     * base16_darktooth
+"     * base16_decaf
+"     * base16_default
+"     * base16_default_dark
+"     * base16_default_light
+"     * base16_dracula
+"     * base16_edge_dark
+"     * base16_edge_light
+"     * base16_eighties
+"     * base16_embers
+"     * base16_espresso
+"     * base16_flat
+"     * base16_framer
+"     * base16_fruit_soda
+"     * base16_gigavolt
+"     * base16_github
+"     * base16_google
+"     * base16_google_dark
+"     * base16_google_light
+"     * base16_grayscale
+"     * base16_grayscale_dark
+"     * base16_grayscale_light
+"     * base16_greenscreen
+"     * base16_gruvbox_dark_hard (|airline-theme-base-gruvbox-dark-hard|)
+"     * base16_gruvbox_dark_medium
+"     * base16_gruvbox_dark_pale
+"     * base16_gruvbox_dark_soft
+"     * base16_gruvbox_light_hard
+"     * base16_gruvbox_light_medium
+"     * base16_gruvbox_light_soft
+"     * base16_harmonic16
+"     * base16_harmonic_dark
+"     * base16_harmonic_light
+"     * base16_heetch
+"     * base16_heetch_light
+"     * base16_helios
+"     * base16_hopscotch
+"     * base16_horizon_dark
+"     * base16_horizon_light
+"     * base16_horizon_terminal_dark
+"     * base16_horizon_terminal_light
+"     * base16_ia_dark
+"     * base16_ia_light
+"     * base16_icy
+"     * base16_irblack
+"     * base16_isotope
+"     * base16_londontube
+"     * base16_macintosh
+"     * base16_marrakesh
+"     * base16_materia
+"     * base16_material
+"     * base16_material_darker
+"     * base16_material_lighter
+"     * base16_material_palenight
+"     * base16_material_vivid
+"     * base16_mellow_purple
+"     * base16_mexico_light
+"     * base16_mocha
+"     * base16_monokai
+"     * base16_nord
+"     * base16_nova
+"     * base16_ocean
+"     * base16_oceanicnext
+"     * base16_one_light
+"     * base16_onedark
+"     * base16_outrun_dark
+"     * base16_papercolor_dark
+"     * base16_papercolor_light
+"     * base16_paraiso
+"     * base16_phd
+"     * base16_pico
+"     * base16_pop
+"     * base16_porple
+"     * base16_railscasts
+"     * base16_rebecca
+"     * base16_sandcastle
+"     * base16_seti
+"     * base16_shapeshifter
+"     * base16_snazzy
+"     * base16_solarflare
+"     * base16_solarized
+"     * base16_solarized_dark
+"     * base16_solarized_light
+"     * base16_spacemacs
+"     * base16_summerfruit
+"     * base16_summerfruit_dark
+"     * base16_summerfruit_light
+"     * base16_synth_midnight_dark
+"     * base16_tomorrow
+"     * base16_tomorrow_night
+"     * base16_tomorrow_night_eighties
+"     * base16_tube
+"     * base16_twilight
+"     * base16_vim
+"     * base16_unikitty_dark
+"     * base16_unikitty_light
+"     * base16_woodland
+"     * base16_xcode_dusk
+"     * base16_zenburn
+"     * base16color
+"     * behelit
+"     * biogoo
+"     * bubblegum
+"     * cobalt2
+"     * cool
+"     * dark
+"     * dark_minimal
+"     * desertink
+"     * deus
+"     * distinguished
+"     * durant
+"     * faryfloss
+"     * fruit_punch
+"     * google_dark
+"     * google_light
+"     * hybrid
+"     * hybridline
+"     * jay
+"     * jellybeans
+"     * jet
+"     * kalisi
+"     * kolor
+"     * laederon
+"     * lessnoise
+"     * light
+"     * lighthaus
+"     * lucius
+"     * luna
+"     * minimalist (|airline-theme-minimalist|)
+"     * molokai
+"     * monochrome
+"     * murmur
+"     * night_owl
+"     * nord-minimal
+"     * onedark (|airline-theme-onedark|)
+"     * ouo
+"     * owo
+"     * papercolor
+"     * peaksea
+"     * powerlineish
+"     * qwq
+"     * raven
+"     * ravenpower
+"     * seagull
+"     * seoul256
+"     * serene
+"     * sierra
+"     * silver
+"     * simple
+"     * soda
+"     * sol
+"     * solarized (|airline-theme-solarized|)
+"     * solarized_flood
+"     * term
+"     * term_light
+"     * tomorrow
+"     * ubaryd
+"     * understated
+"     * violet
+"     * wombat
+"     * xtermlight
+"     * zenburn
+"     * transparent
+" }}}
+let airline#extensions#tabline#current_first = 0
+let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#whitespace#checks = ['conflicts']
+let g:airline#extensions#whitespace#enabled = 1
+let g:airline_base16_improved_contrast = 1
+let g:airline_inactive_alt_sep = 1
+let g:airline_left_alt_sep = ""
+let g:airline_left_sep = ""
+let g:airline_powerline_fonts = 1
+let g:airline_right_alt_sep = ""
+let g:airline_right_sep = ""
 
 function! SanitizeModified() " {{{
   if &modified
@@ -137,24 +368,8 @@ function! SanitizeModified() " {{{
   return ''
 endfunction
 " }}}
-
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline_left_sep = ""
-let g:airline_left_alt_sep = ""
-let g:airline_right_sep = ""
-let g:airline_right_alt_sep = ""
-let g:airline_inactive_alt_sep = 1
-let airline#extensions#tabline#current_first = 0
-let g:airline#extensions#tabline#enabled = 0
-let g:airline#extensions#tabline#show_buffers = 1
-
-let g:airline#extensions#whitespace#enabled = 1
-let g:airline#extensions#whitespace#checks = ['conflicts']
-
 let g:airline_section_a = airline#section#create(['mode', 'iminsert'])
-let g:airline_section_b = airline#section#create(['%-0.60{getcwd()}', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
+let g:airline_section_b = airline#section#create(['%-0.60{expand("%f")}', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
 let g:airline_section_c = airline#section#create(['readonly'])
 let g:airline_section_x = airline#section#create(['%{coc#status()} ', '⎇  %{fugitive#head()}'])
 let g:airline_section_y = airline#section#create(['filetype'])
@@ -215,12 +430,12 @@ set expandtab
 set fdm=marker
 set foldopen=
 set hidden
-set hlsearch
-set incsearch
 set laststatus=2
 set matchtime=2
 set mouse=a
 set nobackup
+set nohlsearch
+set noincsearch
 set noignorecase
 set noshowmode
 set nosmartcase
@@ -498,14 +713,14 @@ xm <leader>f  <Plug>(coc-format-selected)
 
 " Function and Class Objects {{{
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xm if <Plug>(coc-funcobj-i)
-om if <Plug>(coc-funcobj-i)
-xm af <Plug>(coc-funcobj-a)
-om af <Plug>(coc-funcobj-a)
-xm ic <Plug>(coc-classobj-i)
-om ic <Plug>(coc-classobj-i)
-xm ac <Plug>(coc-classobj-a)
-om ac <Plug>(coc-classobj-a)
+" xm if <Plug>(coc-funcobj-i)
+" om if <Plug>(coc-funcobj-i)
+" xm af <Plug>(coc-funcobj-a)
+" om af <Plug>(coc-funcobj-a)
+" xm ic <Plug>(coc-classobj-i)
+" om ic <Plug>(coc-classobj-i)
+" xm ac <Plug>(coc-classobj-a)
+" om ac <Plug>(coc-classobj-a)
 " }}}
 
 " Show documentation in preview window. {{{
