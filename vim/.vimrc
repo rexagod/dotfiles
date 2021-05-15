@@ -24,11 +24,12 @@ Plug 'stsewd/fzf-checkout.vim'
 
 " Go {{{
 
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " }}}
 
 " Internals {{{
 
+Plug 'alok/notational-fzf-vim'
 Plug 'aymericbeaumet/vim-symlink'
 Plug 'vim-test/vim-test'
 Plug 'Shougo/neomru.vim'
@@ -369,7 +370,7 @@ function! SanitizeModified() " {{{
 endfunction
 " }}}
 let g:airline_section_a = airline#section#create(['mode', 'iminsert'])
-let g:airline_section_b = airline#section#create(['%-0.60{expand("%f")}', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
+let g:airline_section_b = airline#section#create(['%{expand("%f")}', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
 let g:airline_section_c = airline#section#create(['readonly'])
 let g:airline_section_x = airline#section#create(['%{coc#status()} ', '⎇  %{fugitive#head()}'])
 let g:airline_section_y = airline#section#create(['filetype'])
@@ -659,8 +660,6 @@ endfunction
 command! -nargs=0 Format :call CocAction('format')
 " Add `:Fold` command to fold current buffer.
 command! -nargs=? Fold :call CocAction('fold', <f-args>)
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 "}}}
 
 " Normal Mode Mappings {{{
@@ -711,26 +710,8 @@ nm <leader>f  <Plug>(coc-format-selected)
 xm <leader>f  <Plug>(coc-format-selected)
 "}}}
 
-" Function and Class Objects {{{
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-" xm if <Plug>(coc-funcobj-i)
-" om if <Plug>(coc-funcobj-i)
-" xm af <Plug>(coc-funcobj-a)
-" om af <Plug>(coc-funcobj-a)
-" xm ic <Plug>(coc-classobj-i)
-" om ic <Plug>(coc-classobj-i)
-" xm ac <Plug>(coc-classobj-a)
-" om ac <Plug>(coc-classobj-a)
-" }}}
-
 " Show documentation in preview window. {{{
 nn <silent> K :call <SID>show_documentation()<CR>
-"}}}
-
-" Use CTRL-S for selections ranges. {{{
-" Requires 'textDocument/selectionRange' support of language server.
-nm <silent> <C-s> <Plug>(coc-range-select)
-xm <silent> <C-s> <Plug>(coc-range-select)
 "}}}
 "}}}
 
@@ -747,10 +728,6 @@ ino <silent><expr> <c-space> coc#refresh()
 " format on enter, <cr> could be remapped by other vim plugin
 " ino <silent><expr> <CR> pumvisible() ? "\<CR>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 ino <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-" Hacky workaround to avoid pum when navigating
-ino <Down> <Left><Right><Down>
-ino <Up> <Left><Right><Up>
 " }}}
 
 " Autocommands {{{
@@ -826,7 +803,7 @@ endfunction
 command! History call fzf#run({
       \   'source': 'sed "1d" $HOME/.cache/neomru/file',
       \   'sink': 'e ',
-      \   'options': '--preview="bat --color always --theme Nord {}" --preview-window='.g:preview_window_fmt
+      \   'options': '--preview="bat --color always --theme gruvbox-dark {}" --preview-window='.g:preview_window_fmt
       \ })<CR>
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 " }}}
@@ -873,6 +850,13 @@ nn <silent><M-2> :HopChar2<cr>
 nn <silent><M-l> :HopLine<cr>
 " }}}
 
+" notational-fzf-vim {{{
+
+nm \n :NV<cr>
+
+let g:nv_search_paths = ['~/repositories/notes', './README.md']
+" }}}
+
 " ranger.vim {{{
 
 let g:ranger_map_keys = 0
@@ -896,28 +880,31 @@ nn <silent><F3> :UndotreeToggle<CR>
 
 " vim-floaterm {{{
 
-nn    <silent>   <F6>   :FloatermKill<CR>
-tno   <silent>   <F6>   <C-\><C-n>:FloatermKill<CR>
-nn    <silent>   <F7>    :FloatermNew<CR>
-tno   <silent>   <F7>    <C-\><C-n>:FloatermNew<CR>
-nn    <silent>   <F8>    :FloatermPrev<CR>
-tno   <silent>   <F8>    <C-\><C-n>:FloatermPrev<CR>
-nn    <silent>   <F9>    :FloatermNext<CR>
-tno   <silent>   <F9>    <C-\><C-n>:FloatermNext<CR>
-nn    <silent>   <F10>   :FloatermToggle<CR>
-tno   <silent>   <F10>   <C-\><C-n>:FloatermToggle<CR>
+nn    <silent>   <F6>    :FloatermNew<CR>
+tno   <silent>   <F6>    <C-\><C-n>:FloatermNew<CR>
+nn    <silent>   <F7>    :FloatermPrev<CR>
+tno   <silent>   <F7>    <C-\><C-n>:FloatermPrev<CR>
+nn    <silent>   <F8>    :FloatermNext<CR>
+tno   <silent>   <F8>    <C-\><C-n>:FloatermNext<CR>
+nn    <silent>   <F9>    :FloatermToggle<CR>
+tno   <silent>   <F9>    <C-\><C-n>:FloatermToggle<CR>
+nn    <silent>   <F10>   :FloatermKill<CR>
+tno   <silent>   <F10>   <C-\><C-n>:FloatermKill<CR>
 " }}}
 
 " vim-go {{{
 
+" Variables {{{
+
 let g:go_auto_sameids = 0
-let g:go_auto_type_info = 1
+let g:go_auto_type_info = 0
 let g:go_diagnostics_level = 2
+let g:go_doc_keywordprg_enabled = 0
+let g:go_doc_popup_window = 1
 let g:go_fmt_command = "goimports"
 let g:go_highlight_array_whitespace_error = 1
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_chan_whitespace_error = 1
-let g:go_highlight_extra_types = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_function_calls = 1
@@ -930,48 +917,60 @@ let g:go_highlight_trailing_whitespace_error = 1
 let g:go_highlight_types = 1
 let g:go_highlight_variable_assignments = 1
 let g:go_highlight_variable_declarations = 1
-let g:go_imports_autosave = 1
+let g:go_imports_autosave = 0
 let g:go_info_mode = 'gopls'
 let g:go_list_type = 'quickfix'
-let g:go_statusline_duration = 1000
-let g:go_test_show_name = 0
-let g:go_test_timeout= '10s'
-let g:go_updatetime = 800
+let g:go_play_browser_command = "chrome"
 let g:go_play_open_browser = 0
-let g:go_doc_popup_window = 1
-let g:go_doc_keywordprg_enabled = 0
+let g:go_statusline_duration = 1000
+let g:go_test_show_name = 1
+let g:go_test_timeout= '10s'
+let g:go_updatetime = 100
+" }}}
+
+" Mappings {{{
 
 aug GO
   au!
   au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
-" Mappings {{{
-  au FileType go nm <silent>'r :GoRun<cr>
-  au FileType go nm <silent>\t :GoDecls<cr>
-  au FileType go nm <silent>\T :GoDeclsDir<cr>
-  au FileType go nm <silent>K :call CocActionAsync('doHover')<cr>
-  au Filetype godoc nn <silent>q :q<cr>
-" }}}
-aug END
 
-" Use ctrl-t for :GoDefPop<cr> (see :GoDefStack){{{
-" Also see:
-" :GoDescribe
-" :GoImplements
-" :GoWhicherr -> all possible values err can return
-" :GoPeerChannels
-" :GoCallers
-" :GoCallees
-" :GoCallstack
-" :GoGuruScope
-" :GoBuildTags mycustomtag " // +build linux darwin OR +build mycustomtag (highlighted when detected)
-" This will pass this tag to guru and from now on it'll work as expected. And just like :GoGuruScope, you can clear it with:
-" :GoBuildTags ""
-" And finally if you wish you can make it permanent with the following setting:
-" let g:go_build_tags = "mycustomtag"
-" :GoRename
-" :GoFreevars
-" :GoImpl -> Util fns
-"}}}
+  " gd - Goto definition.
+  " C-t - Go back.
+  " if, af - Function selectors.
+  " [[, ]] - Move between functions.
+
+  au FileType go nm <silent>'D :GoDeclsDir<cr>
+  au FileType go nm <silent>'I :GoImports<cr>
+  au FileType go nm <silent>'R :GoRename<cr>
+  au FileType go nm <silent>'a :GoAlternate<cr>
+  au FileType go nm <silent>'b :GoBuild<cr>
+  au FileType go nm <silent>'c :GoCoverageToggle<cr>
+  au FileType go nm <silent>'d :GoDecls<cr>
+  au FileType go nm <silent>'e :GoDescribe<cr>
+  au FileType go nm <silent>'E :GoWhicherrs<cr>
+  au FileType go nm <silent>'f :GoFiles<cr>
+  au FileType go vm <silent>'f :GoFreevars<cr>
+  au FileType go nm <silent>'i :GoInfo<cr>
+  au FileType go nm <silent>'r :GoRun<cr>
+  au FileType go nm <silent>'p :GoImplements<cr>
+  au FileType go vm <silent>'p :GoPeerChannels<cr>
+  au FileType go nm <silent>'s :GoSameIdsToggle<cr>
+  au FileType go nm <silent>'t :GoCallstack<cr>
+  " Also, :GoCallees and :GoCallers.
+  au FileType go nm <silent>K :call CocActionAsync('doHover')<cr>
+
+  " Alternate utilities to open alternate file in different ways.
+  au Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  au Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  au Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  au Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+aug END
+" }}}
+
+" "Etcetera etcetera" stuff that I prefer doing manually. {{{
+" :GoImpl
+" :GoPlay
+" }}}
 " }}}
 
 " vim-peekaboo {{{

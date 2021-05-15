@@ -1,45 +1,22 @@
 # zsh {{{
 
-# Carried over from bashrc {{{
+# BASHRC {{{
 
-# setopt nomenucomplete
-# setopt nolistambiguous
-# setopt nobashautolist
-# setopt rec_exact
-setopt noautomenu
-
+COMPLETION_WAITING_DOTS="true"
 DISABLE_AUTO_TITLE="true"
+ENABLE_CORRECTION="true"
 HIST_STAMPS="mm/dd/yyyy"
+
+alias ohmyzsh="nvim ~/.oh-my-zsh"
+alias zshconfig="nvim ~/.zshrc"
+
+export EDITOR='nvim'
+export LANG=en_US.UTF-8
 export UPDATE_ZSH_DAYS=15
 export ZSH="/home/rexagod/.oh-my-zsh"
-export LANG=en_US.UTF-8
 
-alias zshconfig="nvim ~/.zshrc"
-alias ohmyzsh="nvim ~/.oh-my-zsh"
+setopt noautomenu
 
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nvim'
-else
-  export EDITOR='vim'
-fi
-
-# Only one of these two can be enable at a time.
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
-
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# DISABLE_LS_COLORS="true"
-
-# ENABLE_CORRECTION="true"
-# COMPLETION_WAITING_DOTS="true"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -56,8 +33,7 @@ plugins=(
   zsh-z
 )
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#444,bold"
-# autoload -U compinit && compinit
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff1,underline"
 # }}}
 
 source $ZSH/oh-my-zsh.sh
@@ -77,7 +53,6 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 export GO111MODULE="auto"
 export GOBIN="$HOME/go/bin"
 export GOPATH="$HOME/go"
-export GRIM_DEFAULT_DIR='~/Pictures'
 export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
 export MANPAGER="nvim -c 'set ft=man' -"
 export MOZ_ENABLE_WAYLAND=1
@@ -87,7 +62,6 @@ export MYZSHRC='~/.zshrc'
 export PAGER="bat --theme='gruvbox-dark' --paging=auto --italic-text=always --color=always --number"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
 export VISUAL="nvim"
-export XDG_CURRENT_DESKTOP='sway'
 export XDG_SESSION_TYPE='wayland'
 #}}}
 
@@ -136,29 +110,42 @@ cc () { # {{{
 
 # Aliases{{{
 
-alias bat='bat --theme="Dracula" --style grid,numbers,changes'
+alias bat="bat --theme=\"Dracula\" --style grid,numbers,changes"
 alias bb="./bin/bridge"
+alias cdf="cd \$(ls -d ~/*/** | fzf)"
 alias dm="dmenu_run -i -nb '#191919' -nf '#3ea6a3' -sb '#3ea6a3' -sf '#191919' -fn 'FantasqueSansMono Nerd Font Mono-12' -l 56 -i"
-alias gs="git status"
-alias hgrep='history | grep '
-alias l='ls -p1'
-alias la='ls -hlpAX'
-alias ll='ls -pA1'
-alias log='oc login "https://api.$CLUSTER_ID.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`'
-alias nv='nvim'
-alias pacman='sudo pacman'
+alias hgrep="history | grep "
+alias l="ls -p1"
+alias la="ls -hlpAX"
+alias ll="ls -pA1"
+alias nv="nvim"
+alias pacman="sudo pacman"
 alias rr="ranger"
 alias soc="source ./contrib/oc-environment.sh"
-alias sshd='sudo /usr/sbin/sshd'
-alias szr='source ~/.zshrc'
-# fzf --bind 'f1:execute(less -f {}),ctrl-y:execute-silent(echo {} | pbcopy)+abort'
+alias sshd="sudo /usr/sbin/sshd"
+alias szr="source ~/.zshrc"
 alias vi="nvim"
-alias vif='fzf --preview-window=right:50% --preview="bat --color always {}" --bind "enter:execute(nvim {})"'
-alias vpn="nmcli con up uuid bd8183b3-3e15-4c20-a27b-5500873fd9ea && nmcli con"
-alias vpnd="nmcli con down uuid bd8183b3-3e15-4c20-a27b-5500873fd9ea && nmcli con"
+alias vif="fzf --preview-window=right:50% --preview=\"bat --color always {}\" --bind \"enter:execute(nvim {})\""
+alias vpn="nmcli con up id \"1 - Red Hat Global VPN\" --ask"
+alias vpnd="nmcli con down id \"1 - Red Hat Global VPN\" --ask"
 alias vr="nvim ~/.vimrc"
-alias xx="xrandr -s 640x360 && xrandr -s 1920x1080"
-alias zr='nvim ~/.zshrc'
+alias zr="nvim ~/.zshrc"
+# }}}
+
+# PATH {{{
+
+export PATH="\
+$HOME/go/bin:\
+$HOME/.bin:\
+$HOME/.local/bin:\
+$HOME/bin:\
+/home/linuxbrew/.linuxbrew/bin:\
+/usr/bin:\
+/usr/lib:\
+/usr/local/bin:\
+/usr/share:\
+$GOPATH/bin:\
+" # $PATH intentially not included here.
 # }}}
 
 # Misc. {{{
@@ -172,35 +159,15 @@ alias zr='nvim ~/.zshrc'
 #   export PATH=$bindir:$PATH
 # done
 
-# export PATH
 # # }}}
 
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_AUTOSUGGEST_USE_ASYNC=1
+if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
+
 HISTCONTROL=ignoreboth
 HISTFILESIZE=10000
 HISTSIZE=10000
-
-if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
-# }}}
-
-# PATH {{{
-
-PATH="\
-$HOME/go/bin:\
-$HOME/.bin:\
-$HOME/.local/bin:\
-$HOME/bin:\
-/home/linuxbrew/.linuxbrew/bin:\
-/usr/bin:\
-/usr/lib:\
-/usr/lib/firefox-developer-edition:\
-/usr/local/bin:\
-/usr/share:\
-$GOPATH/bin:\
-$GOPATH/src/k8s.io/kubernetes/third_party/etcd:\
-"
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_USE_ASYNC=1
 # }}}
 
 eval "$(starship init zsh)"
-# ~/.bin/ascii-arts/`ls ~/.bin/ascii-arts | sort -R | tail -$N | tail -n 1`
