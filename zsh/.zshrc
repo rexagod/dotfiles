@@ -26,14 +26,19 @@ setopt noautomenu
 
 plugins=(
   bgnotify
+  fzf
   git
   zsh-256color
-  zsh-autosuggestions
   zsh-syntax-highlighting
-  zsh-z
 )
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff1,underline"
+# }}}
+
+# variables {{{
+
+ZSH_THEME="nicoulaj"
+# ZSH_THEME="juanghurtado"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#fff,underline"
 # }}}
 
 source $ZSH/oh-my-zsh.sh
@@ -43,14 +48,17 @@ source $ZSH/oh-my-zsh.sh
 
 # export FZF_DEFAULT_OPTS="--preview='bat --color always --theme Nord {}'"
 # export WEATHER=$(curl -s wttr.in/Lucknow?format=4 | cut -d ':' -f2 | cut -c 2-)
+
 export AWS_PROFILE='openshift-dev'
 export BRIDGE_JASMINE_TIMEOUT=600000
 export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
+export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_COMMAND="fd . $HOME"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --color auto'
 export FZF_DEFAULT_OPTS=""
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-export GO111MODULE="auto"
 export GOBIN="$HOME/go/bin"
 export GOPATH="$HOME/go"
 export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
@@ -59,7 +67,7 @@ export MOZ_ENABLE_WAYLAND=1
 export MYBASHRC='~/.bashrc'
 export MYVIMRC='~/.vimrc'
 export MYZSHRC='~/.zshrc'
-export PAGER="bat --theme='gruvbox-dark' --paging=auto --italic-text=always --color=always --number"
+export PAGER="bat --theme=Dracula --paging=auto --italic-text=always --color=always --number"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
 export VISUAL="nvim"
 export XDG_SESSION_TYPE='wayland'
@@ -169,5 +177,3 @@ HISTSIZE=10000
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 # }}}
-
-eval "$(starship init zsh)"

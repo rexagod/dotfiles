@@ -1,9 +1,7 @@
 " Author: @rexagod
 
-" Notes {{{
+" Misc. {{{
 
-" Rename
-" Mappings for Go.
 " {range}norm <normal mode keystrokes>
 " }}}
 
@@ -90,6 +88,8 @@ Plug 'junegunn/vim-peekaboo'
 
 Plug 'romainl/Apprentice'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'nanotech/jellybeans.vim'
+Plug 'morhetz/gruvbox'
 " }}}
 
 call plug#end()
@@ -97,20 +97,30 @@ call plug#end()
 
 " Theme {{{
 
-filetype plugin on
-filetype indent on
-set termguicolors
-syntax enable
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+filetype indent on
+filetype plugin on
+syntax enable
 set t_Co=256
+set termguicolors
 
 " set background=light
 " let g:airline_theme = 'papercolor'
 " colorscheme papercolor
 
-set background=dark
-let g:airline_theme = 'apprentice'
-colorscheme apprentice
+" let g:airline_theme = 'apprentice'
+" set background=dark
+" colorscheme apprentice
+
+let g:gruvbox_italic=1
+let g:gruvbox_contrast_dark='hard'
+let g:gruvbox_contrast_light='hard'
+let g:gruvbox_italicize_strings=1
+colorscheme gruvbox
+
+" let g:jellybeans_use_term_italics = 1
+" let g:jellybeans_use_lowcolor_black = 1
+" colorscheme jellybeans
 " }}}
 
 " Statusline (vim-airline) {{{
@@ -549,9 +559,8 @@ nn    <PageDown>      <NOP>
 
 let mapleader="\<Space>"
 
-nn <leader>a       ggVG
-nn <silent><leader>zr :vsp $MYZSHRC<cr>
-nn <silent><leader>vr :vsp ~/.vimrc<cr>
+nn <silent><leader>zr        :vsp $MYZSHRC<cr>
+nn <silent><leader>vr        :vsp ~/.config/nvim/init.vim<cr>
 nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
 nn <silent><nowait><leader>q :silent! call <SID>ToggleQuickFix()<cr>
 nn <silent><nowait><leader>l :silent! call <SID>ToggleLocationList()<cr>

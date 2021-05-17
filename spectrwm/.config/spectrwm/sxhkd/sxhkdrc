@@ -14,10 +14,6 @@ super + r
 super + v
     pavucontrol
 
-#Xkill
-super + Escape
-    xkill
-
 #################################################################
 # ALT + ... KEYS
 #################################################################
@@ -62,6 +58,9 @@ Print
 #     FUNCTION KEYS
 #################################################################
 
+F1
+    google-chrome-stable
+
 #################################################################
 #     MULTIMEDIA KEYS
 #################################################################
@@ -104,7 +103,8 @@ XF86MonBrightnessDown
 
 #dmenu
 super + i
-    rofi -show combi -modi "window,combi,ssh,run" -font "FantasqueSansMono Nerd Font 14" -run-shell-command '{terminal} -e " {cmd}; read -n 1 -s"' -show-icons -theme "gruvbox-dark-hard" -fullscreen -terminal alacritty -sort -a -fake-transparency   
+    rofi -show combi -modi "window,combi,ssh,run" -font "FantasqueSansMono Nerd Font 14" \
+      -run-shell-command '{terminal} -e " {cmd}; read -n 1 -s"' -show-icons -theme "gruvbox-dark-hard" -fullscreen -terminal alacritty -sort -a -fake-transparency   
 
 #########################
 #        POLYBAR        #
