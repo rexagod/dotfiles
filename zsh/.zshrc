@@ -57,6 +57,7 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --colo
 export FZF_DEFAULT_OPTS=""
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 export GOBIN="$HOME/go/bin"
+export GOOGLE_APPLICATION_CREDENTIALS="/home/rexagod/Downloads/contrib-k8s-478a21288ae7.json"
 export GOPATH="$HOME/go"
 export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
 export MANPAGER="nvim -c 'set ft=man' -"
@@ -118,9 +119,12 @@ cc () { # {{{
 
 alias bat="bat --theme=\"Dracula\" --style grid,numbers,changes"
 alias bb="./bin/bridge"
-alias cdf="cd \$(ls -d ~/*/** | fzf)"
-alias dm="dmenu_run -i -nb '#191919' -nf '#3ea6a3' -sb '#3ea6a3' -sf '#191919' -fn 'FantasqueSansMono Nerd Font Mono-12' -l 56 -i"
+alias c="clear"
+alias gh="go help"
+alias gS="git stash"
+alias gSp="git stash pop"
 alias hgrep="history | grep "
+alias k="kubectl"
 alias l="ls -p1"
 alias la="ls -hlpAX"
 alias ll="ls -pA1"

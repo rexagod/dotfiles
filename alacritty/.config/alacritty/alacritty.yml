@@ -2,9 +2,9 @@ window:
   padding:
     x: 0
     y: 0
-  dynamic_padding: false
+  dynamic_padding: true
   decorations: none
-  startup_mode: Windowed
+  startup_mode: Maximized
 
 scrolling:
   history: 1000
@@ -32,37 +32,32 @@ font:
 draw_bold_text_with_bright_colors: true
 
 colors:
-  # Default colors
+  name: tlh
+  author: ""
   primary:
-    background: '#000000'
-    foreground: '#eaeaea'
-
-  # Normal colors
+    background: "#101010"
+    foreground: "#66ff66"
+  cursor:
+    text: "#101010"
+    cursor: "#66ff66"
   normal:
-    black: '#000000'
-    red: '#d54e53'
-    green: '#b9ca4a'
-    yellow: '#e6c547'
-    blue: '#7aa6da'
-    magenta: '#c397d8'
-    cyan: '#70c0ba'
-    white: '#424242'
-
-  # Bright colors
+    black: "#1c1c1c"
+    red: "#d81860"
+    green: "#60ff60"
+    yellow: "#f9fd75"
+    blue: "#4695c8"
+    magenta: "#a78edb"
+    cyan: "#43afce"
+    white: "#f3ebe2"
   bright:
-    black: '#666666'
-    red: '#ff3334'
-    green: '#9ec400'
-    yellow: '#e7c547'
-    blue: '#7aa6da'
-    magenta: '#b77ee0'
-    cyan: '#54ced6'
-    white: '#2a2a2a'
-
-bell:
-  animation: EaseOutExpo
-  color: '0xffffff'
-  duration: 0
+    black: "#4d4d4d"
+    red: "#f00060"
+    green: "#70ff70"
+    yellow: "#f9fd80"
+    blue: "#5a9dc8"
+    magenta: "#b29fdb"
+    cyan: "#69b8ce"
+    white: "#eeeeee"
 
 background_opacity: 1.0
 

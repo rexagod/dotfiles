@@ -1,5 +1,7 @@
 {
   "diagnostic.virtualText": true,
   "diagnostic.enableHighlightLineNumber": true,
-  "diagnostic.virtualTextCurrentLineOnly": false
+  "diagnostic.virtualTextCurrentLineOnly": false,
+  "diagnostic.virtualTextPrefix": "→︁ ",
+  "diagnostic.messageTarget": "echo"
 }

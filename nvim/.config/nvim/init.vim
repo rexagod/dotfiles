@@ -1,8 +1,7 @@
-" Author: @rexagod
+" Maintainer: @rexagod
 
 " Misc. {{{
 
-" FZF -> Telescope.
 " {range}norm <normal mode keystrokes>
 " }}}
 
@@ -17,28 +16,36 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Git {{{
 
+Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 " }}}
 
 " Go {{{
 
-Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'branch': 'master', 'do': ':GoUpdateBinaries' }
+" }}}
+
+" Internals {{{
+
+Plug 'mfussenegger/nvim-dap'
+Plug 'Pocco81/DAPInstall.nvim'
+Plug 'aymericbeaumet/vim-symlink'
+Plug 'editorconfig/editorconfig-vim'
 " }}}
 
 " Navigation {{{
 
-Plug 'aymericbeaumet/vim-symlink'
+Plug 'craigemery/vim-autotag'
 Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
 Plug 'alok/notational-fzf-vim'
-Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim'
+Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
 Plug 'rhysd/clever-f.vim'
 " }}}
 
 " Text Manipulations {{{
 
-Plug 'editorconfig/editorconfig-vim'
 Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-indent'
 " {lhs} {rhs}                   ~{{{
 " ----- ----------------------  ~
@@ -70,9 +77,11 @@ Plug 'jiangmiao/auto-pairs'
 
 " Visuals {{{
 
-Plug 'voldikss/vim-floaterm'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'shime/vim-livedown'
 Plug 'markonm/traces.vim'
 Plug 'ryanoasis/vim-devicons'
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'junegunn/vim-peekaboo'
@@ -80,6 +89,7 @@ Plug 'junegunn/vim-peekaboo'
 
 " Syntax {{{
 
+Plug 'julien/vim-colors-green'
 Plug 'romainl/Apprentice'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'nanotech/jellybeans.vim'
@@ -106,15 +116,18 @@ set termguicolors
 " set background=dark
 " colorscheme apprentice
 
-let g:gruvbox_italic=1
-let g:gruvbox_contrast_dark='hard'
-let g:gruvbox_contrast_light='hard'
-let g:gruvbox_italicize_strings=1
-colorscheme gruvbox
+" let g:gruvbox_italic=1
+" let g:gruvbox_contrast_dark='hard'
+" let g:gruvbox_contrast_light='hard'
+" let g:gruvbox_italicize_strings=1
+" colorscheme gruvbox
 
-" let g:jellybeans_use_term_italics = 1
-" let g:jellybeans_use_lowcolor_black = 1
-" colorscheme jellybeans
+let g:jellybeans_use_term_italics = 1
+let g:jellybeans_use_lowcolor_black = 1
+colorscheme jellybeans
+
+" let g:airline_theme = 'atomic'
+" colorscheme green
 " }}}
 
 " Statusline (vim-airline) {{{
@@ -352,6 +365,7 @@ colorscheme gruvbox
 "     * transparent
 " }}}
 let airline#extensions#tabline#current_first = 0
+let g:airline#extensions#coc#enabled = 1
 let g:airline#extensions#tabline#enabled = 0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
@@ -365,7 +379,6 @@ let g:airline_left_sep = ""
 let g:airline_powerline_fonts = 1
 let g:airline_right_alt_sep = ""
 let g:airline_right_sep = ""
-let g:airline#extensions#coc#enabled = 1
 
 function! SanitizeModified() " {{{
   if &modified
@@ -384,6 +397,24 @@ let g:airline_section_z = airline#section#create(['%l', ':', '%v', '  ', '%p'
 
 " Functions {{{
 
+function! s:ToggleQuickFix() " {{{
+  if empty(filter(getwininfo(), 'v:val.quickfix'))
+    copen
+  else
+    cclose
+  endif
+endfunction
+" }}}
+
+function! s:ToggleLocationList() " {{{
+  if empty(filter(getwininfo(), 'v:val.quickfix'))
+    lopen
+  else
+    lclose
+  endif
+endfunction
+" }}}
+
 function! s:SourceScriptImplicit() " {{{
   if !&readonly && &filetype !=# ''
     w
@@ -401,24 +432,6 @@ function! s:SourceScriptImplicit() " {{{
         \ }
   let l:ispresent=has_key(l:sourcecommand, split(l:bin, "/")[-1])
   return l:ispresent ? l:sourcecommand[split(l:bin, "/")[-1]] : ''
-endfunction
-" }}}
-
-function! s:ToggleQuickFix() " {{{
-  if empty(filter(getwininfo(), 'v:val.quickfix'))
-    copen
-  else
-    cclose
-  endif
-endfunction
-" }}}
-
-function! s:ToggleLocationList() " {{{
-  if empty(filter(getwininfo(), 'v:val.quickfix'))
-    lopen
-  else
-    lclose
-  endif
 endfunction
 " }}}
 " }}}
@@ -451,6 +464,7 @@ set nowritebackup
 set number
 set omnifunc=syntaxcomplete#Complete
 set path=.,,
+set pumheight=10
 set re=0
 set relativenumber
 set ruler
@@ -461,7 +475,7 @@ set shortmess+=c
 set showcmd
 set showmatch
 set sidescrolloff=10
-set signcolumn=auto
+set signcolumn=number
 set smartindent
 set smarttab
 set softtabstop=2
@@ -548,6 +562,7 @@ nn    <silent>QQ      :bd<cr>
 nn    <F1>            <NOP>
 nn    <PageUp>        <NOP>
 nn    <PageDown>      <NOP>
+nn    <silent><F6>   :mksession! ~/.session.vim<cr>
 " }}}
 
 " Leader Mappings {{{
@@ -579,9 +594,9 @@ aug END
 
 " Commands {{{
 
+command! SS mks! ~/.session.vim
 command! CM delm!
-command! CW CocCommand browser.clearCache
-command! MK :mksession! ~/.session.vim
+command! YY PlugClean | PlugInstall | PlugUpdate | PlugUpgrade | CocUpdate
 command! QQ qall
 command! W w
 " }}}
@@ -592,12 +607,6 @@ command! W w
 
 packadd! cfilter
 packadd! matchit
-nn <silent><leader><leader>P :
-      \ PlugClean<bar>
-      \ PlugInstall<bar>
-      \ PlugUpdate<bar>
-      \ PlugUpgrade<bar>
-      \ <cr>
 nn <silent><leader><leader>p :
       \ PlugClean<bar>
       \ PlugInstall<bar>
@@ -697,7 +706,7 @@ nm \a  <Plug>(coc-codeaction-selected)
 " Remap keys for applying codeAction to the current buffer.
 nm \ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
-nm \qf  <Plug>(coc-fix-current)
+nm \Q  <Plug>(coc-fix-current)
 "}}}
 
 " Formatting selected code. {{{
@@ -759,6 +768,18 @@ ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scro
 "}}}
 " }}}
 
+" DAPInstall.vim {{{
+
+lua << EOF
+local dap_install = require("dap-install")
+
+dap_install.setup({
+	installation_path = "/tmp/test_dap_install/",
+	verbosely_call_debuggers = true,
+})
+EOF
+" }}}
+
 " editorconfig-vim {{{
 
 let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
@@ -768,9 +789,8 @@ let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
 
 " Vars {{{
 
-let g:fzf_layout = { 'down': '100%' }
-let g:preview_window_fmt = 'up:65%:rounded:nowrap:nofollow'
-let g:fzf_preview_window = [ g:preview_window_fmt ]
+let g:fzf_layout = { 'up': '100%' }
+let g:fzf_preview_window = [ 'up:60%:rounded:nowrap:nofollow' ]
 " }}}
 
 " Functions {{{
@@ -794,48 +814,31 @@ command! BD call fzf#run(fzf#wrap({
       \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
       \ }))
 " }}}
-
-function! RipgrepFzf(query, fullscreen) " {{{
-  let command_fmt = 'rg --hidden --column --line-number --no-heading --color=always --smart-case -- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--preview-window='.g:preview_window_fmt, '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-" }}}
-" }}}
-
-" Commands {{{
-
-command! History call fzf#run({
-      \   'source': 'sed "1d" $HOME/.cache/neomru/file',
-      \   'sink': 'e ',
-      \   'options': '--preview="bat --color always --theme gruvbox-dark {}" --preview-window='.g:preview_window_fmt
-      \ })<CR>
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 " }}}
 
 " Maps {{{
 
-nn <silent>\\ :silent! RG<cr>
 nn <silent>\b :silent! Buffers<cr>
 nn <silent>\c :silent! BCommits<cr>
-nn <silent>\C :silent! Commits<cr>
 nn <silent>\d :silent! BD<cr>
-nn <silent>\f :silent! Files<cr>
-nn <silent>\F :silent! Filetypes<cr>
-nn <silent>\g :silent! GFiles?<cr>
-nn <silent>\G :silent! GFiles<cr>
-nn <silent>\h :silent! History<cr>
-nn <silent>\H :silent! Helptags<cr>
 nn <silent>\k :silent! Commands<cr>
-nn <silent>\l :silent! BLines<cr>
-nn <silent>\L :silent! Lines<cr>
+nn <silent>\C :silent! Commits<cr>
+nn <silent>\F :silent! Filetypes<cr>
+nn <silent>\G :silent! GFiles<cr>
+nn <silent>\g :silent! GFiles?<cr>
+nn <silent>\H :silent! Helptags<cr>
 nn <silent>\m :silent! Maps<cr>
-nn <silent>\M :silent! Marks<cr>
-nn <silent>\t :silent! BTags<cr>
-nn <silent>\T :silent! Tags<cr>
-nn <silent>\w :silent! Windows<cr>
+nn <silent>\l :silent! FZFBLines<cr>
+nn <silent>\f :silent! FZFFiles<cr>
+nn <silent>\/ :silent! FZFGGrep<cr>
+nn <silent>\h :silent! FZFHistory<cr>
+nn <silent>\L :silent! FZFLocList<cr>
+nn <silent>\M :silent! FZFMarks<cr>
+nn <silent>\q :silent! FZFQuickFix<cr>
+nn <silent>\\ :silent! FZFRg<cr>
+nn <silent>\w :silent! FZFWindows<cr>
+nn <silent>\t :silent! FZFBTags<cr>
+nn <silent>\T :silent! FZFTags<cr>
 " }}}
 " }}}
 
@@ -852,6 +855,66 @@ nn <silent><M-l> :HopLine<cr>
 nm \n :NV<cr>
 
 let g:nv_search_paths = ['~/repositories/notes', './README.md']
+" }}}
+
+"" nvim-dap {{{
+
+"lua << EOF
+"  dap.adapters.go = function(callback, config)
+"    local handle
+"    local pid_or_err
+"    local port = 38697
+"    handle, pid_or_err =
+"      vim.loop.spawn(
+"      "dlv",
+"      {
+"        args = {"dap", "-l", "127.0.0.1:" .. port},
+"        detached = true
+"      },
+"      function(code)
+"        handle:close()
+"        print("Delve exited with exit code: " .. code)
+"      end
+"    )
+"    -- Wait 100ms for delve to start
+"    vim.defer_fn(
+"      function()
+"        --dap.repl.open()
+"        callback({type = "server", host = "127.0.0.1", port = port})
+"      end,
+"      100)
+"    --callback({type = "server", host = "127.0.0.1", port = port})
+"  end
+"  -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
+"  dap.configurations.go = {
+"    {
+"      type = "go",
+"      name = "Debug",
+"      request = "launch",
+"      program = "${file}"
+"    }
+"  }
+"EOF
+"" }}}
+
+" nvim-web-devicons {{{
+
+lua << EOF
+require'nvim-web-devicons'.setup {
+ -- your personnal icons can go here (to override)
+ -- DevIcon will be appended to `name`
+ override = {
+  zsh = {
+    icon = "",
+    color = "#428850",
+    name = "Zsh"
+  }
+ };
+ -- globally enable default icons (default to false)
+ -- will get overriden by `get_icons` option
+ default = true;
+}
+EOF
 " }}}
 
 " ranger.vim {{{
@@ -877,18 +940,14 @@ let g:undotree_RelativeTimestamp=1
 nn <silent><F3> :UndotreeToggle<CR>
 " }}}
 
-" vim-floaterm {{{
+" vim-autotag {{{
 
-nn    <silent>   <F6>    :FloatermNew<CR>
-tno   <silent>   <F6>    <C-\><C-n>:FloatermNew<CR>
-nn    <silent>   <F7>    :FloatermPrev<CR>
-tno   <silent>   <F7>    <C-\><C-n>:FloatermPrev<CR>
-nn    <silent>   <F8>    :FloatermNext<CR>
-tno   <silent>   <F8>    <C-\><C-n>:FloatermNext<CR>
-nn    <silent>   <F9>    :FloatermToggle<CR>
-tno   <silent>   <F9>    <C-\><C-n>:FloatermToggle<CR>
-nn    <silent>   <F10>   :FloatermKill<CR>
-tno   <silent>   <F10>   <C-\><C-n>:FloatermKill<CR>
+let g:autotagStartMethod="fork"
+" }}}
+
+" vim-fugitive {{{
+
+nm <silent><leader>b :Git blame<cr>
 " }}}
 
 " vim-go {{{
@@ -970,6 +1029,16 @@ aug END
 " :GoImpl
 " :GoPlay
 " }}}
+" }}}
+
+" vim-indent-guides {{{
+"
+let g:indent_guides_enable_on_vim_startup = 1
+" }}}
+
+" vim-livedown {{{
+
+nm <silent><leader>L :LivedownToggle<cr>
 " }}}
 
 " vim-peekaboo {{{
