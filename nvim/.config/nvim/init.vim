@@ -25,11 +25,6 @@ Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " }}}
 
-" Internals {{{
-
-Plug 'tpope/vim-obsession'
-" }}}
-
 " Navigation {{{
 
 Plug 'aymericbeaumet/vim-symlink'
@@ -385,14 +380,6 @@ let g:airline_section_c = airline#section#create(['readonly'])
 let g:airline_section_x = airline#section#create(['%{coc#status()} ', '⎇  %{fugitive#head()}'])
 let g:airline_section_y = airline#section#create(['filetype'])
 let g:airline_section_z = airline#section#create(['%l', ':', '%v', '  ', '%p', '%%'])
-
-function! AirlineInit()
-    let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''$'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
-endfunction
-
-aug AIRLINE
-  autocmd User AirlineAfterInit call AirlineInit()
-aug END
 " }}}
 
 " Functions {{{
@@ -592,10 +579,9 @@ aug END
 
 " Commands {{{
 
-command! Cm delm!
-command! Cw CocCommand browser.clearCache
-command! Oo :Obsession ~/.session.vim
-command! Oe :Obsession!
+command! CM delm!
+command! CW CocCommand browser.clearCache
+command! MK :mksession! ~/.session.vim
 command! QQ qall
 command! W w
 " }}}
