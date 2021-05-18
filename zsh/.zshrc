@@ -30,6 +30,7 @@ plugins=(
   git
   zsh-256color
   zsh-syntax-highlighting
+  zsh-z
 )
 
 # }}}
@@ -37,7 +38,6 @@ plugins=(
 # variables {{{
 
 ZSH_THEME="nicoulaj"
-# ZSH_THEME="juanghurtado"
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#fff,underline"
 # }}}
 
@@ -46,11 +46,8 @@ source $ZSH/oh-my-zsh.sh
 
 # Exports{{{
 
-# export FZF_DEFAULT_OPTS="--preview='bat --color always --theme Nord {}'"
-# export WEATHER=$(curl -s wttr.in/Lucknow?format=4 | cut -d ':' -f2 | cut -c 2-)
-
 export AWS_PROFILE='openshift-dev'
-export BRIDGE_JASMINE_TIMEOUT=600000
+export COC_GITHUB_USERS_TOKEN='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'
 export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
 export FZF_ALT_C_COMMAND="fd -t d . $HOME"
@@ -64,9 +61,10 @@ export GOPATH="$HOME/go"
 export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
 export MANPAGER="nvim -c 'set ft=man' -"
 export MOZ_ENABLE_WAYLAND=1
-export MYBASHRC='~/.bashrc'
-export MYVIMRC='~/.vimrc'
-export MYZSHRC='~/.zshrc'
+export BASHRC='~/.bashrc'
+export VIM_SESSION='~/.session.vim'
+export VIMRC='~/.config/nvim/init.vim'
+export ZSHRC='~/.zshrc'
 export PAGER="bat --theme=Dracula --paging=auto --italic-text=always --color=always --number"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
 export VISUAL="nvim"
@@ -136,8 +134,9 @@ alias vi="nvim"
 alias vif="fzf --preview-window=right:50% --preview=\"bat --color always {}\" --bind \"enter:execute(nvim {})\""
 alias vpn="nmcli con up id \"1 - Red Hat Global VPN\" --ask"
 alias vpnd="nmcli con down id \"1 - Red Hat Global VPN\" --ask"
-alias vr="nvim ~/.vimrc"
-alias zr="nvim ~/.zshrc"
+alias vr="nvim ${VIMRC}"
+alias vrs="nvim -S ${VIM_SESSION}"
+alias zr="nvim ${ZSHRC}"
 # }}}
 
 # PATH {{{
@@ -158,16 +157,15 @@ $GOPATH/bin:\
 
 # Misc. {{{
 
-# # K8s {{{
+# # # K8s {{{
 
 # GNUBINS="$(find /usr/local/opt -type d -follow -name gnubin -print)"
-
 # for bindir in ${GNUBINS[@]}
 # do
 #   export PATH=$bindir:$PATH
 # done
 
-# # }}}
+# # # }}}
 
 if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 

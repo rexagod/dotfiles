@@ -2,6 +2,7 @@
 
 " Misc. {{{
 
+" FZF -> Telescope.
 " {range}norm <normal mode keystrokes>
 " }}}
 
@@ -17,7 +18,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Git {{{
 
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
-Plug 'stsewd/fzf-checkout.vim'
 " }}}
 
 " Go {{{
@@ -27,25 +27,23 @@ Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " Internals {{{
 
-Plug 'alok/notational-fzf-vim'
-Plug 'aymericbeaumet/vim-symlink'
-Plug 'vim-test/vim-test'
-Plug 'Shougo/neomru.vim'
-Plug 'voldikss/vim-floaterm'
-Plug 'editorconfig/editorconfig-vim'
+Plug 'tpope/vim-obsession'
 " }}}
 
 " Navigation {{{
 
+Plug 'aymericbeaumet/vim-symlink'
 Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim'
+Plug 'alok/notational-fzf-vim'
+Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
 Plug 'rhysd/clever-f.vim'
 " }}}
 
 " Text Manipulations {{{
 
+Plug 'editorconfig/editorconfig-vim'
 Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-indent'
 " {lhs} {rhs}                   ~{{{
 " ----- ----------------------  ~
@@ -77,6 +75,7 @@ Plug 'jiangmiao/auto-pairs'
 
 " Visuals {{{
 
+Plug 'voldikss/vim-floaterm'
 Plug 'markonm/traces.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
@@ -371,6 +370,7 @@ let g:airline_left_sep = ""
 let g:airline_powerline_fonts = 1
 let g:airline_right_alt_sep = ""
 let g:airline_right_sep = ""
+let g:airline#extensions#coc#enabled = 1
 
 function! SanitizeModified() " {{{
   if &modified
@@ -385,6 +385,14 @@ let g:airline_section_c = airline#section#create(['readonly'])
 let g:airline_section_x = airline#section#create(['%{coc#status()} ', '⎇  %{fugitive#head()}'])
 let g:airline_section_y = airline#section#create(['filetype'])
 let g:airline_section_z = airline#section#create(['%l', ':', '%v', '  ', '%p', '%%'])
+
+function! AirlineInit()
+    let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''$'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
+endfunction
+
+aug AIRLINE
+  autocmd User AirlineAfterInit call AirlineInit()
+aug END
 " }}}
 
 " Functions {{{
@@ -560,24 +568,12 @@ nn    <PageDown>      <NOP>
 let mapleader="\<Space>"
 
 nn <silent><leader>zr        :vsp $MYZSHRC<cr>
-nn <silent><leader>vr        :vsp ~/.config/nvim/init.vim<cr>
+nn <silent><leader>vr        :vsp $MYVIMRC<cr>
 nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
 nn <silent><nowait><leader>q :silent! call <SID>ToggleQuickFix()<cr>
 nn <silent><nowait><leader>l :silent! call <SID>ToggleLocationList()<cr>
 nn <silent><nowait><leader>s :silent! exec <SID>SourceScriptImplicit()<cr>
 " }}}
-
-" Localleader Mappings {{{
-
-let maplocalleader='\'
-
-nn <silent>\e :RangerWorkingDirectory<cr>
-" }}}
-" }}}
-
-" Aliases {{{
-
-com! QQ qall
 " }}}
 
 " Autocommands {{{
@@ -590,14 +586,17 @@ aug END
 aug FOO
   au!
   au Filetype help,qf nn <silent><buffer>q :q<cr>
-  au BufReadPost * let b:lexima_disabled=0
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exec "normal! g`\"" | endif
 aug END
 " }}}
 
 " Commands {{{
 
-command! ClearMarksBuf delm!
+command! Cm delm!
+command! Cw CocCommand browser.clearCache
+command! Oo :Obsession ~/.session.vim
+command! Oe :Obsession!
+command! QQ qall
 command! W w
 " }}}
 
@@ -653,6 +652,7 @@ let g:clever_f_chars_match_any_signs = ';' " f;
 " coc.nvim {{{
 
 " Functions {{{
+
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -722,6 +722,18 @@ xm <leader>f  <Plug>(coc-format-selected)
 " Show documentation in preview window. {{{
 nn <silent> K :call <SID>show_documentation()<CR>
 "}}}
+
+" Map function and class text objects{{{
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+"}}}
 "}}}
 
 " Insert Mode Mappings {{{
@@ -731,12 +743,12 @@ ino <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 ino <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 " Use <c-space> to trigger completion.
-ino <silent><expr> <c-space> coc#refresh()
+ino <silent><expr> <C-space> coc#refresh()
 
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-" ino <silent><expr> <CR> pumvisible() ? "\<CR>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-ino <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Use complete_info() to confirm completion only when there's selected complete item (this allows for single-enter breaks)
+if exists('*complete_info')
+  ino <silent><expr> <cr> complete_info(['selected'])['selected'] != -1 ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
 " }}}
 
 " Autocommands {{{
@@ -819,8 +831,6 @@ command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 " Maps {{{
 
-" Normal mode maps {{{
-
 nn <silent>\\ :silent! RG<cr>
 nn <silent>\b :silent! Buffers<cr>
 nn <silent>\c :silent! BCommits<cr>
@@ -840,15 +850,7 @@ nn <silent>\M :silent! Marks<cr>
 nn <silent>\t :silent! BTags<cr>
 nn <silent>\T :silent! Tags<cr>
 nn <silent>\w :silent! Windows<cr>
-"}}}
 " }}}
-" }}}
-
-" fzf-checkout.vim {{{
-
-let g:fzf_checkout_git_options = '--sort=-committerdate'
-
-nm <silent>\B :GBranches<cr>
 " }}}
 
 " hop.nvim {{{
@@ -870,7 +872,9 @@ let g:nv_search_paths = ['~/repositories/notes', './README.md']
 
 let g:ranger_map_keys = 0
 let g:ranger_replace_netrw = 1
-let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
+let g:ranger_command_override = 'ranger --cmd "set show_hidden=false"'
+
+nn <silent>\e :RangerCurrentFile<cr>
 " }}}
 
 " undotree {{{
@@ -986,17 +990,5 @@ aug END
 
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
 let g:peekaboo_compact=0
-" }}}
-
-" vim-test {{{
-
-let test#strategy = "floaterm"
-let g:test#preserve_screen = 0
-
-nm <silent> tn :TestNearest<CR>
-nm <silent> tf :TestFile<CR>
-nm <silent> ts :TestSuite<CR>
-nm <silent> tl :TestLast<CR>
-nm <silent> tv :TestVisit<CR>
 " }}}
 " }}}
