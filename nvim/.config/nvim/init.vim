@@ -27,6 +27,7 @@ Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'branch': 'master', 'do': ':G
 
 " Internals {{{
 
+Plug 'nvim-lua/completion-nvim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'Pocco81/DAPInstall.nvim'
 Plug 'aymericbeaumet/vim-symlink'
@@ -46,6 +47,7 @@ Plug 'rhysd/clever-f.vim'
 
 " Text Manipulations {{{
 
+Plug 'machakann/vim-swap'
 Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-indent'
 " {lhs} {rhs}                   ~{{{
 " ----- ----------------------  ~
@@ -366,19 +368,23 @@ colorscheme jellybeans
 " }}}
 let airline#extensions#tabline#current_first = 0
 let g:airline#extensions#coc#enabled = 1
-let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#buf_label_first = 1
+let g:airline#extensions#tabline#buffer_nr_show = 0
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#exclude_preview = 0
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_splits = 1
+let g:airline#extensions#tabline#show_tab_count = 0
+let g:airline#extensions#tabline#show_tab_nr = 0
+let g:airline#extensions#tabline#show_tab_type = 1
+let g:airline#extensions#tabline#show_tabs = 1
+let g:airline#extensions#tabline#tab_nr_type = 0
+let g:airline#extensions#tabline#tabnr_formatter = 'tabnr'
 let g:airline#extensions#whitespace#checks = ['conflicts']
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline_base16_improved_contrast = 1
-let g:airline_inactive_alt_sep = 1
-let g:airline_left_alt_sep = ""
-let g:airline_left_sep = ""
 let g:airline_powerline_fonts = 1
-let g:airline_right_alt_sep = ""
-let g:airline_right_sep = ""
 
 function! SanitizeModified() " {{{
   if &modified
@@ -395,7 +401,17 @@ let g:airline_section_y = airline#section#create(['filetype'])
 let g:airline_section_z = airline#section#create(['%l', ':', '%v', '  ', '%p', '%%'])
 " }}}
 
+" Variables {{{
+
+let g:markdown_fenced_languages = ["vim","lua","javascript","typescript","go"]
+" }}}
+
 " Functions {{{
+
+function! s:Toggler(variable) " {{{
+  a:variable = !a:variable
+endfunction
+" }}}
 
 function! s:ToggleQuickFix() " {{{
   if empty(filter(getwininfo(), 'v:val.quickfix'))
@@ -580,6 +596,11 @@ nn <silent><nowait><leader>s :silent! exec <SID>SourceScriptImplicit()<cr>
 
 " Autocommands {{{
 
+aug colorscheme_italics
+    autocmd!
+    autocmd ColorScheme * highlight Comment cterm=italic gui=italic
+aug END
+
 aug JSTS
   au!
   au Filetype *.js,*.ts setl suffixesadd=.js,.ts,.jsx,.tsx
@@ -660,6 +681,9 @@ endfunction
 "}}}
 
 " Commands {{{
+
+" Toggle Auto-Completion.
+command! -nargs=0 CC :call Toggler(b:coc_suggest_disable)
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
 " Add `:Fold` command to fold current buffer.
@@ -766,6 +790,25 @@ vn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "
 ino <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
 ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
 "}}}
+" }}}
+
+" completion-vim {{{
+
+let g:completion_enable_auto_popup = 0
+let g:completion_matching_smart_case = 1
+let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy', 'all']
+let g:completion_sorting = "length"
+
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
+
+imap <silent> <C-Space> <Plug>(completion_trigger)
+ino <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+ino <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+
+aug completion
+  au BufEnter * lua require'completion'.on_attach()
+aug END
 " }}}
 
 " DAPInstall.vim {{{
@@ -1045,5 +1088,13 @@ nm <silent><leader>L :LivedownToggle<cr>
 
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
 let g:peekaboo_compact=0
+" }}}
+
+" vim-swap {{{
+
+omap i, <Plug>(swap-textobject-i)
+xmap i, <Plug>(swap-textobject-i)
+omap a, <Plug>(swap-textobject-a)
+xmap a, <Plug>(swap-textobject-a)
 " }}}
 " }}}

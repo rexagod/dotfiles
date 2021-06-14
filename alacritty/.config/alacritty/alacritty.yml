@@ -32,32 +32,32 @@ font:
 draw_bold_text_with_bright_colors: true
 
 colors:
-  name: tlh
-  author: ""
+  name: Atelierforest (dark)
+  author: Chris Kempson
   primary:
-    background: "#101010"
-    foreground: "#66ff66"
+    background: "#1b1918"
+    foreground: "#a8a19f"
   cursor:
-    text: "#101010"
-    cursor: "#66ff66"
+    text: "#1b1918"
+    cursor: "#a8a19f"
   normal:
-    black: "#1c1c1c"
-    red: "#d81860"
-    green: "#60ff60"
-    yellow: "#f9fd75"
-    blue: "#4695c8"
-    magenta: "#a78edb"
-    cyan: "#43afce"
-    white: "#f3ebe2"
+    black: "#1b1918"
+    red: "#f22c40"
+    green: "#5ab738"
+    yellow: "#d5911a"
+    blue: "#407ee7"
+    magenta: "#6666ea"
+    cyan: "#00ad9c"
+    white: "#a8a19f"
   bright:
-    black: "#4d4d4d"
-    red: "#f00060"
-    green: "#70ff70"
-    yellow: "#f9fd80"
-    blue: "#5a9dc8"
-    magenta: "#b29fdb"
-    cyan: "#69b8ce"
-    white: "#eeeeee"
+    black: "#766e6b"
+    red: "#f22c40"
+    green: "#5ab738"
+    yellow: "#d5911a"
+    blue: "#407ee7"
+    magenta: "#6666ea"
+    cyan: "#00ad9c"
+    white: "#f1efee"
 
 background_opacity: 1.0
 
