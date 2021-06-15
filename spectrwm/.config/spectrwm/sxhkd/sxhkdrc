@@ -95,11 +95,11 @@ XF86AudioStop
 
 #Brightness up
 XF86MonBrightnessUp
-    xbacklight -inc 10
+    xbacklight -inc 5
 
 #Brightness down
 XF86MonBrightnessDown
-    xbacklight -dec 10
+    xbacklight -dec 5
 
 #dmenu
 super + i

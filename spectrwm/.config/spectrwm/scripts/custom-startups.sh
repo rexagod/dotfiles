@@ -11,3 +11,6 @@ xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 
 # Bluetooth manager.
 blueman-tray &
+
+# Backup packages.
+pacman -Qe | awk '{print $1}' > ~/dotfiles/pacman-lists/pkglist.txt

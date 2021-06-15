@@ -16,7 +16,6 @@ arch-install-scripts
 archiso
 arcolinux-bin-git
 arcolinux-config-all-desktops-git
-arcolinux-config-spectrwm-git
 arcolinux-conky-collection-git
 arcolinux-fonts-git
 arcolinux-grub-theme-vimix-git
@@ -60,6 +59,7 @@ base
 bash-completion
 bashtop
 bat
+bazel
 bibata-cursor-theme-bin
 bind
 binutils
@@ -86,6 +86,7 @@ cups-pk-helper
 darkhttpd
 dconf-editor
 ddrescue
+delve
 dex
 dhclient
 dialog
@@ -97,16 +98,19 @@ dnsmasq
 docker
 dosfstools
 downgrade
+duktape
 ebtables
 edid-decode-git
 edk2-shell
 efibootmgr
+etcd
 ethtool
 exfatprogs
 exo
 expac
 f2fs-tools
 fakeroot
+fd
 feh
 ffmpegthumbnailer
 file
@@ -114,6 +118,8 @@ file-roller
 findutils
 firefox
 flex
+fmt
+fontviewer
 freetype2
 fsarchiver
 fuse-overlayfs
@@ -129,11 +135,14 @@ gmrun
 gnome-disk-utility
 gnome-keyring
 go
+google-chrome
+google-cloud-sdk
 gparted
 gpm
 gptfdisk
 grep
 groff
+grsync
 grub
 grub-customizer
 gsfonts
@@ -156,6 +165,7 @@ hardcode-fixer-git
 hardinfo
 haveged
 hdparm
+helm
 htop
 hw-probe
 hwinfo
@@ -170,6 +180,9 @@ iw
 jfsutils
 jq
 jsoncpp
+k9s
+kind
+kubectx
 kvantum-qt5
 laptop-detect
 libcups
@@ -221,7 +234,6 @@ networkmanager-pptp
 networkmanager-vpnc
 nfs-utils
 nilfs-utils
-nodejs
 noto-fonts
 npm
 nss-mdns
@@ -235,6 +247,7 @@ openconnect
 openresolv
 openssh
 openvpn
+operator-sdk
 os-prober
 p7zip
 pacman
@@ -242,6 +255,7 @@ pamac-all
 partclone
 parted
 partimage
+pass
 patch
 pavucontrol
 picom
@@ -254,11 +268,13 @@ poppler-glib
 poppler-qt5
 ppp
 pptpclient
+pugixml
 pulseaudio
 pulseaudio-alsa
 pulseaudio-bluetooth
 python-pyparted
 python-pywal
+python2-crcmod
 python2-pyxdg
 qemu
 qt5-webkit
@@ -279,12 +295,15 @@ sddm-config-editor-git
 sdparm
 sed
 sg3_utils
+slack-desktop
 smartmontools
+spdlog
 spectrwm
 speedtest-cli
 splix
 squashfs-tools
 stow
+stylelint
 sudo
 surfn-icons-git
 sutils-git
@@ -300,7 +319,6 @@ thunar
 thunar-archive-plugin
 thunar-media-tags-plugin
 thunar-volman
-timeshift
 tmux
 tree
 trizen
@@ -313,6 +331,7 @@ ttf-hack
 ttf-inconsolata
 ttf-liberation
 ttf-ms-fonts
+ttf-nerd-fonts-symbols-mono
 ttf-roboto
 ttf-ubuntu-font-family
 tumbler
@@ -367,6 +386,7 @@ xfsprogs
 xfwm4
 xl2tpd
 xorg-bdftopcf
+xorg-font-util
 xorg-iceauth
 xorg-mkfontscale
 xorg-server

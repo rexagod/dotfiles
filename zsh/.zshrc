@@ -20,8 +20,6 @@ setopt noautomenu
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
-
-source $ZSH/oh-my-zsh.sh
 # }}}
 
 # plugins {{{
@@ -41,6 +39,8 @@ plugins=(
 ZSH_THEME="nicoulaj"
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#fff,underline"
 # }}}
+
+source $ZSH/oh-my-zsh.sh
 
 # Exports{{{
 
@@ -168,6 +168,12 @@ $GOPATH/bin:\
 # done
 
 # # # }}}
+
+# NVM {{{
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# }}}
 
 if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 

@@ -408,11 +408,6 @@ let g:markdown_fenced_languages = ["vim","lua","javascript","typescript","go"]
 
 " Functions {{{
 
-function! s:Toggler(variable) " {{{
-  a:variable = !a:variable
-endfunction
-" }}}
-
 function! s:ToggleQuickFix() " {{{
   if empty(filter(getwininfo(), 'v:val.quickfix'))
     copen
@@ -615,6 +610,7 @@ aug END
 
 " Commands {{{
 
+command! CC :let b:coc_suggest_disable = 1
 command! SS mks! ~/.session.vim
 command! CM delm!
 command! YY PlugClean | PlugInstall | PlugUpdate | PlugUpgrade | CocUpdate
@@ -682,8 +678,6 @@ endfunction
 
 " Commands {{{
 
-" Toggle Auto-Completion.
-command! -nargs=0 CC :call Toggler(b:coc_suggest_disable)
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
 " Add `:Fold` command to fold current buffer.
