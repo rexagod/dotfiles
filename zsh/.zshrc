@@ -1,28 +1,75 @@
 # Maintainer: @rexagod
 
-# BASHRC {{{
-
-COMPLETION_WAITING_DOTS="true"
-DISABLE_AUTO_TITLE="true"
-ENABLE_CORRECTION="true"
-HIST_STAMPS="mm/dd/yyyy"
-
-alias ohmyzsh="nvim ~/.oh-my-zsh"
-alias zshconfig="nvim ~/.zshrc"
-
-export EDITOR='nvim'
-export LANG=en_US.UTF-8
-export UPDATE_ZSH_DAYS=15
-export ZSH="/home/rexagod/.oh-my-zsh"
+# Options {{{
 
 setopt noautomenu
-
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # }}}
 
-# plugins {{{
+# Variables {{{
+
+COMPLETION_WAITING_DOTS="true"
+DISABLE_AUTO_TITLE="false"
+ENABLE_CORRECTION="false"
+HISTCONTROL=ignoreboth
+HISTFILESIZE=10000
+HISTSIZE=10000
+HIST_STAMPS="mm/dd/yyyy"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#fff,underline"
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_THEME="nicoulaj"
+# }}}
+
+# PATH {{{
+
+export PATH="\
+$GOPATH/bin:\
+$HOME/.bin:\
+$HOME/.local/bin:\
+$HOME/bin:\
+$HOME/go/bin:\
+/home/linuxbrew/.linuxbrew/bin:\
+/usr/bin:\
+/usr/lib:\
+/usr/local/bin:\
+/usr/share:\
+" # $PATH intentially not included here.
+# }}}
+
+# Exports{{{
+
+export AWS_PROFILE='openshift-dev'
+export BASHRC='~/.bashrc'
+export COC_GITHUB_USERS_TOKEN='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'
+export DEFAULT_RECIPIENT="rexagod@gmail.com"
+export EDITOR='nvim'
+export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --color auto'
+export FZF_DEFAULT_OPTS=""
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GOBIN="$HOME/go/bin"
+export GOOGLE_APPLICATION_CREDENTIALS="/home/rexagod/Downloads/contrib-k8s-478a21288ae7.json"
+export GOPATH="$HOME/go"
+export IMAGE_TAG='latest'
+export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
+export LANG=en_US.UTF-8
+export MANPAGER="nvim -c 'set ft=man' -"
+export MOZ_ENABLE_WAYLAND=1
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+export PAGER="bat --theme=Dracula --paging=auto --italic-text=always --color=always --number"
+export RANGER_LOAD_DEFAULT_RC="FALSE"
+export REGISTRY_NAMESPACE='rexagod'
+export UPDATE_ZSH_DAYS=15
+export VIMRC='~/.config/nvim/init.vim'
+export VIM_SESSION='~/.session.vim'
+export VISUAL="nvim"
+export XDG_SESSION_TYPE='wayland'
+export ZSH="/home/rexagod/.oh-my-zsh"
+export ZSHRC='~/.zshrc'
+#}}}
+
+# Plugins {{{
 
 plugins=(
   fzf
@@ -32,74 +79,49 @@ plugins=(
   zsh-z
 )
 
-# }}}
-
-# variables {{{
-
-ZSH_THEME="nicoulaj"
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#fff,underline"
-# }}}
-
 source $ZSH/oh-my-zsh.sh
+# }}}
 
-# Exports{{{
+# Aliases{{{
 
-export AWS_PROFILE='openshift-dev'
-export COC_GITHUB_USERS_TOKEN='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'
-export DEFAULT_RECIPIENT="rexagod@gmail.com"
-export EDITOR='nvim'
-export FZF_ALT_C_COMMAND="fd -t d . $HOME"
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_COMMAND="fd . $HOME"
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --color auto'
-export FZF_DEFAULT_OPTS=""
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-export GOBIN="$HOME/go/bin"
-export GOOGLE_APPLICATION_CREDENTIALS="/home/rexagod/Downloads/contrib-k8s-478a21288ae7.json"
-export GOPATH="$HOME/go"
-export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
-export MANPAGER="nvim -c 'set ft=man' -"
-export MOZ_ENABLE_WAYLAND=1
-export BASHRC='~/.bashrc'
-export VIM_SESSION='~/.session.vim'
-export VIMRC='~/.config/nvim/init.vim'
-export ZSHRC='~/.zshrc'
-export PAGER="bat --theme=Dracula --paging=auto --italic-text=always --color=always --number"
-export RANGER_LOAD_DEFAULT_RC="FALSE"
-export VISUAL="nvim"
-export XDG_SESSION_TYPE='wayland'
-#}}}
+alias bat="bat --theme=\"Dracula\" --style grid,numbers,changes"
+alias bb="./bin/bridge"
+alias c="clear"
+alias gS="git stash"
+alias gSp="git stash pop"
+alias gh="go help"
+alias hgrep="history | grep "
+alias k="kubectl"
+alias ls="lsd"
+alias l="ls -1Sh"
+alias la="ls -1SAh"
+alias ll="ls -1lSh"
+alias nv="nvim"
+alias ohmyzsh="nvim ~/.oh-my-zsh"
+alias pacman="sudo pacman"
+alias rr="ranger"
+alias soc="source ./contrib/oc-environment.sh"
+alias sshd="sudo /usr/sbin/sshd"
+alias szr="source ~/.zshrc"
+alias vi="nvim"
+alias vif="fzf --preview-window=right:50% --preview=\"bat --color always {}\" --bind \"enter:execute(nvim {})\""
+alias vpn="nmcli con up id \"1 - Red Hat Global VPN\" --ask"
+alias vpnd="nmcli con down id \"1 - Red Hat Global VPN\" --ask"
+alias vr="nvim ${VIMRC}"
+alias vrs="nvim -S ${VIM_SESSION}"
+alias zr="nvim ${ZSHRC}"
+alias zshconfig="nvim ~/.zshrc"
+# }}}
 
 # Functions {{{
 
-ocs() { # {{{
-  cd console
-  wget https://raw.githubusercontent.com/afreen23/dev-setup/main/install-ocs.sh
-  chmod +x install-ocs.sh
-  ./install-ocs.sh
-  rm install-ocs.sh
-  cd - >> /dev/null
-}
-# }}}
-
-# vr() { #{{{
-#   cd /etc/dotfiles/
-#   if [[ -f .session.vim ]]; then
-#     nvim -S .session.vim
-#   else
-#     nvim -c 'source %' vimrc.vim
-#   fi
-#   cd - >> /dev/null
-# }
-# # }}}
-
 cc () { # {{{
 
-  export DIR='openshift-cluster'     # Cluster metadata directory
-  USER='prasriva'
-  export CLUSTER_ID="$USER-$RANDOM"
-  NAME='new\sname\shere'  # metadata > name value
-  CONF='install-config.yaml'  # Original config filename in .aws
+  export DIR='openshift-cluster'      # Cluster metadata directory
+  USER='prasriva'                     # RH username
+  export CLUSTER_ID="$USER-$RANDOM"   # Cluster name = <Your RH id> + $RANDOM
+  NAME='new\sname\shere'              # Template for Cluster ID
+  CONF='install-config.yaml'          # Original config filename in .aws
 
   cd ~
   rm -rf "$DIR"
@@ -113,73 +135,14 @@ cc () { # {{{
 # }}}
 # }}}
 
-# Aliases{{{
-
-alias bat="bat --theme=\"Dracula\" --style grid,numbers,changes"
-alias bb="./bin/bridge"
-alias c="clear"
-alias gh="go help"
-alias gS="git stash"
-alias gSp="git stash pop"
-alias hgrep="history | grep "
-alias k="kubectl"
-alias l="ls -p1"
-alias la="ls -hlpAX"
-alias ll="ls -pA1"
-alias nv="nvim"
-alias pacman="sudo pacman"
-alias rr="ranger"
-alias soc="source ./contrib/oc-environment.sh"
-alias sshd="sudo /usr/sbin/sshd"
-alias szr="source ~/.zshrc"
-alias vi="nvim"
-alias vif="fzf --preview-window=right:50% --preview=\"bat --color always {}\" --bind \"enter:execute(nvim {})\""
-alias vpn="nmcli con up id \"1 - Red Hat Global VPN\" --ask"
-alias vpnd="nmcli con down id \"1 - Red Hat Global VPN\" --ask"
-alias vr="nvim ${VIMRC}"
-alias vrs="nvim -S ${VIM_SESSION}"
-alias zr="nvim ${ZSHRC}"
-# }}}
-
-# PATH {{{
-
-export PATH="\
-$HOME/go/bin:\
-$HOME/.bin:\
-$HOME/.local/bin:\
-$HOME/bin:\
-/home/linuxbrew/.linuxbrew/bin:\
-/usr/bin:\
-/usr/lib:\
-/usr/local/bin:\
-/usr/share:\
-$GOPATH/bin:\
-" # $PATH intentially not included here.
-# }}}
-
 # Misc. {{{
 
-# # # K8s {{{
-
-# GNUBINS="$(find /usr/local/opt -type d -follow -name gnubin -print)"
-# for bindir in ${GNUBINS[@]}
-# do
-#   export PATH=$bindir:$PATH
-# done
-
-# # # }}}
-
-# NVM {{{
-
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-# }}}
+export WATCH_NAMESPACE="openshift-storage"                                                                                                        
+export ROOK_CEPH_IMAGE="rook/ceph:v1.6.0.95.gf4cfc7a"                                                                                             
+export CEPH_IMAGE="ceph/daemon-base:latest-pacific"                                                                                               
+export NOOBAA_CORE_IMAGE="noobaa/noobaa-core:master-20210609"                                                                                     
+export NOOBAA_DB_IMAGE="centos/postgresql-12-centos7"
 
 if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
-
-HISTCONTROL=ignoreboth
-HISTFILESIZE=10000
-HISTSIZE=10000
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_AUTOSUGGEST_USE_ASYNC=1
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 # }}}

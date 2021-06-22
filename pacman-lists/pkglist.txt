@@ -183,6 +183,7 @@ jsoncpp
 k9s
 kind
 kubectx
+kustomize
 kvantum-qt5
 laptop-detect
 libcups
@@ -199,6 +200,7 @@ linux-firmware
 linux-headers
 logrotate
 lsb-release
+lsd
 lsscsi
 lvm2
 lxappearance
@@ -303,7 +305,6 @@ speedtest-cli
 splix
 squashfs-tools
 stow
-stylelint
 sudo
 surfn-icons-git
 sutils-git
@@ -311,6 +312,7 @@ sxhkd
 syslinux
 system-config-printer
 tcpdump
+tealdeer-bin
 terminus-font
 termite
 testdisk

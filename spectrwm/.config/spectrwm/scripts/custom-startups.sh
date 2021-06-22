@@ -6,8 +6,10 @@ sleep 1
 # Hide polybar initially.
 # polybar-msg cmd hide
 
-# Map Caps Lock to Escape.
-xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+# Map Caps Lock to BackSpace.
+setxkbmap -option caps:backspace
+setxkbmap -option shift:both_capslock
+xmodmap -e "clear Lock"
 
 # Bluetooth manager.
 blueman-tray &

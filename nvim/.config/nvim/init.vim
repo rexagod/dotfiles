@@ -1,10 +1,5 @@
 " Maintainer: @rexagod
 
-" Misc. {{{
-
-" {range}norm <normal mode keystrokes>
-" }}}
-
 " Plugins {{{
 
 call plug#begin('~/.vim/plugged')
@@ -16,7 +11,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Git {{{
 
-Plug 'mhinz/vim-signify'
+Plug 'nvim-lua/plenary.nvim' | Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 " }}}
 
@@ -27,11 +22,14 @@ Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'branch': 'master', 'do': ':G
 
 " Internals {{{
 
-Plug 'nvim-lua/completion-nvim'
-Plug 'mfussenegger/nvim-dap'
-Plug 'Pocco81/DAPInstall.nvim'
+Plug 'caenrique/nvim-toggle-terminal'
+Plug 'tweekmonster/startuptime.vim'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-eunuch'
 Plug 'aymericbeaumet/vim-symlink'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'shime/vim-livedown'
+Plug 'junegunn/vim-peekaboo'
 " }}}
 
 " Navigation {{{
@@ -47,6 +45,8 @@ Plug 'rhysd/clever-f.vim'
 
 " Text Manipulations {{{
 
+Plug 'Krasjet/auto.pairs'
+Plug 'tpope/vim-abolish'
 Plug 'machakann/vim-swap'
 Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-indent'
 " {lhs} {rhs}                   ~{{{
@@ -74,19 +74,16 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'flwyd/vim-conjoin'
-Plug 'jiangmiao/auto-pairs'
 " }}}
 
 " Visuals {{{
 
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'shime/vim-livedown'
 Plug 'markonm/traces.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'junegunn/vim-peekaboo'
 " }}}
 
 " Syntax {{{
@@ -128,7 +125,7 @@ let g:jellybeans_use_term_italics = 1
 let g:jellybeans_use_lowcolor_black = 1
 colorscheme jellybeans
 
-" let g:airline_theme = 'atomic'
+let g:airline_theme = 'google_dark'
 " colorscheme green
 " }}}
 
@@ -384,7 +381,12 @@ let g:airline#extensions#tabline#tabnr_formatter = 'tabnr'
 let g:airline#extensions#whitespace#checks = ['conflicts']
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline_base16_improved_contrast = 1
+let g:airline_inactive_alt_sep = 0
 let g:airline_powerline_fonts = 1
+let g:airline_left_sep = "\ue0b8"
+let g:airline_left_alt_sep = "\ue0b9"
+let g:airline_right_sep = "\ue0ba"
+let g:airline_right_alt_sep = "\ue0bb"
 
 function! SanitizeModified() " {{{
   if &modified
@@ -398,7 +400,7 @@ let g:airline_section_b = airline#section#create(['%{expand("%f")}', '%{Sanitize
 let g:airline_section_c = airline#section#create(['readonly'])
 let g:airline_section_x = airline#section#create(['%{coc#status()} ', '⎇  %{fugitive#head()}'])
 let g:airline_section_y = airline#section#create(['filetype'])
-let g:airline_section_z = airline#section#create(['%l', ':', '%v', '  ', '%p', '%%'])
+let g:airline_section_z = airline#section#create(['%l', ':', '%v  ', '%p', '%%'])
 " }}}
 
 " Variables {{{
@@ -473,9 +475,8 @@ set noswapfile
 set nowrap
 set nowritebackup
 set number
-set omnifunc=syntaxcomplete#Complete
 set path=.,,
-set pumheight=10
+set pumheight=5
 set re=0
 set relativenumber
 set ruler
@@ -544,44 +545,47 @@ vn    <S-Left>    <Nop>
 vn    <S-Up>      <C-e>
 vn    <S-Down>    <C-y>
 
-vn    <PageUp>    <NOP>
-vn    <PageDown>  <NOP>
+vn    <PageUp>    <Nop>
+vn    <PageDown>  <Nop>
 
 " }}}
 
 " Normal Mode Mappings {{{
 
-nn    <C-j>        5j
-nn    <C-k>        5k
-nn    <C-h>        5h
-nn    <C-l>        5l
-nm    <C-Right>    <C-l>
-nm    <C-Left>     <C-h>
-nm    <C-Up>       <C-k>
-nm    <C-Down>     <C-j>
-nn    <C-PageUp>   <C-b>
-nn    <C-PageDown> <C-f>
+nn    <C-j>          5j
+nn    <C-k>          5k
+nn    <C-h>          5h
+nn    <C-l>          5l
+nm    <C-Right>      <C-l>
+nm    <C-Left>       <C-h>
+nm    <C-Up>         <C-k>
+nm    <C-Down>       <C-j>
+nn    <C-PageUp>     <C-b>
+nn    <C-PageDown>   <C-f>
 
-nn    <S-Right>   <Nop>
-nn    <S-Left>    <Nop>
-nn    <S-Up>      <C-y>
-nn    <S-Down>    <C-e>
+nn    <S-Right>      <Nop>
+nn    <S-Left>       <Nop>
+nn    <S-Up>         <C-y>
+nn    <S-Down>       <C-e>
 
-nn    <silent><F2>    :messages<cr>
-nn    <silent><F4>    :only<cr>
-nn    <silent>QQ      :bd<cr>
-nn    <F1>            <NOP>
-nn    <PageUp>        <NOP>
-nn    <PageDown>      <NOP>
+nn    <silent><F2>   :messages<cr>
+nn    <silent><F4>   :only<cr>
+nn    <silent>QQ     :bd<cr>
+nn    <F1>           <NOP>
+nn    <PageUp>       <NOP>
+nn    <PageDown>     <NOP>
 nn    <silent><F6>   :mksession! ~/.session.vim<cr>
+
+nn    j              gj
+nn    k              gk
 " }}}
 
 " Leader Mappings {{{
 
 let mapleader="\<Space>"
 
-nn <silent><leader>zr        :vsp $MYZSHRC<cr>
-nn <silent><leader>vr        :vsp $MYVIMRC<cr>
+nn <silent><leader>zr        :vsp $ZSHRC<cr>
+nn <silent><leader>vr        :vsp $VIMRC<cr>
 nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
 nn <silent><nowait><leader>q :silent! call <SID>ToggleQuickFix()<cr>
 nn <silent><nowait><leader>l :silent! call <SID>ToggleLocationList()<cr>
@@ -591,20 +595,12 @@ nn <silent><nowait><leader>s :silent! exec <SID>SourceScriptImplicit()<cr>
 
 " Autocommands {{{
 
-aug colorscheme_italics
-    autocmd!
-    autocmd ColorScheme * highlight Comment cterm=italic gui=italic
-aug END
-
-aug JSTS
-  au!
-  au Filetype *.js,*.ts setl suffixesadd=.js,.ts,.jsx,.tsx
-aug END
-
 aug FOO
   au!
+  au Filetype *.js,*.ts setl suffixesadd=.js,.ts,.jsx,.tsx
   au Filetype help,qf nn <silent><buffer>q :q<cr>
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exec "normal! g`\"" | endif
+  au ColorScheme * highlight Comment cterm=italic gui=italic
 aug END
 " }}}
 
@@ -624,24 +620,6 @@ command! W w
 
 packadd! cfilter
 packadd! matchit
-nn <silent><leader><leader>p :
-      \ PlugClean<bar>
-      \ PlugInstall<bar>
-      \ <cr>
-" }}}
-
-" auto-pairs {{{
-
-" <CR>  : Insert new indented line after return if cursor in blank brackets or quotes.
-" <BS>  : Delete brackets in pair
-" <M-p> : Toggle Autopairs (g:AutoPairsShortcutToggle)
-" <M-e> : Fast Wrap (g:AutoPairsShortcutFastWrap)
-" <M-n> : Jump to next closed pair (g:AutoPairsShortcutJump)
-" <M-b> : BackInsert (g:AutoPairsShortcutBackInsert)
-" <M-(bracket)> : Put succeeding character after nearest (bracket).
-" <M-;> : Jump to next closing bracket (of a pair).
-
-let g:AutoPairsShortcutFastWrap = '<M-z>'
 " }}}
 
 " bclose.vim {{{
@@ -686,6 +664,8 @@ command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
 " Normal Mode Mappings {{{
 
+inoremap <silent><expr> <c-space> coc#refresh()
+
 " *g* Maps {{{
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -725,11 +705,6 @@ nm \a  <Plug>(coc-codeaction-selected)
 nm \ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nm \Q  <Plug>(coc-fix-current)
-"}}}
-
-" Formatting selected code. {{{
-nm <leader>f  <Plug>(coc-format-selected)
-xm <leader>f  <Plug>(coc-format-selected)
 "}}}
 
 " Show documentation in preview window. {{{
@@ -773,48 +748,19 @@ aug CoC
   au FileType typescript,json setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder.
   au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  " Disable autocomplete
+  au BufReadPost * let b:coc_suggest_disable = 0
 aug END
 "}}}
 
 " Remap <C-f> and <C-b> for scroll float windows/popups. {{{
 nn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+nn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-b>"
 vn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-vn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+vn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-b>"
 ino <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Left>"
 "}}}
-" }}}
-
-" completion-vim {{{
-
-let g:completion_enable_auto_popup = 0
-let g:completion_matching_smart_case = 1
-let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy', 'all']
-let g:completion_sorting = "length"
-
-set completeopt=menuone,noinsert,noselect
-set shortmess+=c
-
-imap <silent> <C-Space> <Plug>(completion_trigger)
-ino <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-ino <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-
-aug completion
-  au BufEnter * lua require'completion'.on_attach()
-aug END
-" }}}
-
-" DAPInstall.vim {{{
-
-lua << EOF
-local dap_install = require("dap-install")
-
-dap_install.setup({
-	installation_path = "/tmp/test_dap_install/",
-	verbosely_call_debuggers = true,
-})
-EOF
 " }}}
 
 " editorconfig-vim {{{
@@ -828,29 +774,6 @@ let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
 
 let g:fzf_layout = { 'up': '100%' }
 let g:fzf_preview_window = [ 'up:60%:rounded:nowrap:nofollow' ]
-" }}}
-
-" Functions {{{
-
-" Delete buffers {{{
-
-function! s:list_buffers()
-  redir => list
-  silent ls
-  redir END
-  return split(list, "\n")
-endfunction
-
-function! s:delete_buffers(lines)
-  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
-endfunction
-
-command! BD call fzf#run(fzf#wrap({
-      \ 'source': s:list_buffers(),
-      \ 'sink*': { lines -> s:delete_buffers(lines) },
-      \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
-      \ }))
-" }}}
 " }}}
 
 " Maps {{{
@@ -894,64 +817,10 @@ nm \n :NV<cr>
 let g:nv_search_paths = ['~/repositories/notes', './README.md']
 " }}}
 
-"" nvim-dap {{{
+" nvim-toggle-terminal {{{
 
-"lua << EOF
-"  dap.adapters.go = function(callback, config)
-"    local handle
-"    local pid_or_err
-"    local port = 38697
-"    handle, pid_or_err =
-"      vim.loop.spawn(
-"      "dlv",
-"      {
-"        args = {"dap", "-l", "127.0.0.1:" .. port},
-"        detached = true
-"      },
-"      function(code)
-"        handle:close()
-"        print("Delve exited with exit code: " .. code)
-"      end
-"    )
-"    -- Wait 100ms for delve to start
-"    vim.defer_fn(
-"      function()
-"        --dap.repl.open()
-"        callback({type = "server", host = "127.0.0.1", port = port})
-"      end,
-"      100)
-"    --callback({type = "server", host = "127.0.0.1", port = port})
-"  end
-"  -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
-"  dap.configurations.go = {
-"    {
-"      type = "go",
-"      name = "Debug",
-"      request = "launch",
-"      program = "${file}"
-"    }
-"  }
-"EOF
-"" }}}
-
-" nvim-web-devicons {{{
-
-lua << EOF
-require'nvim-web-devicons'.setup {
- -- your personnal icons can go here (to override)
- -- DevIcon will be appended to `name`
- override = {
-  zsh = {
-    icon = "",
-    color = "#428850",
-    name = "Zsh"
-  }
- };
- -- globally enable default icons (default to false)
- -- will get overriden by `get_icons` option
- default = true;
-}
-EOF
+nnoremap <silent> <C-z> :ToggleTerminal<cr>
+tnoremap <silent> <esc> <C-d><cr>
 " }}}
 
 " ranger.vim {{{
@@ -961,20 +830,6 @@ let g:ranger_replace_netrw = 1
 let g:ranger_command_override = 'ranger --cmd "set show_hidden=false"'
 
 nn <silent>\e :RangerCurrentFile<cr>
-" }}}
-
-" undotree {{{
-
-let g:undotree_SetFocusWhenToggle=1
-let g:undotree_CursorLine=0
-let g:undotree_HelpLine=0
-let g:undotree_ShortIndicators=1
-let g:undotree_WindowLayout=2
-let g:undotree_SplitWidth=winwidth(0)/4
-let g:undotree_TreeNodeShape='*'
-let g:undotree_RelativeTimestamp=1
-
-nn <silent><F3> :UndotreeToggle<CR>
 " }}}
 
 " vim-autotag {{{
@@ -1021,6 +876,8 @@ let g:go_statusline_duration = 1000
 let g:go_test_show_name = 1
 let g:go_test_timeout= '10s'
 let g:go_updatetime = 100
+
+let $GINKGO_EDITOR_INTEGRATION = "true"
 " }}}
 
 " Mappings {{{
@@ -1054,17 +911,27 @@ aug GO
   " Also, :GoCallees and :GoCallers.
   au FileType go nm <silent>K :call CocActionAsync('doHover')<cr>
 
+  " Debug utilities.
+  au FileType go nm <F5> :GoDebugContinue<cr>
+  au FileType go nm <F8> :GoDebugHalt<cr>
+  au FileType go nm <F9> :GoDebugBreakpoint<cr>
+  au FileType go nm <F10> :GoDebugNext<cr>
+  au FileType go nm <F11> :GoDebugStep<cr>
+  au FileType go nm <F12> :GoDebugStepOut<cr>
+  au FileType go command! -bang GD GoDebugStart
+  au FileType go command! -bang GDR GoDebugRestart
+  au FileType go command! -bang GDS GoDebugStop
+  au FileType go command! -bang GDE GoDebugSet
+  au FileType go command! -bang GDP GoDebugPrint
+  au FileType go command! -bang GDT GoDebugTest
+  au FileType go command! -bang GDF GoDebugTestFunc
+
   " Alternate utilities to open alternate file in different ways.
   au Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
   au Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
   au Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
   au Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 aug END
-" }}}
-
-" "Etcetera etcetera" stuff that I prefer doing manually. {{{
-" :GoImpl
-" :GoPlay
 " }}}
 " }}}
 
@@ -1086,6 +953,7 @@ let g:peekaboo_compact=0
 
 " vim-swap {{{
 
+" g<, g>, and gs
 omap i, <Plug>(swap-textobject-i)
 xmap i, <Plug>(swap-textobject-i)
 omap a, <Plug>(swap-textobject-a)
