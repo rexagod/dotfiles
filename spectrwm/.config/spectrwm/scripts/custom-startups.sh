@@ -7,9 +7,9 @@ sleep 1
 # polybar-msg cmd hide
 
 # Map Caps Lock to BackSpace.
-setxkbmap -option caps:backspace
-setxkbmap -option shift:both_capslock
-xmodmap -e "clear Lock"
+# setxkbmap -option caps:backspace
+# setxkbmap -option shift:both_capslock
+# xmodmap -e "clear Lock"
 
 # Bluetooth manager.
 blueman-tray &

@@ -13,6 +13,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'nvim-lua/plenary.nvim' | Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
+Plug 'aacunningham/vim-fuzzy-stash'
 " }}}
 
 " Go {{{
@@ -34,6 +35,8 @@ Plug 'junegunn/vim-peekaboo'
 
 " Navigation {{{
 
+Plug 'romainl/vim-qf'
+Plug 'jremmen/vim-ripgrep'
 Plug 'craigemery/vim-autotag'
 Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
@@ -88,6 +91,7 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Syntax {{{
 
+Plug 'sts10/vim-pink-moon'
 Plug 'julien/vim-colors-green'
 Plug 'romainl/Apprentice'
 Plug 'NLKNguyen/papercolor-theme'
@@ -100,33 +104,40 @@ call plug#end()
 
 " Theme {{{
 
+" Configuration {{{
+
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 filetype indent on
 filetype plugin on
 syntax enable
 set t_Co=256
 set termguicolors
+" }}}
 
+" Themes {{{
+
+" colorscheme papercolor
 " set background=light
 " let g:airline_theme = 'papercolor'
-" colorscheme papercolor
 
-" let g:airline_theme = 'apprentice'
-" set background=dark
 " colorscheme apprentice
+" set background=dark
+" let g:airline_theme = 'apprentice'
 
+" colorscheme gruvbox
 " let g:gruvbox_italic=1
 " let g:gruvbox_contrast_dark='hard'
 " let g:gruvbox_contrast_light='hard'
 " let g:gruvbox_italicize_strings=1
-" colorscheme gruvbox
 
-let g:jellybeans_use_term_italics = 1
-let g:jellybeans_use_lowcolor_black = 1
-colorscheme jellybeans
+" colorscheme jellybeans
+" let g:jellybeans_use_term_italics = 1
+" let g:jellybeans_use_lowcolor_black = 1
 
-let g:airline_theme = 'google_dark'
-" colorscheme green
+colorscheme pink-moon
+set background=dark
+let g:airline_theme = 'wombat'
+" }}}
 " }}}
 
 " Statusline (vim-airline) {{{
@@ -387,6 +398,7 @@ let g:airline_left_sep = "\ue0b8"
 let g:airline_left_alt_sep = "\ue0b9"
 let g:airline_right_sep = "\ue0ba"
 let g:airline_right_alt_sep = "\ue0bb"
+let g:airline#extensions#tabline#buffer_min_count = 3
 
 function! SanitizeModified() " {{{
   if &modified
@@ -409,15 +421,6 @@ let g:markdown_fenced_languages = ["vim","lua","javascript","typescript","go"]
 " }}}
 
 " Functions {{{
-
-function! s:ToggleQuickFix() " {{{
-  if empty(filter(getwininfo(), 'v:val.quickfix'))
-    copen
-  else
-    cclose
-  endif
-endfunction
-" }}}
 
 function! s:ToggleLocationList() " {{{
   if empty(filter(getwininfo(), 'v:val.quickfix'))
@@ -466,8 +469,6 @@ set laststatus=2
 set matchtime=2
 set mouse=a
 set nobackup
-set nohlsearch
-set noincsearch
 set noignorecase
 set noshowmode
 set nosmartcase
@@ -552,6 +553,12 @@ vn    <PageDown>  <Nop>
 
 " Normal Mode Mappings {{{
 
+nn    j              gj
+nn    k              gk
+
+nn    <Left>         h
+nn    <Right>        l
+
 nn    <C-j>          5j
 nn    <C-k>          5k
 nn    <C-h>          5h
@@ -572,18 +579,15 @@ nn    <silent><F2>   :messages<cr>
 nn    <silent><F4>   :only<cr>
 nn    <silent>QQ     :bd<cr>
 nn    <F1>           <NOP>
-nn    <PageUp>       <NOP>
-nn    <PageDown>     <NOP>
-nn    <silent><F6>   :mksession! ~/.session.vim<cr>
-
-nn    j              gj
-nn    k              gk
+" nn    <PageUp>       <NOP>
+" nn    <PageDown>     <NOP>
 " }}}
 
 " Leader Mappings {{{
 
 let mapleader="\<Space>"
 
+nn <silent><leader>p         :PlugInstall<cr>
 nn <silent><leader>zr        :vsp $ZSHRC<cr>
 nn <silent><leader>vr        :vsp $VIMRC<cr>
 nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
@@ -842,6 +846,17 @@ let g:autotagStartMethod="fork"
 nm <silent><leader>b :Git blame<cr>
 " }}}
 
+" vim-fuzzy-stash {{{
+
+nm<silent> <C-l>   :GStashList<cr>
+nm<silent> <C-s> :GStash<cr>
+
+let g:fuzzy_stash_actions = {
+  \ 'ctrl-d': 'drop',
+  \ 'ctrl-p': 'pop',
+  \ 'ctrl-a': 'apply' }
+" }}}
+
 " vim-go {{{
 
 " Variables {{{
@@ -949,6 +964,51 @@ nm <silent><leader>L :LivedownToggle<cr>
 
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
 let g:peekaboo_compact=0
+" }}}
+
+" vim-qf {{{
+
+" Keep
+" Reject
+" Restore
+" Doline
+" Dofile
+" SaveList
+" SaveListAdd
+" LoadList
+" LoadListAdd
+" ListLists
+" RemoveList
+
+" Variables {{{
+
+let g:qf_auto_open_loclist = 0
+let g:qf_auto_open_quickfix = 0
+let g:qf_loclist_window_bottom = 0
+let g:qf_mapping_ack_style = 1 " svtoOp
+let g:qf_max_height = 4
+let g:qf_save_win_view = 0
+let g:qf_window_bottom = 0
+
+let g:qf_statusline = {}
+let g:qf_statusline.before = '%<\ '
+let g:qf_statusline.after = '\ %f%=%l\/%-6L\ \ \ \ \ '
+" }}}
+
+" Maps {{{
+
+nm [q <Plug>(qf_qf_previous)
+nm ]q <Plug>(qf_qf_next)
+nm [l <Plug>(qf_loc_previous)
+nm ]l <Plug>(qf_loc_next)
+nm <nowait> <leader><leader> <Plug>(qf_qf_switch)
+nm <leader>q <Plug>(qf_qf_toggle_stay)
+nm <leader>l <Plug>(qf_loc_toggle_stay)
+nm <buffer> <Left>  <Plug>(qf_older)
+nm <buffer> <Right> <Plug>(qf_newer)
+nm <buffer> { <Plug>(qf_previous_file)
+nm <buffer> } <Plug>(qf_next_file)
+" }}}
 " }}}
 
 " vim-swap {{{
