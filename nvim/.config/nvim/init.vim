@@ -996,7 +996,6 @@ let g:qf_statusline.after = '\ %f%=%l\/%-6L\ \ \ \ \ '
 " }}}
 
 " Maps {{{
-
 nm [q <Plug>(qf_qf_previous)
 nm ]q <Plug>(qf_qf_next)
 nm [l <Plug>(qf_loc_previous)
@@ -1019,4 +1018,10 @@ xmap i, <Plug>(swap-textobject-i)
 omap a, <Plug>(swap-textobject-a)
 xmap a, <Plug>(swap-textobject-a)
 " }}}
+" }}}
+
+" Overrides {{{
+
+nn <silent><nowait> <Left>  h
+nn <silent><nowait> <Right> l
 " }}}
