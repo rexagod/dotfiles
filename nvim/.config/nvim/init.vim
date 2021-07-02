@@ -91,6 +91,7 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Syntax {{{
 
+Plug 'arcticicestudio/nord-vim'
 Plug 'sts10/vim-pink-moon'
 Plug 'julien/vim-colors-green'
 Plug 'romainl/Apprentice'
@@ -134,9 +135,11 @@ set termguicolors
 " let g:jellybeans_use_term_italics = 1
 " let g:jellybeans_use_lowcolor_black = 1
 
-colorscheme pink-moon
-set background=dark
-let g:airline_theme = 'wombat'
+" colorscheme pink-moon
+" set background=dark
+" let g:airline_theme = 'wombat'
+
+colorscheme nord
 " }}}
 " }}}
 
@@ -818,13 +821,13 @@ nn <silent><M-l> :HopLine<cr>
 
 nm \n :NV<cr>
 
-let g:nv_search_paths = ['~/repositories/notes', './README.md']
+let g:nv_search_paths = ['~/repositories/x', './README.md']
 " }}}
 
 " nvim-toggle-terminal {{{
 
 nnoremap <silent> <C-z> :ToggleTerminal<cr>
-tnoremap <silent> <esc> <C-d><cr>
+tnoremap <silent> <C-z> <C-d><cr>
 " }}}
 
 " ranger.vim {{{
@@ -1003,10 +1006,13 @@ nm ]l <Plug>(qf_loc_next)
 nm <nowait> <leader><leader> <Plug>(qf_qf_switch)
 nm <leader>q <Plug>(qf_qf_toggle_stay)
 nm <leader>l <Plug>(qf_loc_toggle_stay)
-nm <buffer> <Left>  <Plug>(qf_older)
-nm <buffer> <Right> <Plug>(qf_newer)
-nm <buffer> { <Plug>(qf_previous_file)
-nm <buffer> } <Plug>(qf_next_file)
+
+aug VIMQF
+  au FileType qf nm <Left>  <Plug>(qf_older)
+  au FileType qf nm <Right> <Plug>(qf_newer)
+  au FileType qf nm { <Plug>(qf_previous_file)
+  au FileType qf nm } <Plug>(qf_next_file)
+aug END
 " }}}
 " }}}
 
@@ -1018,10 +1024,4 @@ xmap i, <Plug>(swap-textobject-i)
 omap a, <Plug>(swap-textobject-a)
 xmap a, <Plug>(swap-textobject-a)
 " }}}
-" }}}
-
-" Overrides {{{
-
-nn <silent><nowait> <Left>  h
-nn <silent><nowait> <Right> l
 " }}}

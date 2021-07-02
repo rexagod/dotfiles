@@ -117,9 +117,9 @@ alias zshconfig="nvim ~/.zshrc"
 
 cc () { # {{{
 
-  export DIR='openshift-cluster'      # Cluster metadata directory
+  DIR='openshift-cluster'      # Cluster metadata directory
   USER='prasriva'                     # RH username
-  export CLUSTER_ID="$USER-$RANDOM"   # Cluster name = <Your RH id> + $RANDOM
+  CLUSTER_ID="$USER-$RANDOM"   # Cluster name = <Your RH id> + $RANDOM
   NAME='new\sname\shere'              # Template for Cluster ID
   CONF='install-config.yaml'          # Original config filename in .aws
 
