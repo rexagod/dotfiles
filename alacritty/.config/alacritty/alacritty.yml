@@ -10,15 +10,15 @@ scrolling:
   multiplier: 3
 font:
   normal:
-    family: Source Code Pro
+    family: Monaco
     style: Regular
   bold:
-    family: Source Code Pro
+    family: Monaco
     style: Bold
   italic:
-    family: Source Code Pro
+    family: Monaco
     style: Italic
-  size: 12
+  size: 14
   offset:
     x: 0
     y: 0
@@ -28,32 +28,27 @@ font:
   use_thin_strokes: true
 draw_bold_text_with_bright_colors: true
 colors:
-  name: astromouse
-  author: ""
   primary:
-    background: "#000000"
-    foreground: "#ffffff"
-  cursor:
-    text: "#000000"
-    cursor: "#ffffff"
+    background: "#282828"
+    foreground: "#ebdbb2"
   normal:
-    black: "#1c1c1c"
-    red: "#d770af"
-    green: "#9acc79"
-    yellow: "#d0d26b"
-    blue: "#77b6c5"
-    magenta: "#a488d9"
-    cyan: "#7fcab3"
-    white: "#8d8d8d"
+    black: "#282828"
+    red: "#cc241d"
+    green: "#98971a"
+    yellow: "#d79921"
+    blue: "#458588"
+    magenta: "#b16286"
+    cyan: "#689d6a"
+    white: "#a89984"
   bright:
-    black: "#3d3a3a"
-    red: "#d28abf"
-    green: "#8fb676"
-    yellow: "#c8bc45"
-    blue: "#8fa7b9"
-    magenta: "#bd89de"
-    cyan: "#6ec2a8"
-    white: "#dad3d3"
+    black: "#928374"
+    red: "#fb4934"
+    green: "#b8bb26"
+    yellow: "#fabd2f"
+    blue: "#83a598"
+    magenta: "#d3869b"
+    cyan: "#8ec07c"
+    white: "#ebdbb2"
 background_opacity: 1
 key_bindings:
   - key: V

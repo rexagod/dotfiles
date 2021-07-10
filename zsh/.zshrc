@@ -45,7 +45,7 @@ export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
 export FZF_ALT_C_COMMAND="fd -t d . $HOME"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --color auto'
+export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git/*' --color auto"
 export FZF_DEFAULT_OPTS=""
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 export GOBIN="$HOME/go/bin"
@@ -57,7 +57,7 @@ export LANG=en_US.UTF-8
 export MANPAGER="nvim -c 'set ft=man' -"
 export MOZ_ENABLE_WAYLAND=1
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-export PAGER="bat --theme=Dracula --paging=auto --italic-text=always --color=always --number"
+export PAGER="bat --paging=auto --italic-text=always --color=always --number --theme gruvbox-dark"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
 export REGISTRY_NAMESPACE='rexagod'
 export UPDATE_ZSH_DAYS=15
@@ -117,7 +117,7 @@ alias zshconfig="nvim ~/.zshrc"
 
 cc () { # {{{
 
-  DIR='openshift-cluster'      # Cluster metadata directory
+  DIR='.openshift-cluster'      # Cluster metadata directory
   USER='prasriva'                     # RH username
   CLUSTER_ID="$USER-$RANDOM"   # Cluster name = <Your RH id> + $RANDOM
   NAME='new\sname\shere'              # Template for Cluster ID
@@ -145,4 +145,7 @@ export NOOBAA_DB_IMAGE="centos/postgresql-12-centos7"
 
 if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# vim-gist plugin
+source ~/.local/vim-gist.token.bash
 # }}}

@@ -1,5 +1,12 @@
 " Maintainer: @rexagod
 
+" Notes {{{
+
+" Debugger.
+" Fix tags.
+" coc-floaterm.
+" }}}
+
 " Plugins {{{
 
 call plug#begin('~/.vim/plugged')
@@ -9,8 +16,14 @@ call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " }}}
 
+" nvim-treesitter {{{
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" }}}
+
 " Git {{{
 
+Plug 'mattn/webapi-vim' | Plug 'mattn/vim-gist'
 Plug 'nvim-lua/plenary.nvim' | Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 Plug 'aacunningham/vim-fuzzy-stash'
@@ -23,21 +36,15 @@ Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'branch': 'master', 'do': ':G
 
 " Internals {{{
 
-Plug 'caenrique/nvim-toggle-terminal'
-Plug 'tweekmonster/startuptime.vim'
+Plug 'voldikss/vim-floaterm'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-eunuch'
 Plug 'aymericbeaumet/vim-symlink'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'shime/vim-livedown'
-Plug 'junegunn/vim-peekaboo'
 " }}}
 
 " Navigation {{{
 
-Plug 'romainl/vim-qf'
 Plug 'jremmen/vim-ripgrep'
-Plug 'craigemery/vim-autotag'
 Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
 Plug 'alok/notational-fzf-vim'
@@ -48,7 +55,8 @@ Plug 'rhysd/clever-f.vim'
 
 " Text Manipulations {{{
 
-Plug 'Krasjet/auto.pairs'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'honza/vim-snippets'
 Plug 'tpope/vim-abolish'
 Plug 'machakann/vim-swap'
 Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-indent'
@@ -81,6 +89,8 @@ Plug 'flwyd/vim-conjoin'
 
 " Visuals {{{
 
+Plug 'junegunn/vim-peekaboo'
+Plug 'shime/vim-livedown'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'markonm/traces.vim'
 Plug 'ryanoasis/vim-devicons'
@@ -89,14 +99,8 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " }}}
 
-" Syntax {{{
+" Themes {{{
 
-Plug 'arcticicestudio/nord-vim'
-Plug 'sts10/vim-pink-moon'
-Plug 'julien/vim-colors-green'
-Plug 'romainl/Apprentice'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'nanotech/jellybeans.vim'
 Plug 'morhetz/gruvbox'
 " }}}
 
@@ -117,29 +121,13 @@ set termguicolors
 
 " Themes {{{
 
-" colorscheme papercolor
-" set background=light
-" let g:airline_theme = 'papercolor'
-
-" colorscheme apprentice
-" set background=dark
-" let g:airline_theme = 'apprentice'
-
-" colorscheme gruvbox
-" let g:gruvbox_italic=1
-" let g:gruvbox_contrast_dark='hard'
-" let g:gruvbox_contrast_light='hard'
-" let g:gruvbox_italicize_strings=1
-
-" colorscheme jellybeans
-" let g:jellybeans_use_term_italics = 1
-" let g:jellybeans_use_lowcolor_black = 1
-
-" colorscheme pink-moon
-" set background=dark
-" let g:airline_theme = 'wombat'
-
-colorscheme nord
+colorscheme gruvbox
+let g:gruvbox_italic=1
+let g:gruvbox_contrast_dark='hard'
+let g:gruvbox_contrast_light='hard'
+let g:gruvbox_italicize_strings=1
+let g:airline_theme='gruvbox'
+set background=dark
 " }}}
 " }}}
 
@@ -425,11 +413,11 @@ let g:markdown_fenced_languages = ["vim","lua","javascript","typescript","go"]
 
 " Functions {{{
 
-function! s:ToggleLocationList() " {{{
+function! s:ToggleQuickFixList() " {{{
   if empty(filter(getwininfo(), 'v:val.quickfix'))
-    lopen
+    3copen
   else
-    lclose
+    cclose
   endif
 endfunction
 " }}}
@@ -495,7 +483,7 @@ set signcolumn=number
 set smartindent
 set smarttab
 set softtabstop=2
-set ssop=blank,buffers,curdir,folds,globals,help,localoptions,options,tabpages,winsize
+set ssop=blank,buffers,curdir,folds,help,tabpages,winsize
 set tabstop=2
 set tags+=.git/tags,../.git/tags
 set termguicolors
@@ -505,6 +493,7 @@ set undofile
 set updatetime=100
 set wildmenu
 set wildmode=longest,full
+set pumblend=30
 " }}}
 
 " Maps {{{
@@ -590,12 +579,10 @@ nn    <F1>           <NOP>
 
 let mapleader="\<Space>"
 
-nn <silent><leader>p         :PlugInstall<cr>
 nn <silent><leader>zr        :vsp $ZSHRC<cr>
 nn <silent><leader>vr        :vsp $VIMRC<cr>
 nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
-nn <silent><nowait><leader>q :silent! call <SID>ToggleQuickFix()<cr>
-nn <silent><nowait><leader>l :silent! call <SID>ToggleLocationList()<cr>
+nn <silent><nowait><leader>q :silent! call <SID>ToggleQuickFixList()<cr>
 nn <silent><nowait><leader>s :silent! exec <SID>SourceScriptImplicit()<cr>
 " }}}
 " }}}
@@ -614,11 +601,12 @@ aug END
 " Commands {{{
 
 command! CC :let b:coc_suggest_disable = 1
-command! SS mks! ~/.session.vim
+command! CI PlugClean | PlugInstall
 command! CM delm!
-command! YY PlugClean | PlugInstall | PlugUpdate | PlugUpgrade | CocUpdate
 command! QQ qall
+command! SS mks! ~/.session.vim
 command! W w
+command! YY PlugClean | PlugInstall | PlugUpdate | PlugUpgrade | CocUpdate
 " }}}
 
 " Plugin Configurations {{{
@@ -647,6 +635,16 @@ let g:clever_f_chars_match_any_signs = ';' " f;
 " }}}
 
 " coc.nvim {{{
+
+" coc-snippets {{{
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+let g:coc_snippet_next = '<c-l>'
+
+" Use <leader>x for convert visual selected code to snippet
+xm <leader>x  <Plug>(coc-convert-snippet)
+" }}}
 
 " Functions {{{
 
@@ -720,6 +718,8 @@ nn <silent> K :call <SID>show_documentation()<CR>
 
 " Map function and class text objects{{{
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
 xmap if <Plug>(coc-funcobj-i)
 omap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
@@ -761,11 +761,11 @@ aug END
 "}}}
 
 " Remap <C-f> and <C-b> for scroll float windows/popups. {{{
-nn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-f>"
 nn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-b>"
-vn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+vn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-f>"
 vn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-b>"
-ino <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+ino <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Right>"
 ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Left>"
 "}}}
 " }}}
@@ -844,6 +844,28 @@ nn <silent>\e :RangerCurrentFile<cr>
 let g:autotagStartMethod="fork"
 " }}}
 
+" vim-floaterm {{{
+
+let g:floaterm_autoclose = 0
+let g:floaterm_autohide = 0
+let g:floaterm_title = '$2 term'
+let g:floaterm_opener = 'edit'
+let g:floaterm_position = 'center'
+let g:floaterm_height = 0.9
+let g:floaterm_width = 0.9
+
+nnoremap   <silent>   <F7>   :FloatermNew<CR>
+tnoremap   <silent>   <F7>   <C-\><C-n>:FloatermNew<CR>
+nnoremap   <silent>   <F8>   :FloatermPrev<CR>
+tnoremap   <silent>   <F8>   <C-\><C-n>:FloatermPrev<CR>
+nnoremap   <silent>   <F9>   :FloatermNext<CR>
+tnoremap   <silent>   <F9>   <C-\><C-n>:FloatermNext<CR>
+nnoremap   <silent>   <F10>  :FloatermToggle<CR>
+tnoremap   <silent>   <F10>  <C-\><C-n>:FloatermToggle<CR>
+nnoremap   <silent>   <F12>  :FloatermKill<CR>
+tnoremap   <silent>   <F12>  <C-\><C-n>:FloatermKill<CR>
+" }}}
+
 " vim-fugitive {{{
 
 nm <silent><leader>b :Git blame<cr>
@@ -851,13 +873,22 @@ nm <silent><leader>b :Git blame<cr>
 
 " vim-fuzzy-stash {{{
 
-nm<silent> <C-l>   :GStashList<cr>
-nm<silent> <C-s> :GStash<cr>
+command! GS GStashList
+command! GSL GStashList
 
 let g:fuzzy_stash_actions = {
   \ 'ctrl-d': 'drop',
   \ 'ctrl-p': 'pop',
   \ 'ctrl-a': 'apply' }
+" }}}
+
+" vim-gist {{{
+
+let g:gist_post_private = 1
+let g:gist_show_privates = 1
+let g:gist_detect_filetype = 1
+let g:github_user = "rexagod"
+let g:gist_token = $GIST_TOKEN
 " }}}
 
 " vim-go {{{
@@ -885,7 +916,7 @@ let g:go_highlight_trailing_whitespace_error = 1
 let g:go_highlight_types = 1
 let g:go_highlight_variable_assignments = 1
 let g:go_highlight_variable_declarations = 1
-let g:go_imports_autosave = 0
+let g:go_imports_autosave = 1
 let g:go_info_mode = 'gopls'
 let g:go_list_type = 'quickfix'
 let g:go_play_browser_command = "chrome"
@@ -894,6 +925,7 @@ let g:go_statusline_duration = 1000
 let g:go_test_show_name = 1
 let g:go_test_timeout= '10s'
 let g:go_updatetime = 100
+let g:go_guru_scope = []
 
 let $GINKGO_EDITOR_INTEGRATION = "true"
 " }}}
@@ -928,34 +960,15 @@ aug GO
   au FileType go nm <silent>'t :GoCallstack<cr>
   " Also, :GoCallees and :GoCallers.
   au FileType go nm <silent>K :call CocActionAsync('doHover')<cr>
-
-  " Debug utilities.
-  au FileType go nm <F5> :GoDebugContinue<cr>
-  au FileType go nm <F8> :GoDebugHalt<cr>
-  au FileType go nm <F9> :GoDebugBreakpoint<cr>
-  au FileType go nm <F10> :GoDebugNext<cr>
-  au FileType go nm <F11> :GoDebugStep<cr>
-  au FileType go nm <F12> :GoDebugStepOut<cr>
-  au FileType go command! -bang GD GoDebugStart
-  au FileType go command! -bang GDR GoDebugRestart
-  au FileType go command! -bang GDS GoDebugStop
-  au FileType go command! -bang GDE GoDebugSet
-  au FileType go command! -bang GDP GoDebugPrint
-  au FileType go command! -bang GDT GoDebugTest
-  au FileType go command! -bang GDF GoDebugTestFunc
-
-  " Alternate utilities to open alternate file in different ways.
-  au Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-  au Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-  au Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-  au Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 aug END
 " }}}
 " }}}
 
 " vim-indent-guides {{{
-"
-let g:indent_guides_enable_on_vim_startup = 1
+
+let g:indent_guides_enable_on_vim_startup = 0
+
+command! II IndentGuidesToggle
 " }}}
 
 " vim-livedown {{{
@@ -967,53 +980,6 @@ nm <silent><leader>L :LivedownToggle<cr>
 
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
 let g:peekaboo_compact=0
-" }}}
-
-" vim-qf {{{
-
-" Keep
-" Reject
-" Restore
-" Doline
-" Dofile
-" SaveList
-" SaveListAdd
-" LoadList
-" LoadListAdd
-" ListLists
-" RemoveList
-
-" Variables {{{
-
-let g:qf_auto_open_loclist = 0
-let g:qf_auto_open_quickfix = 0
-let g:qf_loclist_window_bottom = 0
-let g:qf_mapping_ack_style = 1 " svtoOp
-let g:qf_max_height = 4
-let g:qf_save_win_view = 0
-let g:qf_window_bottom = 0
-
-let g:qf_statusline = {}
-let g:qf_statusline.before = '%<\ '
-let g:qf_statusline.after = '\ %f%=%l\/%-6L\ \ \ \ \ '
-" }}}
-
-" Maps {{{
-nm [q <Plug>(qf_qf_previous)
-nm ]q <Plug>(qf_qf_next)
-nm [l <Plug>(qf_loc_previous)
-nm ]l <Plug>(qf_loc_next)
-nm <nowait> <leader><leader> <Plug>(qf_qf_switch)
-nm <leader>q <Plug>(qf_qf_toggle_stay)
-nm <leader>l <Plug>(qf_loc_toggle_stay)
-
-aug VIMQF
-  au FileType qf nm <Left>  <Plug>(qf_older)
-  au FileType qf nm <Right> <Plug>(qf_newer)
-  au FileType qf nm { <Plug>(qf_previous_file)
-  au FileType qf nm } <Plug>(qf_next_file)
-aug END
-" }}}
 " }}}
 
 " vim-swap {{{

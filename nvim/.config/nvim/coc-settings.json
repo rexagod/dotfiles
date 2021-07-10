@@ -5,5 +5,6 @@
   "diagnostic.virtualTextPrefix": "",
   "diagnostic.messageTarget": "float",
   "coc.preferences.silentAutoupdate": true,
-  "suggest.autoTrigger": "always"
+  "suggest.autoTrigger": "always",
+  "suggest.floatEnable": true
 }
