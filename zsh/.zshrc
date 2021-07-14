@@ -40,6 +40,7 @@ $HOME/go/bin:\
 
 export AWS_PROFILE='openshift-dev'
 export BASHRC='~/.bashrc'
+export BROWSER='google-chrome-stable'
 export COC_GITHUB_USERS_TOKEN='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'
 export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
@@ -117,19 +118,22 @@ alias zshconfig="nvim ~/.zshrc"
 
 cc () { # {{{
 
-  DIR='.openshift-cluster'      # Cluster metadata directory
-  USER='prasriva'                     # RH username
-  CLUSTER_ID="$USER-$RANDOM"   # Cluster name = <Your RH id> + $RANDOM
-  NAME='new\sname\shere'              # Template for Cluster ID
-  CONF='install-config.yaml'          # Original config filename in .aws
+  DIR='.openshift-cluster'   # Cluster metadata directory
+  USER='prasriva'            # RH username
+  NAME='new\sname\shere'     # Template for Cluster ID
+  CONF='install-config.yaml' # Original config filename in .aws
+  CLUSTER_ID="$USER-$RANDOM" # Cluster name = <Your RH id> + $RANDOM
+  CLUSTER_ID_STATIC="$CLUSTER_ID"
 
   cd ~
   rm -rf "$DIR"
   mkdir "$DIR"
   cp .aws/"$CONF" "$DIR"/
-  sed -i "s/$NAME/$CLUSTER_ID/" "$DIR"/"$CONF"
+  sed -i "s/$NAME/$CLUSTER_ID_STATIC/" "$DIR"/"$CONF"
   openshift-install create cluster --dir="$DIR"
-  oc login "https://api.$CLUSTER_ID.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`
+  oc login "https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`
+  export OCP_LOGIN_STRING="oc login \"https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443\" -u kubeadmin -p "`cat "$DIR/auth/kubeadmin-password"`
+  echo $OCP_LOGIN_STRING
   cd -
 }
 # }}}
@@ -148,4 +152,6 @@ if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 
 # vim-gist plugin
 source ~/.local/vim-gist.token.bash
+
+pfetch
 # }}}

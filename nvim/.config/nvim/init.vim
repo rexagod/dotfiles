@@ -3,8 +3,6 @@
 " Notes {{{
 
 " Debugger.
-" Fix tags.
-" coc-floaterm.
 " }}}
 
 " Plugins {{{
@@ -14,11 +12,6 @@ call plug#begin('~/.vim/plugged')
 " coc.nvim {{{
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" }}}
-
-" nvim-treesitter {{{
-
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " }}}
 
 " Git {{{
@@ -51,6 +44,14 @@ Plug 'alok/notational-fzf-vim'
 Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
 Plug 'rhysd/clever-f.vim'
+" }}}
+
+" Syntax {{{
+
+Plug 'pangloss/vim-javascript'
+Plug 'MaxMEllon/vim-jsx-pretty'
+Plug 'sheerun/vim-polyglot'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " }}}
 
 " Text Manipulations {{{
@@ -591,6 +592,7 @@ nn <silent><nowait><leader>s :silent! exec <SID>SourceScriptImplicit()<cr>
 
 aug FOO
   au!
+  au BufWritePost * silent! !ctags -R &
   au Filetype *.js,*.ts setl suffixesadd=.js,.ts,.jsx,.tsx
   au Filetype help,qf nn <silent><buffer>q :q<cr>
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exec "normal! g`\"" | endif
@@ -839,11 +841,6 @@ let g:ranger_command_override = 'ranger --cmd "set show_hidden=false"'
 nn <silent>\e :RangerCurrentFile<cr>
 " }}}
 
-" vim-autotag {{{
-
-let g:autotagStartMethod="fork"
-" }}}
-
 " vim-floaterm {{{
 
 let g:floaterm_autoclose = 0
@@ -860,10 +857,10 @@ nnoremap   <silent>   <F8>   :FloatermPrev<CR>
 tnoremap   <silent>   <F8>   <C-\><C-n>:FloatermPrev<CR>
 nnoremap   <silent>   <F9>   :FloatermNext<CR>
 tnoremap   <silent>   <F9>   <C-\><C-n>:FloatermNext<CR>
-nnoremap   <silent>   <F10>  :FloatermToggle<CR>
-tnoremap   <silent>   <F10>  <C-\><C-n>:FloatermToggle<CR>
-nnoremap   <silent>   <F12>  :FloatermKill<CR>
-tnoremap   <silent>   <F12>  <C-\><C-n>:FloatermKill<CR>
+nnoremap   <silent>   <F10>  :FloatermKill<CR>
+tnoremap   <silent>   <F10>  <C-\><C-n>:FloatermKill<CR>
+nnoremap   <silent>   <F12>  :FloatermToggle<CR>
+tnoremap   <silent>   <F12>  <C-\><C-n>:FloatermToggle<CR>
 " }}}
 
 " vim-fugitive {{{
