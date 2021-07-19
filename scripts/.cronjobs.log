@@ -1,0 +1,4 @@
+oc login "https://api.prasriva-20614.devcluster.openshift.com:6443" -u kubeadmin -p gMxsY-NV4Yp-PvbcR-Lv5rk
+oc login "https://api.prasriva-10892.devcluster.openshift.com:6443" -u kubeadmin -p S2KsC-zL784-TkaxB-7be5y
+oc login "https://api.prasriva-19135.devcluster.openshift.com:6443" -u kubeadmin -p 3pznL-LpIUv-RTuLe-InTm4
+oc login "https://api.prasriva-21346.devcluster.openshift.com:6443" -u kubeadmin -p EVDgk-sbtWS-wR6V7-voe8f

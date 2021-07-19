@@ -85,6 +85,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Aliases{{{
 
+alias goland="/home/rexagod/.local/GoLand-2021.1/bin/goland.sh"
 alias bat="bat --theme=\"Dracula\" --style grid,numbers,changes"
 alias bb="./bin/bridge"
 alias c="clear"

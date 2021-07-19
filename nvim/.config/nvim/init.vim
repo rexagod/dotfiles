@@ -369,6 +369,7 @@ set background=dark
 let airline#extensions#tabline#current_first = 0
 let g:airline#extensions#coc#enabled = 1
 let g:airline#extensions#tabline#buf_label_first = 1
+let g:airline#extensions#tabline#buffer_min_count = 2
 let g:airline#extensions#tabline#buffer_nr_show = 0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#exclude_preview = 0
@@ -385,12 +386,11 @@ let g:airline#extensions#whitespace#checks = ['conflicts']
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline_base16_improved_contrast = 1
 let g:airline_inactive_alt_sep = 0
-let g:airline_powerline_fonts = 1
-let g:airline_left_sep = "\ue0b8"
 let g:airline_left_alt_sep = "\ue0b9"
-let g:airline_right_sep = "\ue0ba"
+let g:airline_left_sep = "\ue0b8"
+let g:airline_powerline_fonts = 1
 let g:airline_right_alt_sep = "\ue0bb"
-let g:airline#extensions#tabline#buffer_min_count = 3
+let g:airline_right_sep = "\ue0ba"
 
 function! SanitizeModified() " {{{
   if &modified
