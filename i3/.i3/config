@@ -20,13 +20,13 @@ bindsym $mod+n border normal
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font xft:URWGothic-Book 11
+font xft:Iosevka
 
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+q kill
@@ -135,15 +135,15 @@ bindsym $mod+Ctrl+Left workspace prev
 # something like: set $ws1 1:mail
 #                 set $ws2 2:
 set $ws1 1:Neovim
-set $ws2 2:Chrome
-set $ws3 3:ChromeBeta
-set $ws4 4:Other
+set $ws2 2:ChromePersonal
+set $ws3 3:ChromeWork
+set $ws4 4:Goland
 set $ws5 5:Other
 set $ws6 6:Other
 set $ws7 7:Other
 set $ws8 8:Other
-set $ws9 9:Other
-set $ws0 0:Other
+set $ws9 9:Init
+set $ws0 0:Debug
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -328,7 +328,7 @@ bar {
         separator #ffffff
         background #222222
         statusline #dddddd
-        focused_workspace #999900 #777700 #ffffff
+        focused_workspace #334455 #008899 #ffffff
         active_workspace #333333 #333333 #555500
         inactive_workspace #333333 #333333 #888888
         urgent_workspace #2f343a #900000 #ffffff

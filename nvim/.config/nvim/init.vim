@@ -103,6 +103,7 @@ Plug 'vim-airline/vim-airline-themes'
 " Themes {{{
 
 Plug 'morhetz/gruvbox'
+Plug 'ajh17/spacegray.vim'
 " }}}
 
 call plug#end()
@@ -122,13 +123,18 @@ set termguicolors
 
 " Themes {{{
 
-colorscheme gruvbox
-let g:gruvbox_italic=1
-let g:gruvbox_contrast_dark='hard'
-let g:gruvbox_contrast_light='hard'
-let g:gruvbox_italicize_strings=1
-let g:airline_theme='gruvbox'
-set background=dark
+" colorscheme gruvbox
+" let g:gruvbox_italic=1
+" let g:gruvbox_contrast_dark='hard'
+" let g:gruvbox_contrast_light='hard'
+" let g:gruvbox_italicize_strings=1
+" let g:airline_theme='gruvbox'
+" set background=dark
+
+colorscheme spacegray
+let g:spacegray_underline_search = 1
+let g:spacegray_use_italics = 1
+let g:spacegray_low_contrast = 0
 " }}}
 " }}}
 

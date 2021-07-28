@@ -24,9 +24,6 @@ ZSH_THEME="nicoulaj"
 
 export PATH="\
 $GOPATH/bin:\
-$HOME/.bin:\
-$HOME/.local/bin:\
-$HOME/bin:\
 $HOME/go/bin:\
 /home/linuxbrew/.linuxbrew/bin:\
 /usr/bin:\
@@ -52,7 +49,7 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 export GOBIN="$HOME/go/bin"
 export GOOGLE_APPLICATION_CREDENTIALS="/home/rexagod/Downloads/contrib-k8s-478a21288ae7.json"
 export GOPATH="$HOME/go"
-export IMAGE_TAG='latest'
+export IMAGE_TAG="latest-\${RANDOM}" # `eval "echo $IMAGE_TAG"` to generate new seeds everytime!
 export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
 export LANG=en_US.UTF-8
 export MANPAGER="nvim -c 'set ft=man' -"
@@ -136,6 +133,7 @@ cc () { # {{{
   export OCP_LOGIN_STRING="oc login \"https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443\" -u kubeadmin -p "`cat "$DIR/auth/kubeadmin-password"`
   echo $OCP_LOGIN_STRING
   cd -
+  oc create -f https://raw.githubusercontent.com/openshift/ocs-operator/master/deploy/deploy-with-olm.yaml
 }
 # }}}
 # }}}
@@ -154,5 +152,6 @@ if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 # vim-gist plugin
 source ~/.local/vim-gist.token.bash
 
-pfetch
+# krew
+export PATH="${PATH}:${HOME}/.krew/bin"
 # }}}
