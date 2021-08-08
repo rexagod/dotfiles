@@ -37,6 +37,7 @@ Plug 'aymericbeaumet/vim-symlink'
 
 " Navigation {{{
 
+Plug 'bfrg/vim-jqplay'
 Plug 'jremmen/vim-ripgrep'
 Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
@@ -135,6 +136,7 @@ colorscheme spacegray
 let g:spacegray_underline_search = 1
 let g:spacegray_use_italics = 1
 let g:spacegray_low_contrast = 0
+let g:airline_theme='base16_shell'
 " }}}
 " }}}
 

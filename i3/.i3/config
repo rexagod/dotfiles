@@ -49,9 +49,9 @@ bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
 ################################################################################################
 
 # Screen brightness controls
-set $offset 5
-bindsym XF86MonBrightnessUp exec "xbacklight -inc $offset"
-bindsym XF86MonBrightnessDown exec "xbacklight -dec $offset"
+set $offset 1000
+bindsym XF86MonBrightnessUp exec "brightnessctl s +$offset"
+bindsym XF86MonBrightnessDown exec "brightnessctl s $offset-"
 
 # Start Applications
 bindsym F1 exec google-chrome-stable
@@ -61,7 +61,7 @@ bindsym $mod+Shift+Return exec google-chrome-beta
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
+bindsym Shift+Print --release exec --no-startup-id i3-scrot -s
 
 # focus_follows_mouse no
 

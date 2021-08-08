@@ -38,7 +38,6 @@ $HOME/go/bin:\
 export AWS_PROFILE='openshift-dev'
 export BASHRC='~/.bashrc'
 export BROWSER='google-chrome-stable'
-export COC_GITHUB_USERS_TOKEN='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'
 export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
 export FZF_ALT_C_COMMAND="fd -t d . $HOME"
@@ -49,7 +48,7 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 export GOBIN="$HOME/go/bin"
 export GOOGLE_APPLICATION_CREDENTIALS="/home/rexagod/Downloads/contrib-k8s-478a21288ae7.json"
 export GOPATH="$HOME/go"
-export IMAGE_TAG="latest-\${RANDOM}" # `eval "echo $IMAGE_TAG"` to generate new seeds everytime!
+export IMAGE_TAG="debug-0003"
 export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
 export LANG=en_US.UTF-8
 export MANPAGER="nvim -c 'set ft=man' -"
@@ -123,6 +122,7 @@ cc () { # {{{
   CLUSTER_ID="$USER-$RANDOM" # Cluster name = <Your RH id> + $RANDOM
   CLUSTER_ID_STATIC="$CLUSTER_ID"
 
+  # openshift-install destroy cluster --dir="$DIR"
   cd ~
   rm -rf "$DIR"
   mkdir "$DIR"
@@ -133,7 +133,7 @@ cc () { # {{{
   export OCP_LOGIN_STRING="oc login \"https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443\" -u kubeadmin -p "`cat "$DIR/auth/kubeadmin-password"`
   echo $OCP_LOGIN_STRING
   cd -
-  oc create -f https://raw.githubusercontent.com/openshift/ocs-operator/master/deploy/deploy-with-olm.yaml
+  # oc create -f https://raw.githubusercontent.com/openshift/ocs-operator/master/deploy/deploy-with-olm.yaml
 }
 # }}}
 # }}}
@@ -145,6 +145,8 @@ export ROOK_CEPH_IMAGE="rook/ceph:v1.6.0.95.gf4cfc7a"
 export CEPH_IMAGE="ceph/daemon-base:latest-pacific"                                                                                               
 export NOOBAA_CORE_IMAGE="noobaa/noobaa-core:master-20210609"                                                                                     
 export NOOBAA_DB_IMAGE="centos/postgresql-12-centos7"
+export NOOBAA_IMAGE="noobaa/noobaa-operator:master-20210609"
+export ROOK_IMAGE="rook/ceph:v1.6.5-2.gb78358e"
 
 if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -154,4 +156,7 @@ source ~/.local/vim-gist.token.bash
 
 # krew
 export PATH="${PATH}:${HOME}/.krew/bin"
+
+# kubectl autocomplete
+[[ /bin/kubectl ]] && source <(kubectl completion zsh)
 # }}}
