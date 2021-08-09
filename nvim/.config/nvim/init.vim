@@ -3,24 +3,16 @@
 " Plugins {{{
 
 call plug#begin('~/.vim/plugged')
-
 " coc.nvim {{{
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " }}}
-
 " Git {{{
 
-Plug 'nvim-lua/plenary.nvim' | Plug 'mhinz/vim-signify'
+Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 Plug 'aacunningham/vim-fuzzy-stash'
 " }}}
-
-" Go {{{
-
-Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'branch': 'master', 'do': ':GoUpdateBinaries' }
-" }}}
-
 " Internals {{{
 
 Plug 'voldikss/vim-floaterm'
@@ -28,34 +20,19 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-eunuch'
 Plug 'aymericbeaumet/vim-symlink'
 " }}}
-
 " Navigation {{{
 
 Plug 'jremmen/vim-ripgrep'
-Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
-Plug 'alok/notational-fzf-vim'
 Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
 Plug 'rhysd/clever-f.vim'
 " }}}
-
 " Text Manipulations {{{
 
 Plug 'editorconfig/editorconfig-vim'
-Plug 'honza/vim-snippets'
-Plug 'tpope/vim-abolish'
 Plug 'machakann/vim-swap'
-Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-indent'
-" {lhs} {rhs}                   ~{{{
-" ----- ----------------------  ~
-" ai    <Plug>(textobj-indent-a) " includes blanks
-" ii    <Plug>(textobj-indent-i)
-" consecutive same level indents:
-" aI    <Plug>(textobj-indent-same-a)
-" iI    <Plug>(textobj-indent-same-i)
-"}}}
-Plug 'coderifous/textobj-word-column.vim'
+Plug 'kana/vim-textobj-user' | Plug 'coderifous/textobj-word-column.vim' | Plug 'adolenc/vim-textobj-toplevel'
 "{{{
 "                                          *ac* *cac* *dac* *vac* *yac*
 " ac     "a column", a column based on "a word" |aw|.
@@ -72,26 +49,21 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'flwyd/vim-conjoin'
 " }}}
-
 " Visuals {{{
 
 Plug 'junegunn/vim-peekaboo'
-Plug 'shime/vim-livedown'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'markonm/traces.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " }}}
-
 " Themes {{{
 
 Plug 'morhetz/gruvbox'
 Plug 'ajh17/spacegray.vim'
 " }}}
-
 call plug#end()
 " }}}
-
 " Theme {{{
 
 " Configuration {{{
@@ -99,11 +71,10 @@ call plug#end()
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 filetype indent on
 filetype plugin on
-syntax enable
+syntax on
 set t_Co=256
 set termguicolors
 " }}}
-
 " Themes {{{
 
 " colorscheme gruvbox
@@ -121,7 +92,6 @@ let g:spacegray_low_contrast = 0
 let g:airline_theme='base16_shell'
 " }}}
 " }}}
-
 " Statusline (vim-airline) {{{
 
 " Listed all themes for autocompletion {{{
@@ -396,12 +366,10 @@ let g:airline_section_x = airline#section#create(['%{coc#status()} ', '⎇  %{fu
 let g:airline_section_y = airline#section#create(['filetype'])
 let g:airline_section_z = airline#section#create(['%l', ':', '%v  ', '%p', '%%'])
 " }}}
-
 " Variables {{{
 
 let g:markdown_fenced_languages = ["vim","lua","javascript","typescript","go"]
 " }}}
-
 " Functions {{{
 
 function! s:ToggleQuickFixList() " {{{
@@ -412,7 +380,6 @@ function! s:ToggleQuickFixList() " {{{
   endif
 endfunction
 " }}}
-
 function! s:SourceScriptImplicit() " {{{
   if !&readonly && &filetype !=# ''
     w
@@ -433,7 +400,6 @@ function! s:SourceScriptImplicit() " {{{
 endfunction
 " }}}
 " }}}
-
 " Options {{{
 
 " set grepprg=rg\ --vimgrep
@@ -458,9 +424,10 @@ set noswapfile
 set nowrap
 set nowritebackup
 set number
+set numberwidth=4
 set path=.,,
 set pumheight=5
-set re=0
+set re=1
 set relativenumber
 set ruler
 set scroll=5
@@ -470,7 +437,7 @@ set shortmess+=c
 set showcmd
 set showmatch
 set sidescrolloff=10
-set signcolumn=number
+set signcolumn=auto
 set smartindent
 set smarttab
 set softtabstop=2
@@ -486,7 +453,6 @@ set wildmenu
 set wildmode=longest,full
 set pumblend=30
 " }}}
-
 " Maps {{{
 
 " Insert Mode Mappings {{{
@@ -510,7 +476,6 @@ ino   <S-Down>    <esc><C-y>a
 ino   <PageUp>    <NOP>
 ino   <PageDown>  <NOP>
 " }}}
-
 " Visual Mode Mappings {{{
 
 vn    <C-j>        5j
@@ -533,7 +498,6 @@ vn    <PageUp>    <Nop>
 vn    <PageDown>  <Nop>
 
 " }}}
-
 " Normal Mode Mappings {{{
 
 nn    j              gj
@@ -565,7 +529,6 @@ nn    <F1>           <NOP>
 " nn    <PageUp>       <NOP>
 " nn    <PageDown>     <NOP>
 " }}}
-
 " Leader Mappings {{{
 
 let mapleader="\<Space>"
@@ -577,7 +540,6 @@ nn <silent><nowait><leader>q :silent! call <SID>ToggleQuickFixList()<cr>
 nn <silent><nowait><leader>s :silent! exec <SID>SourceScriptImplicit()<cr>
 " }}}
 " }}}
-
 " Autocommands {{{
 
 aug FOO
@@ -589,7 +551,6 @@ aug FOO
   au ColorScheme * highlight Comment cterm=italic gui=italic
 aug END
 " }}}
-
 " Commands {{{
 
 command! CC :let b:coc_suggest_disable = 1
@@ -600,7 +561,6 @@ command! SS mks! ~/.session.vim
 command! W w
 command! YY PlugClean | PlugInstall | PlugUpdate | PlugUpgrade | CocUpdate
 " }}}
-
 " Plugin Configurations {{{
 
 " standard plugins {{{
@@ -608,12 +568,10 @@ command! YY PlugClean | PlugInstall | PlugUpdate | PlugUpgrade | CocUpdate
 packadd! cfilter
 packadd! matchit
 " }}}
-
 " bclose.vim {{{
 
 let g:bclose_no_plugin_maps=1
 " }}}
-
 " clever-f.vim {{{
 
 " Alt.: hop.nvim, fzf.vim
@@ -625,7 +583,6 @@ let g:clever_f_across_no_line = 1
 let g:clever_f_fix_key_direction = 1
 let g:clever_f_chars_match_any_signs = ';' " f;
 " }}}
-
 " coc.nvim {{{
 
 " coc-snippets {{{
@@ -761,12 +718,10 @@ ino <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scro
 ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Left>"
 "}}}
 " }}}
-
 " editorconfig-vim {{{
 
 let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
 " }}}
-
 " fzf.vim {{{
 
 " Vars {{{
@@ -800,28 +755,6 @@ nn <silent>\t :silent! FZFBTags<cr>
 nn <silent>\T :silent! FZFTags<cr>
 " }}}
 " }}}
-
-" hop.nvim {{{
-
-nn <silent><M-w> :HopWord<cr>
-nn <silent><M-1> :HopChar1<cr>
-nn <silent><M-2> :HopChar2<cr>
-nn <silent><M-l> :HopLine<cr>
-" }}}
-
-" notational-fzf-vim {{{
-
-nm \n :NV<cr>
-
-let g:nv_search_paths = ['~/repositories/x', './README.md']
-" }}}
-
-" nvim-toggle-terminal {{{
-
-nnoremap <silent> <C-z> :ToggleTerminal<cr>
-tnoremap <silent> <C-z> <C-d><cr>
-" }}}
-
 " ranger.vim {{{
 
 let g:ranger_map_keys = 0
@@ -830,7 +763,6 @@ let g:ranger_command_override = 'ranger --cmd "set show_hidden=false"'
 
 nn <silent>\e :RangerCurrentFile<cr>
 " }}}
-
 " vim-floaterm {{{
 
 let g:floaterm_autoclose = 0
@@ -852,12 +784,10 @@ tnoremap   <silent>   <F10>  <C-\><C-n>:FloatermKill<CR>
 nnoremap   <silent>   <F12>  :FloatermToggle<CR>
 tnoremap   <silent>   <F12>  <C-\><C-n>:FloatermToggle<CR>
 " }}}
-
 " vim-fugitive {{{
 
 nm <silent><leader>b :Git blame<cr>
 " }}}
-
 " vim-fuzzy-stash {{{
 
 command! GS GStashList
@@ -868,107 +798,24 @@ let g:fuzzy_stash_actions = {
   \ 'ctrl-p': 'pop',
   \ 'ctrl-a': 'apply' }
 " }}}
-
-" vim-gist {{{
-
-let g:gist_post_private = 1
-let g:gist_show_privates = 1
-let g:gist_detect_filetype = 1
-let g:github_user = "rexagod"
-let g:gist_token = $GIST_TOKEN
-" }}}
-
-" vim-go {{{
-
-" Variables {{{
-
-let g:go_auto_sameids = 0
-let g:go_auto_type_info = 0
-let g:go_diagnostics_level = 2
-let g:go_doc_keywordprg_enabled = 0
-let g:go_doc_popup_window = 1
-let g:go_fmt_command = "goimports"
-let g:go_highlight_array_whitespace_error = 1
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_chan_whitespace_error = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_function_parameters = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_generate_tags = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_space_tab_error = 1
-let g:go_highlight_trailing_whitespace_error = 1
-let g:go_highlight_types = 1
-let g:go_highlight_variable_assignments = 1
-let g:go_highlight_variable_declarations = 1
-let g:go_imports_autosave = 1
-let g:go_info_mode = 'gopls'
-let g:go_list_type = 'quickfix'
-let g:go_play_browser_command = "chrome"
-let g:go_play_open_browser = 0
-let g:go_statusline_duration = 1000
-let g:go_test_show_name = 1
-let g:go_test_timeout= '10s'
-let g:go_updatetime = 100
-let g:go_guru_scope = []
-
-let $GINKGO_EDITOR_INTEGRATION = "true"
-" }}}
-
-" Mappings {{{
-
-aug GO
-  au!
-  au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
-
-  " gd - Goto definition.
-  " C-t - Go back.
-  " if, af - Function selectors.
-  " [[, ]] - Move between functions.
-
-  au FileType go nm <silent>'D :GoDeclsDir<cr>
-  au FileType go nm <silent>'I :GoImports<cr>
-  au FileType go nm <silent>'R :GoRename<cr>
-  au FileType go nm <silent>'a :GoAlternate<cr>
-  au FileType go nm <silent>'b :GoBuild<cr>
-  au FileType go nm <silent>'c :GoCoverageToggle<cr>
-  au FileType go nm <silent>'d :GoDecls<cr>
-  au FileType go nm <silent>'e :GoDescribe<cr>
-  au FileType go nm <silent>'E :GoWhicherrs<cr>
-  au FileType go nm <silent>'f :GoFiles<cr>
-  au FileType go vm <silent>'f :GoFreevars<cr>
-  au FileType go nm <silent>'i :GoInfo<cr>
-  au FileType go nm <silent>'r :GoRun<cr>
-  au FileType go nm <silent>'p :GoImplements<cr>
-  au FileType go vm <silent>'p :GoPeerChannels<cr>
-  au FileType go nm <silent>'s :GoSameIdsToggle<cr>
-  au FileType go nm <silent>'t :GoCallstack<cr>
-  " Also, :GoCallees and :GoCallers.
-  au FileType go nm <silent>K :call CocActionAsync('doHover')<cr>
-aug END
-" }}}
-" }}}
-
 " vim-indent-guides {{{
 
 let g:indent_guides_enable_on_vim_startup = 0
 
 command! II IndentGuidesToggle
 " }}}
-
-" vim-livedown {{{
-
-nm <silent><leader>L :LivedownToggle<cr>
-" }}}
-
 " vim-peekaboo {{{
 
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
 let g:peekaboo_compact=0
 " }}}
+" vim-signify {{{
 
+nm ]c ]c:SignifyHunkDiff<cr>
+nm [c [c:SignifyHunkDiff<cr>
+nm ]C ]C:SignifyHunkDiff<cr>
+nm [C [C:SignifyHunkDiff<cr>
+" }}}
 " vim-swap {{{
 
 " g<, g>, and gs
