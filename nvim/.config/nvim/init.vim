@@ -1,10 +1,5 @@
 " Maintainer: @rexagod
 
-" Notes {{{
-
-" Debugger.
-" }}}
-
 " Plugins {{{
 
 call plug#begin('~/.vim/plugged')
@@ -16,7 +11,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Git {{{
 
-Plug 'mattn/webapi-vim' | Plug 'mattn/vim-gist'
 Plug 'nvim-lua/plenary.nvim' | Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 Plug 'aacunningham/vim-fuzzy-stash'
@@ -37,7 +31,6 @@ Plug 'aymericbeaumet/vim-symlink'
 
 " Navigation {{{
 
-Plug 'bfrg/vim-jqplay'
 Plug 'jremmen/vim-ripgrep'
 Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-unimpaired'
@@ -45,14 +38,6 @@ Plug 'alok/notational-fzf-vim'
 Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
 Plug 'rhysd/clever-f.vim'
-" }}}
-
-" Syntax {{{
-
-Plug 'pangloss/vim-javascript'
-Plug 'MaxMEllon/vim-jsx-pretty'
-Plug 'sheerun/vim-polyglot'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " }}}
 
 " Text Manipulations {{{
@@ -81,7 +66,6 @@ Plug 'coderifous/textobj-word-column.vim'
 "                                          *iC* *ciC* *diC* *viC* *yiC*
 " iC     "inner COLUMN", a column based on "inner WORD" |iW|.
 "}}}
-Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
@@ -95,8 +79,6 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'shime/vim-livedown'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'markonm/traces.vim'
-Plug 'ryanoasis/vim-devicons'
-Plug 'kyazdani42/nvim-web-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " }}}
