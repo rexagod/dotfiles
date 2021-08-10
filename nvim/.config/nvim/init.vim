@@ -59,7 +59,6 @@ Plug 'vim-airline/vim-airline-themes'
 " }}}
 " Themes {{{
 
-Plug 'morhetz/gruvbox'
 Plug 'ajh17/spacegray.vim'
 " }}}
 call plug#end()
@@ -77,19 +76,11 @@ set termguicolors
 " }}}
 " Themes {{{
 
-" colorscheme gruvbox
-" let g:gruvbox_italic=1
-" let g:gruvbox_contrast_dark='hard'
-" let g:gruvbox_contrast_light='hard'
-" let g:gruvbox_italicize_strings=1
-" let g:airline_theme='gruvbox'
-" set background=dark
-
 colorscheme spacegray
 let g:spacegray_underline_search = 1
 let g:spacegray_use_italics = 1
 let g:spacegray_low_contrast = 0
-let g:airline_theme='base16_shell'
+let g:airline_theme='transparent'
 " }}}
 " }}}
 " Statusline (vim-airline) {{{
@@ -443,7 +434,7 @@ set smarttab
 set softtabstop=2
 set ssop=blank,buffers,curdir,folds,help,tabpages,winsize
 set tabstop=2
-set tags+=.git/tags,../.git/tags
+set tags=
 set termguicolors
 set textwidth=0
 set undodir=~/.vim-undo-dir
@@ -808,13 +799,6 @@ command! II IndentGuidesToggle
 
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
 let g:peekaboo_compact=0
-" }}}
-" vim-signify {{{
-
-nm ]c ]c:SignifyHunkDiff<cr>
-nm [c [c:SignifyHunkDiff<cr>
-nm ]C ]C:SignifyHunkDiff<cr>
-nm [C [C:SignifyHunkDiff<cr>
 " }}}
 " vim-swap {{{
 
