@@ -4,7 +4,6 @@
 
 setopt noautomenu
 # }}}
-
 # Variables {{{
 
 COMPLETION_WAITING_DOTS="true"
@@ -19,12 +18,12 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 ZSH_THEME="nicoulaj"
 # }}}
-
 # PATH {{{
 
 export PATH="\
 $GOPATH/bin:\
 $HOME/go/bin:\
+/home/rexagod/.local/bin:\
 /home/linuxbrew/.linuxbrew/bin:\
 /usr/bin:\
 /usr/lib:\
@@ -32,7 +31,6 @@ $HOME/go/bin:\
 /usr/share:\
 " # $PATH intentially not included here.
 # }}}
-
 # Exports{{{
 
 export AWS_PROFILE='openshift-dev'
@@ -45,10 +43,9 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git/*' --color auto"
 export FZF_DEFAULT_OPTS=""
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GO111MODULE="on"
 export GOBIN="$HOME/go/bin"
-export GOOGLE_APPLICATION_CREDENTIALS="/home/rexagod/Downloads/contrib-k8s-478a21288ae7.json"
 export GOPATH="$HOME/go"
-export IMAGE_TAG="debug-0003"
 export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
 export LANG=en_US.UTF-8
 export MANPAGER="nvim -c 'set ft=man' -"
@@ -56,7 +53,6 @@ export MOZ_ENABLE_WAYLAND=1
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 export PAGER="bat --paging=auto --italic-text=always --color=always --number --theme gruvbox-dark"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
-export REGISTRY_NAMESPACE='rexagod'
 export UPDATE_ZSH_DAYS=15
 export VIMRC='~/.config/nvim/init.vim'
 export VIM_SESSION='~/.session.vim'
@@ -65,7 +61,6 @@ export XDG_SESSION_TYPE='wayland'
 export ZSH="/home/rexagod/.oh-my-zsh"
 export ZSHRC='~/.zshrc'
 #}}}
-
 # Plugins {{{
 
 plugins=(
@@ -78,7 +73,6 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 # }}}
-
 # Aliases{{{
 
 alias goland="/home/rexagod/.local/GoLand-2021.1/bin/goland.sh"
@@ -87,7 +81,6 @@ alias bb="./bin/bridge"
 alias c="clear"
 alias gS="git stash"
 alias gSp="git stash pop"
-alias gh="go help"
 alias hgrep="history | grep "
 alias k="kubectl"
 alias ls="lsd"
@@ -110,11 +103,9 @@ alias vrs="nvim -S ${VIM_SESSION}"
 alias zr="nvim ${ZSHRC}"
 alias zshconfig="nvim ~/.zshrc"
 # }}}
-
 # Functions {{{
 
 cc () { # {{{
-
   DIR='.openshift-cluster'   # Cluster metadata directory
   USER='prasriva'            # RH username
   NAME='new\sname\shere'     # Template for Cluster ID
@@ -122,41 +113,66 @@ cc () { # {{{
   CLUSTER_ID="$USER-$RANDOM" # Cluster name = <Your RH id> + $RANDOM
   CLUSTER_ID_STATIC="$CLUSTER_ID"
 
-  # openshift-install destroy cluster --dir="$DIR"
-  cd ~
-  rm -rf "$DIR"
-  mkdir "$DIR"
-  cp .aws/"$CONF" "$DIR"/
-  sed -i "s/$NAME/$CLUSTER_ID_STATIC/" "$DIR"/"$CONF"
-  openshift-install create cluster --dir="$DIR"
-  oc login "https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`
-  export OCP_LOGIN_STRING="oc login \"https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443\" -u kubeadmin -p "`cat "$DIR/auth/kubeadmin-password"`
-  echo $OCP_LOGIN_STRING
-  cd -
-  # oc create -f https://raw.githubusercontent.com/openshift/ocs-operator/master/deploy/deploy-with-olm.yaml
+  if [[ $1 == "d" ]]; then
+    cd ~
+    openshift-install destroy cluster --dir="$DIR"
+    cd -
+  elif [[ $1 == "ocs" ]]; then
+    oc apply -f https://raw.githubusercontent.com/openshift/ocs-operator/master/deploy/deploy-with-olm.yaml
+  elif [[ $1 == "odf" ]]; then
+# {{{
+    cat <<EOF | k apply -f -
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  labels:
+    odf-operator-internal: "true"
+  name: odf-catalogsource
+  namespace: openshift-marketplace
+spec:
+  sourceType: grpc
+  image: quay.io/ocs-dev/odf-operator-catalog:latest
+  displayName: OpenShift Data Foundation [Internal]
+  publisher: Red Hat
+EOF
+# }}}
+  else
+    cd ~
+    rm -rf "$DIR"
+    mkdir "$DIR"
+    cp .aws/"$CONF" "$DIR"/
+    sed -i "s/$NAME/$CLUSTER_ID_STATIC/" "$DIR"/"$CONF"
+    openshift-install create cluster --dir="$DIR"
+    oc login "https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`
+    OCP_LOGIN_STRING="oc login \"https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443\" -u kubeadmin -p "`cat "$DIR/auth/kubeadmin-password"`
+    echo $OCP_LOGIN_STRING > ~/.ocp-login-string.txt
+    cd -
+  fi
 }
 # }}}
 # }}}
-
 # Misc. {{{
 
-export WATCH_NAMESPACE="openshift-storage"                                                                                                        
-export ROOK_CEPH_IMAGE="rook/ceph:v1.6.0.95.gf4cfc7a"                                                                                             
-export CEPH_IMAGE="ceph/daemon-base:latest-pacific"                                                                                               
-export NOOBAA_CORE_IMAGE="noobaa/noobaa-core:master-20210609"                                                                                     
-export NOOBAA_DB_IMAGE="centos/postgresql-12-centos7"
-export NOOBAA_IMAGE="noobaa/noobaa-operator:master-20210609"
-export ROOK_IMAGE="rook/ceph:v1.6.5-2.gb78358e"
+# export WATCH_NAMESPACE="openshift-storage"
+# export ROOK_CEPH_IMAGE="rook/ceph:v1.6.0.95.gf4cfc7a"
+# export CEPH_IMAGE="ceph/daemon-base:latest-pacific"
+# export NOOBAA_CORE_IMAGE="noobaa/noobaa-core:master-20210609"
+# export NOOBAA_DB_IMAGE="centos/postgresql-12-centos7"
+# export NOOBAA_IMAGE="noobaa/noobaa-operator:master-20210609"
+# export ROOK_IMAGE="rook/ceph:v1.6.5-2.gb78358e"
 
 if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # vim-gist plugin
-source ~/.local/vim-gist.token.bash
+# source ~/.local/vim-gist.token.bash
 
 # krew
 export PATH="${PATH}:${HOME}/.krew/bin"
 
 # kubectl autocomplete
 [[ /bin/kubectl ]] && source <(kubectl completion zsh)
+
+# ocs-operator PR chores
+alias make-ocs="make gen-latest-csv && make verify-latest-csv && make update-generated && make ocs-operator-ci"
 # }}}

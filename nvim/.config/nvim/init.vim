@@ -7,6 +7,10 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " }}}
+" Go {{{
+
+Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'branch': 'master', 'do': ':GoUpdateBinaries' }
+" }}}
 " Git {{{
 
 Plug 'mhinz/vim-signify'
@@ -15,21 +19,32 @@ Plug 'aacunningham/vim-fuzzy-stash'
 " }}}
 " Internals {{{
 
-Plug 'voldikss/vim-floaterm'
-Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-eunuch'
 Plug 'aymericbeaumet/vim-symlink'
+Plug 'gelguy/wilder.nvim'
+Plug 'romgrk/fzy-lua-native'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-sleuth'
+Plug 'voldikss/vim-floaterm'
 " }}}
 " Navigation {{{
 
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'tami5/sqlite.lua'
+Plug 'nvim-telescope/telescope-cheat.nvim'
+
+Plug 'preservim/vim-wheel'
+Plug 'dhruvasagar/vim-open-url'
 Plug 'jremmen/vim-ripgrep'
 Plug 'tpope/vim-unimpaired'
-Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
 Plug 'rhysd/clever-f.vim'
 " }}}
 " Text Manipulations {{{
 
+" Plug 'preservim/vim-wordchipper'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'machakann/vim-swap'
 Plug 'kana/vim-textobj-user' | Plug 'coderifous/textobj-word-column.vim' | Plug 'adolenc/vim-textobj-toplevel'
@@ -57,14 +72,18 @@ Plug 'markonm/traces.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " }}}
+" Syntax {{{
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" }}}
 " Themes {{{
 
 Plug 'ajh17/spacegray.vim'
+Plug 'projekt0n/github-nvim-theme'
 " }}}
 call plug#end()
 " }}}
 " Theme {{{
-
 " Configuration {{{
 
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
@@ -74,14 +93,16 @@ syntax on
 set t_Co=256
 set termguicolors
 " }}}
-" Themes {{{
 
-colorscheme spacegray
-let g:spacegray_underline_search = 1
-let g:spacegray_use_italics = 1
-let g:spacegray_low_contrast = 0
-let g:airline_theme='transparent'
-" }}}
+" colorscheme spacegray
+" let g:spacegray_underline_search = 1
+" let g:spacegray_use_italics = 1
+" let g:spacegray_low_contrast = 0
+" let g:airline_theme='transparent'
+
+colorscheme github_dark
+let g:dark_float = v:true
+let g:airline_theme='minimalist'
 " }}}
 " Statusline (vim-airline) {{{
 
@@ -399,6 +420,7 @@ set autoread
 set autowrite
 set backupcopy=yes
 set clipboard+=unnamedplus
+set conceallevel=0
 set confirm
 set expandtab
 set fdm=marker
@@ -418,7 +440,7 @@ set number
 set numberwidth=4
 set path=.,,
 set pumheight=5
-set re=1
+set re=0
 set relativenumber
 set ruler
 set scroll=5
@@ -435,7 +457,6 @@ set softtabstop=2
 set ssop=blank,buffers,curdir,folds,help,tabpages,winsize
 set tabstop=2
 set tags=
-set termguicolors
 set textwidth=0
 set undodir=~/.vim-undo-dir
 set undofile
@@ -448,6 +469,7 @@ set pumblend=30
 
 " Insert Mode Mappings {{{
 
+ino   <esc>         <C-c>
 ino   <C-j>         <esc>5ja
 ino   <C-k>         <esc>5ka
 ino   <C-h>         <esc>5ha
@@ -505,8 +527,8 @@ nm    <C-Right>      <C-l>
 nm    <C-Left>       <C-h>
 nm    <C-Up>         <C-k>
 nm    <C-Down>       <C-j>
-nn    <C-PageUp>     <C-b>
-nn    <C-PageDown>   <C-f>
+nn    <C-PageUp>     2j
+nn    <C-PageDown>   2k
 
 nn    <S-Right>      <Nop>
 nn    <S-Left>       <Nop>
@@ -713,38 +735,22 @@ ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scro
 
 let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
 " }}}
-" fzf.vim {{{
+" nvim-treesitter {{{
 
-" Vars {{{
-
-let g:fzf_layout = { 'up': '100%' }
-let g:fzf_preview_window = [ 'up:60%:rounded:nowrap:nofollow' ]
-" }}}
-
-" Maps {{{
-
-nn <silent>\b :silent! Buffers<cr>
-nn <silent>\c :silent! BCommits<cr>
-nn <silent>\d :silent! BD<cr>
-nn <silent>\k :silent! Commands<cr>
-nn <silent>\C :silent! Commits<cr>
-nn <silent>\F :silent! Filetypes<cr>
-nn <silent>\G :silent! GFiles<cr>
-nn <silent>\g :silent! GFiles?<cr>
-nn <silent>\H :silent! Helptags<cr>
-nn <silent>\m :silent! Maps<cr>
-nn <silent>\l :silent! FZFBLines<cr>
-nn <silent>\f :silent! FZFFiles<cr>
-nn <silent>\/ :silent! FZFGGrep<cr>
-nn <silent>\h :silent! FZFHistory<cr>
-nn <silent>\L :silent! FZFLocList<cr>
-nn <silent>\M :silent! FZFMarks<cr>
-nn <silent>\q :silent! FZFQuickFix<cr>
-nn <silent>\\ :silent! FZFRg<cr>
-nn <silent>\w :silent! FZFWindows<cr>
-nn <silent>\t :silent! FZFBTags<cr>
-nn <silent>\T :silent! FZFTags<cr>
-" }}}
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+    disable = {},
+  },
+  indent = {
+    enable = false,
+    disable = {},
+  },
+}
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.tsx.used_by = { "javascript", "typescript.tsx" }
+EOF
 " }}}
 " ranger.vim {{{
 
@@ -753,6 +759,66 @@ let g:ranger_replace_netrw = 1
 let g:ranger_command_override = 'ranger --cmd "set show_hidden=false"'
 
 nn <silent>\e :RangerCurrentFile<cr>
+" }}}
+" telescope {{{
+
+" <C-x>	Go to file selection as a split{{{
+" <C-v>	Go to file selection as a vsplit
+" <C-t>	Go to a file in a new tab
+" <C-u>	Scroll up in preview window
+" <C-d>	Scroll down in preview window
+" <C-/>/?	Show picker mappings (in insert & normal mode, respectively)
+" <C-c>	Close telescope
+" <Esc>	Close telescope (in normal mode)
+" <Tab>	Toggle selection and move to next selection
+" <S-Tab>	Toggle selection and move to prev selection
+" <C-q>	Send all items not filtered to qflist
+" <M-q>	Send all selected items to qflist}}}
+
+lua << EOF
+require('telescope').load_extension('fzf')
+require('telescope').load_extension("cheat")
+require('telescope').setup{
+  defaults = {
+    dynamic_preview_title = true,
+    selection_strategy = "closest",
+    path_display = {
+      shorten = 1,
+    },
+    sorting_strategy = "descending",
+    winblend = 30,
+    -- mappings = {
+    --   i = {
+    --     ["<esc>"] = require('telescope.actions').close
+    --   },
+    -- },
+  }
+}
+EOF
+
+nn<silent> \A :lua require'telescope.builtin'.git_stash{}<cr>
+nn<silent> \B :lua require'telescope.builtin'.git_branches{}<cr>
+nn<silent> \C :lua require'telescope.builtin'.git_commits{}<cr>
+nn<silent> \F :lua require'telescope.builtin'.file_browser{}<cr>
+nn<silent> \H :lua require'telescope.builtin'.help_tags{}<cr>
+nn<silent> \L :lua require'telescope.builtin'.loclist{}<cr>
+nn<silent> \M :lua require'telescope.builtin'.man_pages{}<cr>
+nn<silent> \S :lua require'telescope.builtin'.git_status{}<cr>
+nn<silent> \Y :lua require'telescope.builtin'.spell_suggest{}<cr>
+nn<silent> \\ :lua require'telescope.builtin'.live_grep{}<cr>
+nn<silent> \a :lua require'telescope.builtin'.autocommands{}<cr>
+nn<silent> \b :lua require'telescope.builtin'.buffers{}<cr>
+nn<silent> \c :lua require'telescope.builtin'.git_bcommits{}<cr>
+nn<silent> \f :lua require'telescope.builtin'.find_files{}<cr>
+nn<silent> \g :lua require'telescope.builtin'.git_files{}<cr>
+nn<silent> \h :lua require'telescope.builtin'.oldfiles{}<cr>
+nn<silent> \k :lua require'telescope.builtin'.commands{}<cr>
+nn<silent> \l :lua require'telescope.builtin'.current_buffer_fuzzy_find{}<cr>
+nn<silent> \m :lua require'telescope.builtin'.marks{}<cr>
+nn<silent> \q :lua require'telescope.builtin'.quickfix{}<cr>
+nn<silent> \t :lua require'telescope.builtin'.treesitter{}<cr>
+nn<silent> \y :lua require'telescope.builtin'.filetypes{}<cr>
+nn<silent> \~ :Telescope cheat fd<cr>
 " }}}
 " vim-floaterm {{{
 
@@ -789,11 +855,86 @@ let g:fuzzy_stash_actions = {
   \ 'ctrl-p': 'pop',
   \ 'ctrl-a': 'apply' }
 " }}}
+" vim-go {{{
+
+" Variables {{{
+
+let g:go_auto_sameids = 0
+let g:go_auto_type_info = 0
+let g:go_diagnostics_level = 2
+let g:go_doc_keywordprg_enabled = 0
+let g:go_doc_popup_window = 1
+let g:go_fmt_command = "goimports"
+let g:go_highlight_array_whitespace_error = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_chan_whitespace_error = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_function_parameters = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_space_tab_error = 1
+let g:go_highlight_trailing_whitespace_error = 1
+let g:go_highlight_types = 1
+let g:go_highlight_variable_assignments = 1
+let g:go_highlight_variable_declarations = 1
+let g:go_imports_autosave = 1
+let g:go_info_mode = 'gopls'
+let g:go_list_type = 'quickfix'
+let g:go_play_browser_command = "chrome"
+let g:go_play_open_browser = 0
+let g:go_statusline_duration = 1000
+let g:go_test_show_name = 1
+let g:go_test_timeout= '10s'
+let g:go_updatetime = 0
+let g:go_guru_scope = []
+
+let $GINKGO_EDITOR_INTEGRATION = "true"
+" }}}
+" Mappings {{{
+
+aug GO
+  au!
+  au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
+
+  " gd - Goto definition.
+  " C-t - Go back.
+  " if, af - Function selectors.
+  " [[, ]] - Move between functions.
+
+  au FileType go nm <silent>'D :GoDeclsDir<cr>
+  au FileType go nm <silent>'I :GoImports<cr>
+  au FileType go nm <silent>'R :GoRename<cr>
+  au FileType go nm <silent>'a :GoAlternate<cr>
+  au FileType go nm <silent>'b :GoBuild<cr>
+  au FileType go nm <silent>'c :GoCoverageToggle<cr>
+  au FileType go nm <silent>'d :GoDecls<cr>
+  au FileType go nm <silent>'e :GoDescribe<cr>
+  au FileType go nm <silent>'E :GoWhicherrs<cr>
+  au FileType go nm <silent>'f :GoFiles<cr>
+  au FileType go vm <silent>'f :GoFreevars<cr>
+  au FileType go nm <silent>'i :GoInfo<cr>
+  au FileType go nm <silent>'r :GoRun<cr>
+  au FileType go nm <silent>'p :GoImplements<cr>
+  au FileType go vm <silent>'p :GoPeerChannels<cr>
+  au FileType go nm <silent>'s :GoSameIdsToggle<cr>
+  au FileType go nm <silent>'t :GoCallstack<cr>
+  " Also, :GoCallees and :GoCallers.
+  au FileType go nm <silent>K :call CocActionAsync('doHover')<cr>
+aug END
+" }}}
+" }}}
 " vim-indent-guides {{{
 
 let g:indent_guides_enable_on_vim_startup = 0
 
 command! II IndentGuidesToggle
+" }}}
+" vim-open-url {{{
+
+nm gx gB
 " }}}
 " vim-peekaboo {{{
 
@@ -807,5 +948,45 @@ omap i, <Plug>(swap-textobject-i)
 xmap i, <Plug>(swap-textobject-i)
 omap a, <Plug>(swap-textobject-a)
 xmap a, <Plug>(swap-textobject-a)
+" }}}
+" vim-wheel {{{
+
+let g:wheel#map#up   = '<PageUp>'
+let g:wheel#map#down = '<PageDown>'
+let g:wheel#map#mouse = 1
+let g:wheel#line#threshold = 5
+let g:wheel#scroll_on_wrap = 1
+" }}}
+" wilder.nvim {{{
+
+call wilder#setup({'modes': [':', '/', '?']})
+call wilder#set_option('use_python_remote_plugin', 0)
+
+call wilder#set_option('pipeline', [
+      \   wilder#branch(
+      \     wilder#cmdline_pipeline({
+      \       'use_python': 0,
+      \       'fuzzy': 1,
+      \       'fuzzy_filter': wilder#lua_fzy_filter(),
+      \     }),
+      \     wilder#vim_search_pipeline(),
+      \   ),
+      \ ])
+
+call wilder#set_option('renderer', wilder#renderer_mux({
+      \ ':': wilder#popupmenu_renderer({
+      \   'highlighter': wilder#lua_fzy_highlighter(),
+      \   'left': [
+      \     wilder#popupmenu_devicons(),
+      \   ],
+      \   'right': [
+      \     ' ',
+      \     wilder#popupmenu_scrollbar(),
+      \   ],
+      \ }),
+      \ '/': wilder#wildmenu_renderer({
+      \   'highlighter': wilder#lua_fzy_highlighter(),
+      \ }),
+      \ }))
 " }}}
 " }}}

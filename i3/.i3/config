@@ -41,10 +41,10 @@ bindsym $mod+i exec $launcher
 ################################################################################################
 
 exec --no-startup-id volumeicon
-bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
-#exec --no-startup-id pulseaudio
-#exec --no-startup-id pa-applet
-#bindsym $mod+Ctrl+m exec pavucontrol
+# bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
+exec --no-startup-id pulseaudio
+exec --no-startup-id pa-applet
+bindsym $mod+Ctrl+m exec pavucontrol
 
 ################################################################################################
 
@@ -137,7 +137,7 @@ bindsym $mod+Ctrl+Left workspace prev
 set $ws1 1:Neovim
 set $ws2 2:ChromePersonal
 set $ws3 3:ChromeWork
-set $ws4 4:Goland
+set $ws4 4:Other
 set $ws5 5:Other
 set $ws6 6:Other
 set $ws7 7:Other
@@ -169,24 +169,12 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws0
 
-# Move to workspace with focused container
-bindsym $mod+Ctrl+1 move container to workspace $ws1; workspace $ws1
-bindsym $mod+Ctrl+2 move container to workspace $ws2; workspace $ws2
-bindsym $mod+Ctrl+3 move container to workspace $ws3; workspace $ws3
-bindsym $mod+Ctrl+4 move container to workspace $ws4; workspace $ws4
-bindsym $mod+Ctrl+5 move container to workspace $ws5; workspace $ws5
-bindsym $mod+Ctrl+6 move container to workspace $ws6; workspace $ws6
-bindsym $mod+Ctrl+7 move container to workspace $ws7; workspace $ws7
-bindsym $mod+Ctrl+8 move container to workspace $ws8; workspace $ws8
-bindsym $mod+Ctrl+9 move container to workspace $ws9; workspace $ws9
-bindsym $mod+Ctrl+0 move container to workspace $ws0; workspace $ws0
-
 # Open applications on specific workspaces
-assign [class="alacritty"] $ws1
-assign [class="google-chrome-stable"] $ws2
-assign [class="google-chrome-beta"] $ws3
-assign [class="alacritty"] $ws9
-assign [class="alacritty"] $ws0
+# assign [class="alacritty"] $ws1
+# assign [class="google-chrome-stable"] $ws2
+# assign [class="google-chrome-beta"] $ws3
+# assign [class="alacritty"] $ws9
+# assign [class="alacritty"] $ws0
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1

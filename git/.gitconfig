@@ -21,7 +21,7 @@
 [core]
 	pager = git-split-diffs --color | less -RFX
 [interactive]
-	diffFilter = diff-so-fancy --patch
+	diffFilter = less
 [color]
 	ui = true
 [color "diff-highlight"]
