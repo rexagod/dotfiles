@@ -86,3 +86,8 @@ debug:
   log_level: OFF
   print_events: false
   ref_test: false
+r_timer: false
+  persistent_logging: false
+  log_level: OFF
+  print_events: false
+  ref_test: false

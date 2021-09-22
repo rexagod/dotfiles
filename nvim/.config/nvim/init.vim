@@ -19,6 +19,7 @@ Plug 'aacunningham/vim-fuzzy-stash'
 " }}}
 " Internals {{{
 
+Plug 'nvim-lua/plenary.nvim'
 Plug 'aymericbeaumet/vim-symlink'
 Plug 'gelguy/wilder.nvim'
 Plug 'romgrk/fzy-lua-native'
@@ -29,17 +30,12 @@ Plug 'voldikss/vim-floaterm'
 " }}}
 " Navigation {{{
 
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-Plug 'tami5/sqlite.lua'
-Plug 'nvim-telescope/telescope-cheat.nvim'
-
 Plug 'preservim/vim-wheel'
 Plug 'dhruvasagar/vim-open-url'
 Plug 'jremmen/vim-ripgrep'
 Plug 'tpope/vim-unimpaired'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
+Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
 Plug 'rhysd/clever-f.vim'
 " }}}
 " Text Manipulations {{{
@@ -94,15 +90,15 @@ set t_Co=256
 set termguicolors
 " }}}
 
-" colorscheme spacegray
-" let g:spacegray_underline_search = 1
-" let g:spacegray_use_italics = 1
-" let g:spacegray_low_contrast = 0
-" let g:airline_theme='transparent'
+colorscheme spacegray
+let g:spacegray_underline_search = 1
+let g:spacegray_use_italics = 1
+let g:spacegray_low_contrast = 0
+let g:airline_theme='transparent'
 
-colorscheme github_dark
-let g:dark_float = v:true
-let g:airline_theme='minimalist'
+" colorscheme github_dark
+" let g:dark_float = v:true
+" let g:airline_theme='minimalist'
 " }}}
 " Statusline (vim-airline) {{{
 
@@ -559,6 +555,7 @@ aug FOO
   au!
   au BufWritePost * silent! !ctags -R &
   au Filetype *.js,*.ts setl suffixesadd=.js,.ts,.jsx,.tsx
+  au Filetype *.js,*.ts,*.jsx,*.tsx nm = <leader>f
   au Filetype help,qf nn <silent><buffer>q :q<cr>
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exec "normal! g`\"" | endif
   au ColorScheme * highlight Comment cterm=italic gui=italic
@@ -735,6 +732,38 @@ ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scro
 
 let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
 " }}}
+" fzf.vim {{{
+
+" Vars {{{
+
+let g:fzf_layout = { 'up': '100%' }
+let g:fzf_preview_window = [ 'up:60%:rounded:nowrap:nofollow' ]
+" }}}
+" Maps {{{
+
+nn <silent>\b :silent! Buffers<cr>
+nn <silent>\c :silent! BCommits<cr>
+nn <silent>\d :silent! BD<cr>
+nn <silent>\k :silent! Commands<cr>
+nn <silent>\C :silent! Commits<cr>
+nn <silent>\F :silent! Filetypes<cr>
+nn <silent>\G :silent! GFiles<cr>
+nn <silent>\g :silent! GFiles?<cr>
+nn <silent>\H :silent! Helptags<cr>
+nn <silent>\m :silent! Maps<cr>
+nn <silent>\l :silent! FZFBLines<cr>
+nn <silent>\f :silent! FZFFiles<cr>
+nn <silent>\/ :silent! FZFGGrep<cr>
+nn <silent>\h :silent! FZFHistory<cr>
+nn <silent>\L :silent! FZFLocList<cr>
+nn <silent>\M :silent! FZFMarks<cr>
+nn <silent>\q :silent! FZFQuickFix<cr>
+nn <silent>\\ :silent! FZFRg<cr>
+nn <silent>\w :silent! FZFWindows<cr>
+nn <silent>\t :silent! FZFBTags<cr>
+nn <silent>\T :silent! FZFTags<cr>
+" }}}
+" }}}
 " nvim-treesitter {{{
 
 lua << EOF
@@ -759,66 +788,6 @@ let g:ranger_replace_netrw = 1
 let g:ranger_command_override = 'ranger --cmd "set show_hidden=false"'
 
 nn <silent>\e :RangerCurrentFile<cr>
-" }}}
-" telescope {{{
-
-" <C-x>	Go to file selection as a split{{{
-" <C-v>	Go to file selection as a vsplit
-" <C-t>	Go to a file in a new tab
-" <C-u>	Scroll up in preview window
-" <C-d>	Scroll down in preview window
-" <C-/>/?	Show picker mappings (in insert & normal mode, respectively)
-" <C-c>	Close telescope
-" <Esc>	Close telescope (in normal mode)
-" <Tab>	Toggle selection and move to next selection
-" <S-Tab>	Toggle selection and move to prev selection
-" <C-q>	Send all items not filtered to qflist
-" <M-q>	Send all selected items to qflist}}}
-
-lua << EOF
-require('telescope').load_extension('fzf')
-require('telescope').load_extension("cheat")
-require('telescope').setup{
-  defaults = {
-    dynamic_preview_title = true,
-    selection_strategy = "closest",
-    path_display = {
-      shorten = 1,
-    },
-    sorting_strategy = "descending",
-    winblend = 30,
-    -- mappings = {
-    --   i = {
-    --     ["<esc>"] = require('telescope.actions').close
-    --   },
-    -- },
-  }
-}
-EOF
-
-nn<silent> \A :lua require'telescope.builtin'.git_stash{}<cr>
-nn<silent> \B :lua require'telescope.builtin'.git_branches{}<cr>
-nn<silent> \C :lua require'telescope.builtin'.git_commits{}<cr>
-nn<silent> \F :lua require'telescope.builtin'.file_browser{}<cr>
-nn<silent> \H :lua require'telescope.builtin'.help_tags{}<cr>
-nn<silent> \L :lua require'telescope.builtin'.loclist{}<cr>
-nn<silent> \M :lua require'telescope.builtin'.man_pages{}<cr>
-nn<silent> \S :lua require'telescope.builtin'.git_status{}<cr>
-nn<silent> \Y :lua require'telescope.builtin'.spell_suggest{}<cr>
-nn<silent> \\ :lua require'telescope.builtin'.live_grep{}<cr>
-nn<silent> \a :lua require'telescope.builtin'.autocommands{}<cr>
-nn<silent> \b :lua require'telescope.builtin'.buffers{}<cr>
-nn<silent> \c :lua require'telescope.builtin'.git_bcommits{}<cr>
-nn<silent> \f :lua require'telescope.builtin'.find_files{}<cr>
-nn<silent> \g :lua require'telescope.builtin'.git_files{}<cr>
-nn<silent> \h :lua require'telescope.builtin'.oldfiles{}<cr>
-nn<silent> \k :lua require'telescope.builtin'.commands{}<cr>
-nn<silent> \l :lua require'telescope.builtin'.current_buffer_fuzzy_find{}<cr>
-nn<silent> \m :lua require'telescope.builtin'.marks{}<cr>
-nn<silent> \q :lua require'telescope.builtin'.quickfix{}<cr>
-nn<silent> \t :lua require'telescope.builtin'.treesitter{}<cr>
-nn<silent> \y :lua require'telescope.builtin'.filetypes{}<cr>
-nn<silent> \~ :Telescope cheat fd<cr>
 " }}}
 " vim-floaterm {{{
 
