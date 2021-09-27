@@ -30,9 +30,9 @@ Plug 'voldikss/vim-floaterm'
 " }}}
 " Navigation {{{
 
+Plug 'phaazon/hop.nvim'
 Plug 'preservim/vim-wheel'
 Plug 'dhruvasagar/vim-open-url'
-Plug 'jremmen/vim-ripgrep'
 Plug 'tpope/vim-unimpaired'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
 Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
@@ -74,8 +74,8 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " }}}
 " Themes {{{
 
-Plug 'ajh17/spacegray.vim'
-Plug 'projekt0n/github-nvim-theme'
+Plug 'sainnhe/sonokai'
+Plug 'morhetz/gruvbox'
 " }}}
 call plug#end()
 " }}}
@@ -90,15 +90,24 @@ set t_Co=256
 set termguicolors
 " }}}
 
-colorscheme spacegray
-let g:spacegray_underline_search = 1
-let g:spacegray_use_italics = 1
-let g:spacegray_low_contrast = 0
-let g:airline_theme='transparent'
+let g:gruvbox_contrast_dark     = 'light'
+let g:gruvbox_contrast_light    = 'light'
+let g:gruvbox_hls_cursor        = 'fg4'
+let g:gruvbox_improved_strings  = '1'
+let g:gruvbox_improved_warnings = '1'
+let g:gruvbox_invert_selection  = '0'
+let g:gruvbox_invert_tabline    = '0'
+let g:gruvbox_italic            = '1'
+let g:gruvbox_italicize_strings = '1'
+let g:gruvbox_number_column     = 'bg0'
+let g:gruvbox_sign_column       = 'bg0'
+colorscheme gruvbox
 
-" colorscheme github_dark
-" let g:dark_float = v:true
-" let g:airline_theme='minimalist'
+" let g:sonokai_style = 'maia'
+" let g:sonokai_enable_italic = 1
+" let g:sonokai_disable_italic_comment = 1
+" colorscheme sonokai
+" let g:airline_theme = 'sonokai'
 " }}}
 " Statusline (vim-airline) {{{
 
@@ -739,30 +748,46 @@ let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
 let g:fzf_layout = { 'up': '100%' }
 let g:fzf_preview_window = [ 'up:60%:rounded:nowrap:nofollow' ]
 " }}}
+" Commands {{{
+
+command! FZFShow call fzf#run(fzf#wrap({
+      \ 'source': 'git show --format=oneline --name-only | tail --lines=+2', 
+      \ 'sink': 'e',
+      \ 'options': '--multi --reverse --preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {}"'
+      \ }))
+" }}}
 " Maps {{{
 
-nn <silent>\b :silent! Buffers<cr>
-nn <silent>\c :silent! BCommits<cr>
-nn <silent>\d :silent! BD<cr>
-nn <silent>\k :silent! Commands<cr>
+nn <silent>\/ :silent! FZFGGrep<cr>
 nn <silent>\C :silent! Commits<cr>
 nn <silent>\F :silent! Filetypes<cr>
 nn <silent>\G :silent! GFiles<cr>
-nn <silent>\g :silent! GFiles?<cr>
 nn <silent>\H :silent! Helptags<cr>
-nn <silent>\m :silent! Maps<cr>
-nn <silent>\l :silent! FZFBLines<cr>
-nn <silent>\f :silent! FZFFiles<cr>
-nn <silent>\/ :silent! FZFGGrep<cr>
-nn <silent>\h :silent! FZFHistory<cr>
 nn <silent>\L :silent! FZFLocList<cr>
 nn <silent>\M :silent! FZFMarks<cr>
-nn <silent>\q :silent! FZFQuickFix<cr>
-nn <silent>\\ :silent! FZFRg<cr>
-nn <silent>\w :silent! FZFWindows<cr>
-nn <silent>\t :silent! FZFBTags<cr>
 nn <silent>\T :silent! FZFTags<cr>
+nn <silent>\\ :silent! FZFRg<cr>
+nn <silent>\b :silent! Buffers<cr>
+nn <silent>\c :silent! BCommits<cr>
+nn <silent>\d :silent! BD<cr>
+nn <silent>\f :silent! FZFFiles<cr>
+nn <silent>\g :silent! GFiles?<cr>
+nn <silent>\h :silent! FZFHistory<cr>
+nn <silent>\k :silent! Commands<cr>
+nn <silent>\l :silent! FZFBLines<cr>
+nn <silent>\m :silent! Maps<cr>
+nn <silent>\q :silent! FZFQuickFix<cr>
+nn <silent>\s :silent! FZFShow<cr>
+nn <silent>\t :silent! FZFBTags<cr>
+nn <silent>\w :silent! FZFWindows<cr>
 " }}}
+" }}}
+" hop.nvim {{{
+
+nn <silent><M-w> :HopWord<cr>
+nn <silent><M-1> :HopChar1<cr>
+nn <silent><M-2> :HopChar2<cr>
+nn <silent><M-l> :HopLine<cr>
 " }}}
 " nvim-treesitter {{{
 

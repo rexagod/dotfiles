@@ -49,7 +49,6 @@ export GOPATH="$HOME/go"
 export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
 export LANG=en_US.UTF-8
 export MANPAGER="nvim -c 'set ft=man' -"
-export MOZ_ENABLE_WAYLAND=1
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 export PAGER="bat --paging=auto --italic-text=always --color=always --number --theme gruvbox-dark"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
@@ -57,7 +56,6 @@ export UPDATE_ZSH_DAYS=15
 export VIMRC='~/.config/nvim/init.vim'
 export VIM_SESSION='~/.session.vim'
 export VISUAL="nvim"
-export XDG_SESSION_TYPE='wayland'
 export ZSH="/home/rexagod/.oh-my-zsh"
 export ZSHRC='~/.zshrc'
 #}}}

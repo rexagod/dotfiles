@@ -137,7 +137,7 @@ bindsym $mod+Ctrl+Left workspace prev
 set $ws1 1:Neovim
 set $ws2 2:ChromePersonal
 set $ws3 3:ChromeWork
-set $ws4 4:Other
+set $ws4 4:Discord
 set $ws5 5:Other
 set $ws6 6:Other
 set $ws7 7:Other
@@ -313,13 +313,12 @@ bar {
     position bottom
     status_command i3status-rs
     colors {
-        separator #ffffff
-        background #222222
-        statusline #dddddd
-        focused_workspace #334455 #008899 #ffffff
-        active_workspace #333333 #333333 #555500
-        inactive_workspace #333333 #333333 #888888
-        urgent_workspace #2f343a #900000 #ffffff
+        separator #a89984
+        background #282828
+        statusline #282828
+        focused_workspace #a89984 #282828 #fbf1c7
+        inactive_workspace #282828 #282828 #928374
+        urgent_workspace #fe8019 #d65d0e #000000
     }
 }
 
