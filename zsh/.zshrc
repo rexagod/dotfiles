@@ -35,7 +35,8 @@ $HOME/go/bin:\
 
 export AWS_PROFILE='openshift-dev'
 export BASHRC='~/.bashrc'
-export BROWSER='google-chrome-stable'
+export BAT_THEME='gruvbox-light'
+export BROWSER='chromium'
 export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
 export FZF_ALT_C_COMMAND="fd -t d . $HOME"
@@ -48,9 +49,9 @@ export GOBIN="$HOME/go/bin"
 export GOPATH="$HOME/go"
 export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
 export LANG=en_US.UTF-8
-export MANPAGER="nvim -c 'set ft=man' -"
+export MANPAGER='nvim +Man!'
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-export PAGER="bat --paging=auto --italic-text=always --color=always --number --theme gruvbox-dark"
+export PAGER="bat --paging=auto --italic-text=always --color=always --number --theme ${BAT_THEME}"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
 export UPDATE_ZSH_DAYS=15
 export VIMRC='~/.config/nvim/init.vim'
@@ -74,7 +75,7 @@ source $ZSH/oh-my-zsh.sh
 # Aliases{{{
 
 alias goland="/home/rexagod/.local/GoLand-2021.1/bin/goland.sh"
-alias bat="bat --theme=\"Dracula\" --style grid,numbers,changes"
+alias bat="bat --theme ${BAT_THEME} --style grid,numbers,changes"
 alias bb="./bin/bridge"
 alias c="clear"
 alias gS="git stash"
@@ -93,7 +94,7 @@ alias soc="source ./contrib/oc-environment.sh"
 alias sshd="sudo /usr/sbin/sshd"
 alias szr="source ~/.zshrc"
 alias vi="nvim"
-alias vif="fzf --preview-window=right:50% --preview=\"bat --color always {}\" --bind \"enter:execute(nvim {})\""
+alias vif="fzf --preview-window=right:50% --preview=\"bat --theme ${BAT_THEME} --color always {}\" --bind \"enter:execute(nvim {})\""
 alias vpn="nmcli con up id \"1 - Red Hat Global VPN\" --ask"
 alias vpnd="nmcli con down id \"1 - Red Hat Global VPN\" --ask"
 alias vr="nvim ${VIMRC}"

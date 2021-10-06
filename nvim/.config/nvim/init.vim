@@ -101,6 +101,7 @@ let g:gruvbox_italic            = '1'
 let g:gruvbox_italicize_strings = '1'
 let g:gruvbox_number_column     = 'bg0'
 let g:gruvbox_sign_column       = 'bg0'
+set background="light"
 colorscheme gruvbox
 
 " let g:sonokai_style = 'maia'
@@ -391,7 +392,7 @@ let g:markdown_fenced_languages = ["vim","lua","javascript","typescript","go"]
 
 function! s:ToggleQuickFixList() " {{{
   if empty(filter(getwininfo(), 'v:val.quickfix'))
-    3copen
+    6copen
   else
     cclose
   endif
@@ -515,6 +516,8 @@ vn    <S-Down>    <C-y>
 vn    <PageUp>    <Nop>
 vn    <PageDown>  <Nop>
 
+vn    <C-s>       :sort<cr> " implicitly inserts the visual marker range
+
 " }}}
 " Normal Mode Mappings {{{
 
@@ -540,8 +543,8 @@ nn    <S-Left>       <Nop>
 nn    <S-Up>         <C-y>
 nn    <S-Down>       <C-e>
 
-nn    <silent><F2>   :messages<cr>
 nn    <silent><F4>   :only<cr>
+nn    <silent><F5>   :messages<cr> "<F26> == <C-F2>
 nn    <silent>QQ     :bd<cr>
 nn    <F1>           <NOP>
 " nn    <PageUp>       <NOP>
@@ -798,8 +801,7 @@ require'nvim-treesitter.configs'.setup {
     disable = {},
   },
   indent = {
-    enable = false,
-    disable = {},
+    enable = true,
   },
 }
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
@@ -875,9 +877,9 @@ let g:go_highlight_types = 1
 let g:go_highlight_variable_assignments = 1
 let g:go_highlight_variable_declarations = 1
 let g:go_imports_autosave = 1
-let g:go_info_mode = 'gopls'
+let g:go_info_mode = 'guru'
 let g:go_list_type = 'quickfix'
-let g:go_play_browser_command = "chrome"
+let g:go_play_browser_command = "chromium"
 let g:go_play_open_browser = 0
 let g:go_statusline_duration = 1000
 let g:go_test_show_name = 1
