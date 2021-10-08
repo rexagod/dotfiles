@@ -101,7 +101,7 @@ let g:gruvbox_italic            = '1'
 let g:gruvbox_italicize_strings = '1'
 let g:gruvbox_number_column     = 'bg0'
 let g:gruvbox_sign_column       = 'bg0'
-set background="light"
+" set background="light"
 colorscheme gruvbox
 
 " let g:sonokai_style = 'maia'

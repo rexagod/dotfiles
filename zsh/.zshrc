@@ -28,14 +28,14 @@ $HOME/go/bin:\
 /usr/bin:\
 /usr/lib:\
 /usr/local/bin:\
-/usr/share:\
+/usr/share\
 " # $PATH intentially not included here.
 # }}}
 # Exports{{{
 
 export AWS_PROFILE='openshift-dev'
 export BASHRC='~/.bashrc'
-export BAT_THEME='gruvbox-light'
+export BAT_THEME='gruvbox-dark'
 export BROWSER='chromium'
 export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
@@ -169,9 +169,21 @@ if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 # krew
 export PATH="${PATH}:${HOME}/.krew/bin"
 
+# k8s
+K8S_KUBECONFIG="/var/run/kubernetes/admin.kubeconfig"
+export KUBE_ENABLE_CLUSTER_DNS=true
+export KUBE_DNS_SERVER_IP="10.0.0.10"
+export KUBE_DNS_DOMAIN="cluster.local"
+## etcd
+export PATH="${PATH}:${HOME}/kubernetes/third_party/etcd"
+## custom kubectl build
+alias lc="KUBECONFIG=${K8S_KUBECONFIG} ${HOME}/kubernetes/cluster/kubectl.sh"
+## custom k9s monitoring
+alias klc="k9s --kubeconfig ${K8S_KUBECONFIG}"
+
 # kubectl autocomplete
 [[ /bin/kubectl ]] && source <(kubectl completion zsh)
 
 # ocs-operator PR chores
-alias make-ocs="make gen-latest-csv && make verify-latest-csv && make update-generated && make ocs-operator-ci"
+# alias make-ocs="make gen-latest-csv && make verify-latest-csv && make update-generated && make ocs-operator-ci"
 # }}}

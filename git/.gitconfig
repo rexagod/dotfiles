@@ -19,12 +19,11 @@
 [pull]
 	rebase = true
 [core]
-	pager = nvim -R
+	pager = git-split-diffs --color | less -RFX
 [interactive]
 	diffFilter = less
 [color]
 	ui = true
-	pager = no
 [color "diff-highlight"]
 	oldNormal = red bold
 	oldHighlight = red bold 52
@@ -44,3 +43,5 @@
 	autosquash = false
 [rerere]
 	enabled = true
+[split-diffs]
+	theme-name = arctic
