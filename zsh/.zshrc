@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # Maintainer: @rexagod
 
 # Options {{{
@@ -16,7 +23,7 @@ HIST_STAMPS="mm/dd/yyyy"
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#fff,underline"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
-ZSH_THEME="nicoulaj"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 # }}}
 # PATH {{{
 
@@ -28,15 +35,18 @@ $HOME/go/bin:\
 /usr/bin:\
 /usr/lib:\
 /usr/local/bin:\
-/usr/share\
+/usr/share:\
+/snap/bin:\
+/home/linuxbrew/.linuxbrew/opt/node@14/bin\
 " # $PATH intentially not included here.
 # }}}
 # Exports{{{
 
 export AWS_PROFILE='openshift-dev'
 export BASHRC='~/.bashrc'
-export BAT_THEME='gruvbox-dark'
-export BROWSER='chromium'
+export BAT_THEME='Nord'
+export BROWSER='firefox'
+export CPPFLAGS="-I/home/linuxbrew/.linuxbrew/opt/node@14/include"
 export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
 export FZF_ALT_C_COMMAND="fd -t d . $HOME"
@@ -47,8 +57,9 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 export GO111MODULE="on"
 export GOBIN="$HOME/go/bin"
 export GOPATH="$HOME/go"
-export KUBECONFIG="$HOME/openshift-cluster/auth/kubeconfig"
+export KUBECONFIG="$HOME/.openshift-cluster/auth/kubeconfig"
 export LANG=en_US.UTF-8
+export LDFLAGS="-L/home/linuxbrew/.linuxbrew/opt/node@14/lib"
 export MANPAGER='nvim +Man!'
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 export PAGER="bat --paging=auto --italic-text=always --color=always --number --theme ${BAT_THEME}"
@@ -69,6 +80,20 @@ plugins=(
   zsh-syntax-highlighting
   zsh-z
 )
+
+# fzf-tab {{{
+
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with exa when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
+# }}}
 
 source $ZSH/oh-my-zsh.sh
 # }}}
@@ -107,7 +132,7 @@ alias zshconfig="nvim ~/.zshrc"
 cc () { # {{{
   DIR='.openshift-cluster'   # Cluster metadata directory
   USER='prasriva'            # RH username
-  NAME='new\sname\shere'     # Template for Cluster ID
+  NAME='\[new\sname\shere\]' # Template for Cluster ID
   CONF='install-config.yaml' # Original config filename in .aws
   CLUSTER_ID="$USER-$RANDOM" # Cluster name = <Your RH id> + $RANDOM
   CLUSTER_ID_STATIC="$CLUSTER_ID"
@@ -119,7 +144,8 @@ cc () { # {{{
   elif [[ $1 == "ocs" ]]; then
     oc apply -f https://raw.githubusercontent.com/openshift/ocs-operator/master/deploy/deploy-with-olm.yaml
   elif [[ $1 == "odf" ]]; then
-# {{{
+    #   image: quay.io/ocs-dev/odf-operator-catalog:latest
+# CatalogSource Spec {{{
     cat <<EOF | k apply -f -
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
@@ -130,7 +156,7 @@ metadata:
   namespace: openshift-marketplace
 spec:
   sourceType: grpc
-  image: quay.io/ocs-dev/odf-operator-catalog:latest
+  image: quay.io/nigoyal/odf-operator-catalog:stable
   displayName: OpenShift Data Foundation [Internal]
   publisher: Red Hat
 EOF
@@ -152,6 +178,13 @@ EOF
 # }}}
 # Misc. {{{
 
+# Ranger {{{
+
+if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# }}}
+# OCS {{{
+
 # export WATCH_NAMESPACE="openshift-storage"
 # export ROOK_CEPH_IMAGE="rook/ceph:v1.6.0.95.gf4cfc7a"
 # export CEPH_IMAGE="ceph/daemon-base:latest-pacific"
@@ -159,31 +192,42 @@ EOF
 # export NOOBAA_DB_IMAGE="centos/postgresql-12-centos7"
 # export NOOBAA_IMAGE="noobaa/noobaa-operator:master-20210609"
 # export ROOK_IMAGE="rook/ceph:v1.6.5-2.gb78358e"
+# alias make-ocs="make gen-latest-csv && make verify-latest-csv && make update-generated && make ocs-operator-ci
+# }}}
+# K8s {{{
 
-if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-# vim-gist plugin
-# source ~/.local/vim-gist.token.bash
-
-# krew
 export PATH="${PATH}:${HOME}/.krew/bin"
 
-# k8s
+[[ /bin/kubectl ]] && source <(kubectl completion zsh)
+
 K8S_KUBECONFIG="/var/run/kubernetes/admin.kubeconfig"
 export KUBE_ENABLE_CLUSTER_DNS=true
 export KUBE_DNS_SERVER_IP="10.0.0.10"
 export KUBE_DNS_DOMAIN="cluster.local"
 ## etcd
 export PATH="${PATH}:${HOME}/kubernetes/third_party/etcd"
-## custom kubectl build
-alias lc="KUBECONFIG=${K8S_KUBECONFIG} ${HOME}/kubernetes/cluster/kubectl.sh"
 ## custom k9s monitoring
-alias klc="k9s --kubeconfig ${K8S_KUBECONFIG}"
+alias k89s="k9s --kubeconfig ${K8S_KUBECONFIG}"
+## up the cluster
+alias k8c="sudo ${HOME}/kubernetes/hack/local-up-cluster.sh" # -O to avoid rebuilding
+## interact with this cluster
+alias k8ctl="KUBECONFIG=${K8S_KUBECONFIG} ${HOME}/kubernetes/cluster/kubectl.sh"
+## make subsystem
+alias k8make="make WHAT=cmd/$1 GOGCFLAGS='-N -l'"
+# To cross-compile Kubernetes for all platforms, run the following command:
+# make cross
+# To build binaries for a specific platform, add KUBE_BUILD_PLATFORMS=<os>/<arch>. For example:
+# make cross KUBE_BUILD_PLATFORMS=windows/amd64
 
-# kubectl autocomplete
-[[ /bin/kubectl ]] && source <(kubectl completion zsh)
-
-# ocs-operator PR chores
-# alias make-ocs="make gen-latest-csv && make verify-latest-csv && make update-generated && make ocs-operator-ci"
+# # Prioritize GNU bins in PATH
+# GNUBINS="$(find /usr/local/opt -type d -follow -name gnubin -print)"
+# for bindir in ${GNUBINS[@]}
+# do
+#   export PATH=$bindir:$PATH
+# done
+# export PATH
 # }}}
+# }}}
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

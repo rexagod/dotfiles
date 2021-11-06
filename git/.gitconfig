@@ -44,4 +44,4 @@
 [rerere]
 	enabled = true
 [split-diffs]
-	theme-name = arctic
+	theme-name = monochrome-dark

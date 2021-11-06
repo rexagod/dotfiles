@@ -17,22 +17,23 @@ Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 Plug 'aacunningham/vim-fuzzy-stash'
 " }}}
-" Internals {{{
+" Internal {{{
 
+" Plug 'github/copilot.vim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'aymericbeaumet/vim-symlink'
 Plug 'gelguy/wilder.nvim'
 Plug 'romgrk/fzy-lua-native'
-Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-sleuth'
 Plug 'voldikss/vim-floaterm'
 " }}}
 " Navigation {{{
 
+Plug 'chaoren/vim-wordmotion'
+Plug 'kevinhwang91/nvim-bqf'
 Plug 'phaazon/hop.nvim'
 Plug 'preservim/vim-wheel'
-Plug 'dhruvasagar/vim-open-url'
 Plug 'tpope/vim-unimpaired'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
 Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
@@ -40,7 +41,6 @@ Plug 'rhysd/clever-f.vim'
 " }}}
 " Text Manipulations {{{
 
-" Plug 'preservim/vim-wordchipper'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'machakann/vim-swap'
 Plug 'kana/vim-textobj-user' | Plug 'coderifous/textobj-word-column.vim' | Plug 'adolenc/vim-textobj-toplevel'
@@ -63,7 +63,6 @@ Plug 'flwyd/vim-conjoin'
 " Visuals {{{
 
 Plug 'junegunn/vim-peekaboo'
-Plug 'nathanaelkane/vim-indent-guides'
 Plug 'markonm/traces.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -74,8 +73,13 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " }}}
 " Themes {{{
 
-Plug 'sainnhe/sonokai'
-Plug 'morhetz/gruvbox'
+Plug 'arcticicestudio/nord-vim'
+" needs to be loaded after all plugins have been initialized
+" to patch w/o changing the current font,
+" visit https://powerline.readthedocs.io/en/master/installation/linux.html#fontconfig
+" prefer this over 'ryanoasis/vim-devicons', since this supports a wider
+" render range
+Plug 'kyazdani42/nvim-web-devicons'
 " }}}
 call plug#end()
 " }}}
@@ -90,25 +94,19 @@ set t_Co=256
 set termguicolors
 " }}}
 
-let g:gruvbox_contrast_dark     = 'light'
-let g:gruvbox_contrast_light    = 'light'
-let g:gruvbox_hls_cursor        = 'fg4'
-let g:gruvbox_improved_strings  = '1'
-let g:gruvbox_improved_warnings = '1'
-let g:gruvbox_invert_selection  = '0'
-let g:gruvbox_invert_tabline    = '0'
-let g:gruvbox_italic            = '1'
-let g:gruvbox_italicize_strings = '1'
-let g:gruvbox_number_column     = 'bg0'
-let g:gruvbox_sign_column       = 'bg0'
-" set background="light"
-colorscheme gruvbox
+let g:nord_italic = 1
+let g:nord_italic_comments = 1
+let g:nord_uniform_diff_background = 1
+let g:nord_uniform_status_lines = 1
+let g:nord_cursor_line_number_background = 1
 
-" let g:sonokai_style = 'maia'
-" let g:sonokai_enable_italic = 1
-" let g:sonokai_disable_italic_comment = 1
-" colorscheme sonokai
-" let g:airline_theme = 'sonokai'
+augroup nord-overrides
+  autocmd!
+  autocmd ColorScheme nord highlight Folded cterm=italic,bold ctermbg=0 ctermfg=12 guibg=#3B4252 guifg=#81A1C1
+  autocmd ColorScheme nord highlight Comment ctermfg=12 guifg=#EBCB8B
+augroup END
+
+colorscheme nord
 " }}}
 " Statusline (vim-airline) {{{
 
@@ -352,6 +350,7 @@ let g:airline#extensions#tabline#buffer_nr_show = 0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#exclude_preview = 0
 let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_buffers = 1
 let g:airline#extensions#tabline#show_splits = 1
 let g:airline#extensions#tabline#show_tab_count = 0
@@ -363,12 +362,13 @@ let g:airline#extensions#tabline#tabnr_formatter = 'tabnr'
 let g:airline#extensions#whitespace#checks = ['conflicts']
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline_base16_improved_contrast = 1
-let g:airline_inactive_alt_sep = 0
-let g:airline_left_alt_sep = "\ue0b9"
-let g:airline_left_sep = "\ue0b8"
-let g:airline_powerline_fonts = 1
-let g:airline_right_alt_sep = "\ue0bb"
-let g:airline_right_sep = "\ue0ba"
+let g:airline_symbols_ascii = 1
+" let g:airline_inactive_alt_sep = 0
+" let g:airline_left_alt_sep = "\ue0b9"
+" let g:airline_left_sep = "\ue0b8"
+" let g:airline_powerline_fonts = 1
+" let g:airline_right_alt_sep = "\ue0bb"
+" let g:airline_right_sep = "\ue0ba"
 
 function! SanitizeModified() " {{{
   if &modified
@@ -428,6 +428,7 @@ set backupcopy=yes
 set clipboard+=unnamedplus
 set conceallevel=0
 set confirm
+set encoding=UTF-8
 set expandtab
 set fdm=marker
 set foldopen=
@@ -448,6 +449,7 @@ set path=.,,
 set pumheight=5
 set re=0
 set relativenumber
+set rtp+=/home/linuxbrew/.linuxbrew/opt/fzf
 set ruler
 set scroll=5
 set scrolloff=0
@@ -520,6 +522,9 @@ vn    <C-s>       :sort<cr> " implicitly inserts the visual marker range
 
 " }}}
 " Normal Mode Mappings {{{
+
+nn    <tab>          <C-w>l
+nn    <s-tab>        <C-w>h
 
 nn    j              gj
 nn    k              gk
@@ -616,7 +621,6 @@ let g:coc_snippet_next = '<c-l>'
 " Use <leader>x for convert visual selected code to snippet
 xm <leader>x  <Plug>(coc-convert-snippet)
 " }}}
-
 " Functions {{{
 
 function! s:show_documentation()
@@ -629,7 +633,6 @@ function! s:show_documentation()
   endif
 endfunction
 "}}}
-
 " Commands {{{
 
 " Add `:Format` command to format current buffer.
@@ -637,7 +640,6 @@ command! -nargs=0 Format :call CocAction('format')
 " Add `:Fold` command to fold current buffer.
 command! -nargs=? Fold :call CocAction('fold', <f-args>)
 "}}}
-
 " Normal Mode Mappings {{{
 
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -701,7 +703,6 @@ xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 "}}}
 "}}}
-
 " Insert Mode Mappings {{{
 
 " Use tab for trigger completion with characters ahead and navigate.
@@ -716,7 +717,6 @@ if exists('*complete_info')
   ino <silent><expr> <cr> complete_info(['selected'])['selected'] != -1 ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 " }}}
-
 " Autocommands {{{
 aug CoC
   au!
@@ -730,7 +730,6 @@ aug CoC
   au BufReadPost * let b:coc_suggest_disable = 0
 aug END
 "}}}
-
 " Remap <C-f> and <C-b> for scroll float windows/popups. {{{
 nn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-f>"
 nn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-b>"
@@ -754,9 +753,9 @@ let g:fzf_preview_window = [ 'up:60%:rounded:nowrap:nofollow' ]
 " Commands {{{
 
 command! FZFShow call fzf#run(fzf#wrap({
-      \ 'source': 'git show --format=oneline --name-only | tail --lines=+2', 
+      \ 'source': 'git show --format=oneline --name-only --relative | tail --lines=+2', 
       \ 'sink': 'e',
-      \ 'options': '--multi --reverse --preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {}"'
+      \ 'options': '--multi --reverse --preview "git diff HEAD^ HEAD {} | git-split-diffs --color | less -RFX" --preview-window "up,80%,rounded"',
       \ }))
 " }}}
 " Maps {{{
@@ -787,10 +786,71 @@ nn <silent>\w :silent! FZFWindows<cr>
 " }}}
 " hop.nvim {{{
 
+lua << EOF
+require'hop'.setup()
+EOF
+
 nn <silent><M-w> :HopWord<cr>
 nn <silent><M-1> :HopChar1<cr>
 nn <silent><M-2> :HopChar2<cr>
 nn <silent><M-l> :HopLine<cr>
+" }}}
+" nvim-bqf {{{
+
+" {{{
+
+" open           open the item under the cursor 										<CR>
+" openc          like open, and close quickfix window 							o
+" tab            open the item under the cursor in a new tab 				t
+" tabb           like tab, but stay at quickfix window 							T
+" split          open the item under the cursor in vertical split  	<C-x>
+" vsplit         open the item under the cursor in horizontal split	<C-v>
+" prevfile       go to previous file under the cursor 							<C-p>
+" nextfile       go to next file under the cursor 								 	<C-n>
+" prevhist       go to previous quickfix list 										 	<
+" nexthist       go to next quickfix list 													>
+" stoggleup      toggle sign and move cursor up 									 	<S-Tab>
+" stoggledown    toggle sign and move cursor down 								 	<Tab>
+" stogglevm      toggle multiple signs in visual mode 						 	<Tab>
+" stogglebuf     toggle signs for same buffers under the cursor 	 	'<Tab>
+" sclear         clear the signs in current quickfix list 					z<Tab>
+" pscrollup      scroll up half-page in preview window 							<C-b>
+" pscrolldown    scroll down half-page in preview window 						<C-f>
+" pscrollorig    scroll back to original postion in preview window	zo
+" ptogglemode    toggle preview window between normal and max size  zp
+" ptoggleitem    toggle preview for an item of quickfix list 			 	p
+" ptoggleauto    toggle auto preview when cursor moved 						 	P
+" filter         create new list for signed items 								  zn
+" filterr        create new list for non-signed items 						  zN
+" fzffilter      enter fzf mode 														        zf
+" }}}
+" Variables {{{
+
+let g:coc_enable_locationlist = 0
+" }}}
+" Functions {{{
+
+function! Coc_qf_jump2loc(locs) abort "{{{
+    let loc_ranges = map(deepcopy(a:locs), 'v:val.range')
+    call setloclist(0, [], ' ', {'title': 'CocLocationList', 'items': a:locs,
+                \ 'context': {'bqf': 
+                \ {'lsp_ranges_hl': loc_ranges}
+                \ }})
+    let winid = getloclist(0, {'winid': 0}).winid
+    if winid == 0
+        aboveleft lwindow
+    else
+        call win_gotoid(winid)
+    endif
+endfunction "}}}
+" }}}
+" Autocommands {{{
+
+aug Coc
+    au!
+    au User CocLocationsChange ++nested call Coc_qf_jump2loc(g:coc_jump_locations)
+aug END
+" }}}
 " }}}
 " nvim-treesitter {{{
 
@@ -922,16 +982,6 @@ aug GO
 aug END
 " }}}
 " }}}
-" vim-indent-guides {{{
-
-let g:indent_guides_enable_on_vim_startup = 0
-
-command! II IndentGuidesToggle
-" }}}
-" vim-open-url {{{
-
-nm gx gB
-" }}}
 " vim-peekaboo {{{
 
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
@@ -952,6 +1002,11 @@ let g:wheel#map#down = '<PageDown>'
 let g:wheel#map#mouse = 1
 let g:wheel#line#threshold = 5
 let g:wheel#scroll_on_wrap = 1
+" }}}
+" vim-wordmotion {{{
+
+let g:wordmotion_spaces = ['\w\@<=-\w\@=', '\.']
+let g:wordmotion_uppercase_spaces = ['-']
 " }}}
 " wilder.nvim {{{
 
