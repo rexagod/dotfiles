@@ -19,8 +19,6 @@ Plug 'aacunningham/vim-fuzzy-stash'
 " }}}
 " Internal {{{
 
-" Plug 'github/copilot.vim'
-Plug 'nvim-lua/plenary.nvim'
 Plug 'aymericbeaumet/vim-symlink'
 Plug 'gelguy/wilder.nvim'
 Plug 'romgrk/fzy-lua-native'
@@ -30,9 +28,7 @@ Plug 'voldikss/vim-floaterm'
 " }}}
 " Navigation {{{
 
-Plug 'chaoren/vim-wordmotion'
 Plug 'kevinhwang91/nvim-bqf'
-Plug 'phaazon/hop.nvim'
 Plug 'preservim/vim-wheel'
 Plug 'tpope/vim-unimpaired'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
@@ -43,17 +39,6 @@ Plug 'rhysd/clever-f.vim'
 
 Plug 'editorconfig/editorconfig-vim'
 Plug 'machakann/vim-swap'
-Plug 'kana/vim-textobj-user' | Plug 'coderifous/textobj-word-column.vim' | Plug 'adolenc/vim-textobj-toplevel'
-"{{{
-"                                          *ac* *cac* *dac* *vac* *yac*
-" ac     "a column", a column based on "a word" |aw|.
-"                                          *ic* *cic* *dic* *vic* *yic*
-" ic     "inner column", a column based on the "inner word" |iw|.
-"                                          *aC* *caC* *daC* *vaC* *yaC*
-" aC     "a COLUMN", a column based on "a WORD" |aW|.
-"                                          *iC* *ciC* *diC* *viC* *yiC*
-" iC     "inner COLUMN", a column based on "inner WORD" |iW|.
-"}}}
 Plug 'godlygeek/tabular'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
@@ -62,10 +47,11 @@ Plug 'flwyd/vim-conjoin'
 " }}}
 " Visuals {{{
 
+Plug 'junegunn/goyo.vim' | Plug 'junegunn/limelight.vim'
+Plug 'mbbill/undotree'
 Plug 'junegunn/vim-peekaboo'
 Plug 'markonm/traces.vim'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 " }}}
 " Syntax {{{
 
@@ -104,6 +90,8 @@ augroup nord-overrides
   autocmd!
   autocmd ColorScheme nord highlight Folded cterm=italic,bold ctermbg=0 ctermfg=12 guibg=#3B4252 guifg=#81A1C1
   autocmd ColorScheme nord highlight Comment ctermfg=12 guifg=#EBCB8B
+  autocmd ColorScheme nord highlight clear CursorLine
+  autocmd ColorScheme nord highlight CursorLineNR cterm=bold
 augroup END
 
 colorscheme nord
@@ -411,7 +399,7 @@ function! s:SourceScriptImplicit() " {{{
   endif
   let l:sourcecommand=
         \ {
-        \ "vim":         "source %",
+        \ "vim": "source %",
         \ }
   let l:ispresent=has_key(l:sourcecommand, split(l:bin, "/")[-1])
   return l:ispresent ? l:sourcecommand[split(l:bin, "/")[-1]] : ''
@@ -426,8 +414,10 @@ set autoread
 set autowrite
 set backupcopy=yes
 set clipboard+=unnamedplus
+set colorcolumn=80
 set conceallevel=0
 set confirm
+set cursorline
 set encoding=UTF-8
 set expandtab
 set fdm=marker
@@ -465,7 +455,7 @@ set softtabstop=2
 set ssop=blank,buffers,curdir,folds,help,tabpages,winsize
 set tabstop=2
 set tags=
-set textwidth=0
+set textwidth=80
 set undodir=~/.vim-undo-dir
 set undofile
 set updatetime=100
@@ -523,8 +513,8 @@ vn    <C-s>       :sort<cr> " implicitly inserts the visual marker range
 " }}}
 " Normal Mode Mappings {{{
 
-nn    <tab>          <C-w>l
-nn    <s-tab>        <C-w>h
+nm    <tab>          ]b 
+nm    <s-tab>        [b
 
 nn    j              gj
 nn    k              gk
@@ -549,18 +539,21 @@ nn    <S-Up>         <C-y>
 nn    <S-Down>       <C-e>
 
 nn    <silent><F4>   :only<cr>
-nn    <silent><F5>   :messages<cr> "<F26> == <C-F2>
+nn    <silent><F2>   :messages<cr>
 nn    <silent>QQ     :bd<cr>
 nn    <F1>           <NOP>
-" nn    <PageUp>       <NOP>
-" nn    <PageDown>     <NOP>
+
+nn    <Tab> <C-w>l
+nn    <S-Tab> <C-w>h
 " }}}
 " Leader Mappings {{{
 
 let mapleader="\<Space>"
 
-nn <silent><leader>zr        :vsp $ZSHRC<cr>
+nn <silent><leader>gs        :enew $GOSANDBOX<cr>
 nn <silent><leader>vr        :vsp $VIMRC<cr>
+nn <silent><leader>zr        :vsp $ZSHRC<cr>
+nn <silent><leader>tr        :vsp $TMUXRC<cr>
 nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
 nn <silent><nowait><leader>q :silent! call <SID>ToggleQuickFixList()<cr>
 nn <silent><nowait><leader>s :silent! exec <SID>SourceScriptImplicit()<cr>
@@ -573,6 +566,7 @@ aug FOO
   au BufWritePost * silent! !ctags -R &
   au Filetype *.js,*.ts setl suffixesadd=.js,.ts,.jsx,.tsx
   au Filetype *.js,*.ts,*.jsx,*.tsx nm = <leader>f
+  au BufNewFile,BufRead * if @% =~ "Dockerfile" | setl filetype=dockerfile | endif
   au Filetype help,qf nn <silent><buffer>q :q<cr>
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exec "normal! g`\"" | endif
   au ColorScheme * highlight Comment cterm=italic gui=italic
@@ -585,7 +579,7 @@ command! CI PlugClean | PlugInstall
 command! CM delm!
 command! QQ qall
 command! SS mks! ~/.session.vim
-command! W w
+command! W w | e
 command! YY PlugClean | PlugInstall | PlugUpdate | PlugUpgrade | CocUpdate
 " }}}
 " Plugin Configurations {{{
@@ -606,8 +600,9 @@ let g:bclose_no_plugin_maps=1
 " Use f<CR> to repeat previous search.
 
 let g:clever_f_mark_direct = 1
-let g:clever_f_across_no_line = 1
-let g:clever_f_fix_key_direction = 1
+let g:clever_f_across_no_line = 0
+let g:clever_f_fix_key_direction = 0
+
 let g:clever_f_chars_match_any_signs = ';' " f;
 " }}}
 " coc.nvim {{{
@@ -643,7 +638,6 @@ command! -nargs=? Fold :call CocAction('fold', <f-args>)
 " Normal Mode Mappings {{{
 
 inoremap <silent><expr> <c-space> coc#refresh()
-
 " *g* Maps {{{
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -655,7 +649,6 @@ nm <silent> gI <Plug>(coc-implementation)
 nm <silent> gr <Plug>(coc-references)
 nm <silent> gR <Plug>(coc-rename)
 "}}}
-
 " Mappings for CoCList {{{
 " Show all diagnostics.
 nn <silent><nowait> <M-a> :<C-u>CocList diagnostics<cr>
@@ -674,7 +667,6 @@ nn <silent><nowait> <M-k> :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nn <silent><nowait> <M-p> :<C-u>CocListResume<CR>
 "}}}
-
 " Applying codeAction to the selected region. {{{
 " Example: `<leader>aap` for current paragraph
 xm \a  <Plug>(coc-codeaction-selected)
@@ -684,11 +676,9 @@ nm \ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nm \Q  <Plug>(coc-fix-current)
 "}}}
-
 " Show documentation in preview window. {{{
 nn <silent> K :call <SID>show_documentation()<CR>
 "}}}
-
 " Map function and class text objects{{{
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap <leader>f  <Plug>(coc-format-selected)
@@ -784,16 +774,16 @@ nn <silent>\t :silent! FZFBTags<cr>
 nn <silent>\w :silent! FZFWindows<cr>
 " }}}
 " }}}
-" hop.nvim {{{
+" goyo.vim {{{
 
-lua << EOF
-require'hop'.setup()
-EOF
+let g:goyo_width="80"
+let g:goyo_height="85%"
+let g:goyo_linenr="0"
+" }}}
+" limelight.vim {{{
 
-nn <silent><M-w> :HopWord<cr>
-nn <silent><M-1> :HopChar1<cr>
-nn <silent><M-2> :HopChar2<cr>
-nn <silent><M-l> :HopLine<cr>
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
 " }}}
 " nvim-bqf {{{
 
@@ -1003,11 +993,6 @@ let g:wheel#map#mouse = 1
 let g:wheel#line#threshold = 5
 let g:wheel#scroll_on_wrap = 1
 " }}}
-" vim-wordmotion {{{
-
-let g:wordmotion_spaces = ['\w\@<=-\w\@=', '\.']
-let g:wordmotion_uppercase_spaces = ['-']
-" }}}
 " wilder.nvim {{{
 
 call wilder#setup({'modes': [':', '/', '?']})
@@ -1040,4 +1025,11 @@ call wilder#set_option('renderer', wilder#renderer_mux({
       \ }),
       \ }))
 " }}}
+" }}}
+
+" Neovide {{{
+
+let g:neovide_refresh_rate=75
+let g:neovide_transparency=1
+let g:neovide_no_idle=v:true
 " }}}

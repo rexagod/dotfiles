@@ -42,6 +42,8 @@ $HOME/go/bin:\
 # }}}
 # Exports{{{
 
+# export KUBECONFIG="$HOME/.openshift-cluster/auth/kubeconfig"
+# export LDFLAGS="-L/home/linuxbrew/.linuxbrew/opt/node@14/lib"
 export AWS_PROFILE='openshift-dev'
 export BASHRC='~/.bashrc'
 export BAT_THEME='Nord'
@@ -57,17 +59,20 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 export GO111MODULE="on"
 export GOBIN="$HOME/go/bin"
 export GOPATH="$HOME/go"
-export KUBECONFIG="$HOME/.openshift-cluster/auth/kubeconfig"
+export GOSANDBOX="${HOME}/.local/go-test/main.go"
 export LANG=en_US.UTF-8
-export LDFLAGS="-L/home/linuxbrew/.linuxbrew/opt/node@14/lib"
-export MANPAGER='nvim +Man!'
+export MANPAGER="${EDITOR} +Man!"
+export NEOVIDE_FRAMELESS=1
+export NEOVIDE_MAXIMIZED=1
+export NEOVIDE_MULTIGRID=1
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 export PAGER="bat --paging=auto --italic-text=always --color=always --number --theme ${BAT_THEME}"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
+export TMUXRC='~/.config/tmux/tmux.conf'
 export UPDATE_ZSH_DAYS=15
 export VIMRC='~/.config/nvim/init.vim'
 export VIM_SESSION='~/.session.vim'
-export VISUAL="nvim"
+export VISUAL="${EDITOR}"
 export ZSH="/home/rexagod/.oh-my-zsh"
 export ZSHRC='~/.zshrc'
 #}}}
@@ -99,41 +104,39 @@ source $ZSH/oh-my-zsh.sh
 # }}}
 # Aliases{{{
 
-alias goland="/home/rexagod/.local/GoLand-2021.1/bin/goland.sh"
 alias bat="bat --theme ${BAT_THEME} --style grid,numbers,changes"
 alias bb="./bin/bridge"
 alias c="clear"
 alias gS="git stash"
 alias gSp="git stash pop"
+alias goland="/home/rexagod/.local/GoLand-2021.1/bin/goland.sh"
 alias hgrep="history | grep "
 alias k="kubectl"
-alias ls="lsd"
-alias l="ls -1Sh"
-alias la="ls -1SAh"
-alias ll="ls -1lSh"
-alias nv="nvim"
-alias ohmyzsh="nvim ~/.oh-my-zsh"
+alias l="ls -1Sh --sort version"
+alias la="ls -1SAh --sort version"
+alias ll="ls -1lSh --sort version"
+alias ls="lsd --sort version"
+alias nv="${EDITOR}"
 alias pacman="sudo pacman"
 alias rr="ranger"
 alias soc="source ./contrib/oc-environment.sh"
 alias sshd="sudo /usr/sbin/sshd"
 alias szr="source ~/.zshrc"
-alias vi="nvim"
-alias vif="fzf --preview-window=right:50% --preview=\"bat --theme ${BAT_THEME} --color always {}\" --bind \"enter:execute(nvim {})\""
+alias tr="${EDITOR} ${TMUXRC}"
+alias vif="fzf --preview-window=right:50% --preview=\"bat --theme ${BAT_THEME} --color always {}\" --bind \"enter:execute(${EDITOR} {})\""
 alias vpn="nmcli con up id \"1 - Red Hat Global VPN\" --ask"
 alias vpnd="nmcli con down id \"1 - Red Hat Global VPN\" --ask"
-alias vr="nvim ${VIMRC}"
-alias vrs="nvim -S ${VIM_SESSION}"
-alias zr="nvim ${ZSHRC}"
-alias zshconfig="nvim ~/.zshrc"
+alias vr="${EDITOR} ${VIMRC}"
+alias vrs="${EDITOR} -- -S ${VIM_SESSION}"
+alias zr="${EDITOR} ${ZSHRC}"
 # }}}
 # Functions {{{
 
 cc () { # {{{
   DIR='.openshift-cluster'   # Cluster metadata directory
   USER='prasriva'            # RH username
-  NAME='\[new\sname\shere\]' # Template for Cluster ID
   CONF='install-config.yaml' # Original config filename in .aws
+  NAME='\[new\sname\shere\]' # Template for Cluster ID ('.metadata.name' in your $CONF)
   CLUSTER_ID="$USER-$RANDOM" # Cluster name = <Your RH id> + $RANDOM
   CLUSTER_ID_STATIC="$CLUSTER_ID"
 
@@ -144,7 +147,6 @@ cc () { # {{{
   elif [[ $1 == "ocs" ]]; then
     oc apply -f https://raw.githubusercontent.com/openshift/ocs-operator/master/deploy/deploy-with-olm.yaml
   elif [[ $1 == "odf" ]]; then
-    #   image: quay.io/ocs-dev/odf-operator-catalog:latest
 # CatalogSource Spec {{{
     cat <<EOF | k apply -f -
 apiVersion: operators.coreos.com/v1alpha1
@@ -156,7 +158,7 @@ metadata:
   namespace: openshift-marketplace
 spec:
   sourceType: grpc
-  image: quay.io/nigoyal/odf-operator-catalog:stable
+  image: quay.io/ocs-dev/odf-operator-catalog:latest
   displayName: OpenShift Data Foundation [Internal]
   publisher: Red Hat
 EOF

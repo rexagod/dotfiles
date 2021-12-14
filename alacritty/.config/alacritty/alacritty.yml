@@ -10,15 +10,15 @@ scrolling:
   multiplier: 3
 font:
   normal:
-    family: JetBrainsMono
+    family: InputMono
     style: Regular
   bold:
-    family: JetBrainsMono
+    family: InputMono
     style: Bold
   italic:
-    family: JetBrainsMono
+    family: InputMono
     style: Italic
-  size: 14
+  size: 16
   offset:
     x: 0
     y: 0
