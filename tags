@@ -1,0 +1,191 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+$GINKGO_EDITOR_INTEGRATION	nvim/.config/nvim/init.vim	/^let $GINKGO_EDITOR_INTEGRATION = "true"$/;"	v
+$NVIM_TUI_ENABLE_TRUE_COLOR	nvim/.config/nvim/init.vim	/^let $NVIM_TUI_ENABLE_TRUE_COLOR=1$/;"	v
+.complete()	nvim/.config/nvim/init.vim	/^            cmp.complete()$/;"	m
+.setup	nvim/.config/nvim/init.vim	/^  cmp.setup {$/;"	m
+.setup({	nvim/.config/nvim/init.vim	/^  cmp.setup({$/;"	m
+.setup.cmdline('/',	nvim/.config/nvim/init.vim	/^  cmp.setup.cmdline('\/', {$/;"	m
+.setup.cmdline(':',	nvim/.config/nvim/init.vim	/^  cmp.setup.cmdline(':', {$/;"	m
+<C-Down>	nvim/.config/nvim/init.vim	/^imap  <C-Down>      <esc>5ja$/;"	m
+<C-Down>	nvim/.config/nvim/init.vim	/^nm    <C-Down>       <C-j>$/;"	m
+<C-Down>	nvim/.config/nvim/init.vim	/^vm    <C-Down>     <C-j>$/;"	m
+<C-Left>	nvim/.config/nvim/init.vim	/^imap  <C-Left>      <esc>5ha$/;"	m
+<C-Left>	nvim/.config/nvim/init.vim	/^nm    <C-Left>       <C-h>$/;"	m
+<C-Left>	nvim/.config/nvim/init.vim	/^vm    <C-Left>     <C-h>$/;"	m
+<C-PageDown>	nvim/.config/nvim/init.vim	/^imap  <C-PageDown>  <esc><C-f>a$/;"	m
+<C-PageUp>	nvim/.config/nvim/init.vim	/^imap  <C-PageUp>    <esc><C-b>a$/;"	m
+<C-Right>	nvim/.config/nvim/init.vim	/^imap  <C-Right>     <esc>5la$/;"	m
+<C-Right>	nvim/.config/nvim/init.vim	/^nm    <C-Right>      <C-l>$/;"	m
+<C-Right>	nvim/.config/nvim/init.vim	/^vm    <C-Right>    <C-l>$/;"	m
+<C-Up>	nvim/.config/nvim/init.vim	/^imap  <C-Up>        <esc>5ka$/;"	m
+<C-Up>	nvim/.config/nvim/init.vim	/^nm    <C-Up>         <C-k>$/;"	m
+<C-Up>	nvim/.config/nvim/init.vim	/^vm    <C-Up>       <C-k>$/;"	m
+<C-h>	nvim/.config/nvim/init.vim	/^ino   <C-h>         <esc>5ha$/;"	m
+<C-j>	nvim/.config/nvim/init.vim	/^ino   <C-j>         <esc>5ja$/;"	m
+<C-k>	nvim/.config/nvim/init.vim	/^ino   <C-k>         <esc>5ka$/;"	m
+<C-l>	nvim/.config/nvim/init.vim	/^ino   <C-l>         <esc>5la$/;"	m
+<F10>	nvim/.config/nvim/init.vim	/^nnoremap   <silent>   <F10>  :FloatermKill<CR>$/;"	m
+<F12>	nvim/.config/nvim/init.vim	/^nnoremap   <silent>   <F12>  :FloatermToggle<CR>$/;"	m
+<F7>	nvim/.config/nvim/init.vim	/^nnoremap   <silent>   <F7>   :FloatermNew<CR>$/;"	m
+<F8>	nvim/.config/nvim/init.vim	/^nnoremap   <silent>   <F8>   :FloatermPrev<CR>$/;"	m
+<F9>	nvim/.config/nvim/init.vim	/^nnoremap   <silent>   <F9>   :FloatermNext<CR>$/;"	m
+<PageDown>	nvim/.config/nvim/init.vim	/^ino   <PageDown>  <NOP>$/;"	m
+<PageUp>	nvim/.config/nvim/init.vim	/^ino   <PageUp>    <NOP>$/;"	m
+<S-Down>	nvim/.config/nvim/init.vim	/^ino   <S-Down>    <esc><C-y>a$/;"	m
+<S-Left>	nvim/.config/nvim/init.vim	/^ino   <S-Left>    <Nop>$/;"	m
+<S-Right>	nvim/.config/nvim/init.vim	/^ino   <S-Right>   <Nop>$/;"	m
+<S-Up>	nvim/.config/nvim/init.vim	/^ino   <S-Up>      <esc><C-e>a$/;"	m
+<esc>	nvim/.config/nvim/init.vim	/^ino   <esc>         <C-c>$/;"	m
+<leader>b	nvim/.config/nvim/init.vim	/^nm <silent><leader>b :Git blame<cr>$/;"	m
+<s-tab>	nvim/.config/nvim/init.vim	/^nm    <s-tab>        [b$/;"	m
+<tab>	nvim/.config/nvim/init.vim	/^nm    <tab>          ]b $/;"	m
+=	nvim/.config/nvim/init.vim	/^    mapping = {$/;"	m
+API_KEY	polybar/.config/polybar/scripts/weather.py	/^API_KEY = "756edce7e9d4c385ef9499a53492678c"$/;"	v
+CI	nvim/.config/nvim/init.vim	/^command! CI PlugClean | PlugInstall$/;"	c
+CITY	polybar/.config/polybar/scripts/weather.py	/^CITY = "1264733"$/;"	v
+CM	nvim/.config/nvim/init.vim	/^command! CM delm!$/;"	c
+CURRENT	polybar/.config/polybar/scripts/weather.py	/^        CURRENT = REQ.json()["weather"][0]["description"].capitalize()$/;"	v
+ES	nvim/.config/nvim/init.vim	/^command! ES EslintFixAll$/;"	c
+FOO	nvim/.config/nvim/init.vim	/^aug FOO$/;"	a
+FZFShow	nvim/.config/nvim/init.vim	/^command! FZFShow call fzf#run(fzf#wrap({$/;"	c
+GO	nvim/.config/nvim/init.vim	/^aug GO$/;"	a
+GS	nvim/.config/nvim/init.vim	/^command! GS GStashList$/;"	c
+GSL	nvim/.config/nvim/init.vim	/^command! GSL GStashList$/;"	c
+LANG	polybar/.config/polybar/scripts/weather.py	/^LANG = "en"$/;"	v
+QQ	nvim/.config/nvim/init.vim	/^command! QQ qall$/;"	c
+REQ	polybar/.config/polybar/scripts/weather.py	/^REQ = requests.get("http:\/\/api.openweathermap.org\/data\/2.5\/weather?id={}&lang={}&appid={}&units={}".format(CITY, LANG,  API_KEY, UNITS))$/;"	v
+S	nvim/.config/nvim/init.vim	/^command! S source %$/;"	c
+SS	nvim/.config/nvim/init.vim	/^command! SS mks! ~\/.session.vim$/;"	c
+SanitizeModified	nvim/.config/nvim/init.vim	/^function! SanitizeModified() " {{{$/;"	f
+TEMP	polybar/.config/polybar/scripts/weather.py	/^        TEMP = int(float(REQ.json()["main"]["temp"]))$/;"	v
+UNITS	polybar/.config/polybar/scripts/weather.py	/^UNITS = "Metric"$/;"	v
+UNIT_KEY	polybar/.config/polybar/scripts/weather.py	/^UNIT_KEY = "C"$/;"	v
+W	nvim/.config/nvim/init.vim	/^command! W w | e$/;"	c
+YY	nvim/.config/nvim/init.vim	/^command! YY PlugUpgrade | PlugClean | PlugInstall | PlugUpdate $/;"	c
+a,	nvim/.config/nvim/init.vim	/^omap a, <Plug>(swap-textobject-a)$/;"	m
+airline#extensions#tabline#current_first	nvim/.config/nvim/init.vim	/^let airline#extensions#tabline#current_first = 0$/;"	v
+g:EditorConfig_exclude_patterns	nvim/.config/nvim/init.vim	/^let g:EditorConfig_exclude_patterns=['fugitive:\/\/.*', 'scp:\/\/.*']$/;"	v
+g:airline#extensions#tabline#buf_label_first	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#buf_label_first = 1$/;"	v
+g:airline#extensions#tabline#buffer_min_count	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#buffer_min_count = 2$/;"	v
+g:airline#extensions#tabline#buffer_nr_show	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#buffer_nr_show = 0$/;"	v
+g:airline#extensions#tabline#enabled	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#enabled = 1$/;"	v
+g:airline#extensions#tabline#exclude_preview	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#exclude_preview = 0$/;"	v
+g:airline#extensions#tabline#formatter	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#formatter = 'unique_tail'$/;"	v
+g:airline#extensions#tabline#show_buffers	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#show_buffers = 1$/;"	v
+g:airline#extensions#tabline#show_close_button	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#show_close_button = 0$/;"	v
+g:airline#extensions#tabline#show_splits	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#show_splits = 1$/;"	v
+g:airline#extensions#tabline#show_tab_count	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#show_tab_count = 0$/;"	v
+g:airline#extensions#tabline#show_tab_nr	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#show_tab_nr = 0$/;"	v
+g:airline#extensions#tabline#show_tab_type	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#show_tab_type = 1$/;"	v
+g:airline#extensions#tabline#show_tabs	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#show_tabs = 1$/;"	v
+g:airline#extensions#tabline#tab_nr_type	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#tab_nr_type = 0$/;"	v
+g:airline#extensions#tabline#tabnr_formatter	nvim/.config/nvim/init.vim	/^let g:airline#extensions#tabline#tabnr_formatter = 'tabnr'$/;"	v
+g:airline#extensions#whitespace#checks	nvim/.config/nvim/init.vim	/^let g:airline#extensions#whitespace#checks = ['conflicts']$/;"	v
+g:airline#extensions#whitespace#enabled	nvim/.config/nvim/init.vim	/^let g:airline#extensions#whitespace#enabled = 1$/;"	v
+g:airline_base16_improved_contrast	nvim/.config/nvim/init.vim	/^let g:airline_base16_improved_contrast = 1$/;"	v
+g:airline_inactive_alt_sep	nvim/.config/nvim/init.vim	/^let g:airline_inactive_alt_sep = 0$/;"	v
+g:airline_left_alt_sep	nvim/.config/nvim/init.vim	/^let g:airline_left_alt_sep = "\\ue0b9"$/;"	v
+g:airline_left_sep	nvim/.config/nvim/init.vim	/^let g:airline_left_sep = "\\ue0b8"$/;"	v
+g:airline_powerline_fonts	nvim/.config/nvim/init.vim	/^let g:airline_powerline_fonts = 1$/;"	v
+g:airline_right_alt_sep	nvim/.config/nvim/init.vim	/^let g:airline_right_alt_sep = "\\ue0bb"$/;"	v
+g:airline_right_sep	nvim/.config/nvim/init.vim	/^let g:airline_right_sep = "\\ue0ba"$/;"	v
+g:airline_section_a	nvim/.config/nvim/init.vim	/^let g:airline_section_a = airline#section#create(['mode', 'iminsert'])$/;"	v
+g:airline_section_b	nvim/.config/nvim/init.vim	/^let g:airline_section_b = airline#section#create(['%{expand("%f")}', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.$/;"	v
+g:airline_section_c	nvim/.config/nvim/init.vim	/^let g:airline_section_c = airline#section#create(['readonly'])$/;"	v
+g:airline_section_x	nvim/.config/nvim/init.vim	/^let g:airline_section_x = airline#section#create(['⎇  %{fugitive#head()}'])$/;"	v
+g:airline_section_y	nvim/.config/nvim/init.vim	/^let g:airline_section_y = airline#section#create(['filetype'])$/;"	v
+g:airline_section_z	nvim/.config/nvim/init.vim	/^let g:airline_section_z = airline#section#create(['%l', ':', '%v  ', '%p', '%%'])$/;"	v
+g:airline_symbols_ascii	nvim/.config/nvim/init.vim	/^let g:airline_symbols_ascii = 1$/;"	v
+g:bclose_no_plugin_maps	nvim/.config/nvim/init.vim	/^let g:bclose_no_plugin_maps=1$/;"	v
+g:clever_f_across_no_line	nvim/.config/nvim/init.vim	/^let g:clever_f_across_no_line = 1$/;"	v
+g:clever_f_chars_match_any_signs	nvim/.config/nvim/init.vim	/^let g:clever_f_chars_match_any_signs = ';' " f;$/;"	v
+g:clever_f_fix_key_direction	nvim/.config/nvim/init.vim	/^let g:clever_f_fix_key_direction = 0$/;"	v
+g:clever_f_mark_direct	nvim/.config/nvim/init.vim	/^let g:clever_f_mark_direct = 1$/;"	v
+g:floaterm_autoclose	nvim/.config/nvim/init.vim	/^let g:floaterm_autoclose = 0$/;"	v
+g:floaterm_autohide	nvim/.config/nvim/init.vim	/^let g:floaterm_autohide = 0$/;"	v
+g:floaterm_height	nvim/.config/nvim/init.vim	/^let g:floaterm_height = 0.9$/;"	v
+g:floaterm_opener	nvim/.config/nvim/init.vim	/^let g:floaterm_opener = 'edit'$/;"	v
+g:floaterm_position	nvim/.config/nvim/init.vim	/^let g:floaterm_position = 'center'$/;"	v
+g:floaterm_title	nvim/.config/nvim/init.vim	/^let g:floaterm_title = '$2 term'$/;"	v
+g:floaterm_width	nvim/.config/nvim/init.vim	/^let g:floaterm_width = 0.9$/;"	v
+g:fuzzy_stash_actions	nvim/.config/nvim/init.vim	/^let g:fuzzy_stash_actions = {$/;"	v
+g:fzf_layout	nvim/.config/nvim/init.vim	/^let g:fzf_layout = { 'up': '100%' }$/;"	v
+g:fzf_preview_window	nvim/.config/nvim/init.vim	/^let g:fzf_preview_window = [ 'up:60%:rounded:nowrap:nofollow' ]$/;"	v
+g:go_auto_sameids	nvim/.config/nvim/init.vim	/^let g:go_auto_sameids = 0$/;"	v
+g:go_auto_type_info	nvim/.config/nvim/init.vim	/^let g:go_auto_type_info = 0$/;"	v
+g:go_diagnostics_level	nvim/.config/nvim/init.vim	/^let g:go_diagnostics_level = 2$/;"	v
+g:go_doc_keywordprg_enabled	nvim/.config/nvim/init.vim	/^let g:go_doc_keywordprg_enabled = 0$/;"	v
+g:go_doc_popup_window	nvim/.config/nvim/init.vim	/^let g:go_doc_popup_window = 1$/;"	v
+g:go_fmt_command	nvim/.config/nvim/init.vim	/^let g:go_fmt_command = "goimports"$/;"	v
+g:go_guru_scope	nvim/.config/nvim/init.vim	/^let g:go_guru_scope = []$/;"	v
+g:go_highlight_array_whitespace_error	nvim/.config/nvim/init.vim	/^let g:go_highlight_array_whitespace_error = 1$/;"	v
+g:go_highlight_build_constraints	nvim/.config/nvim/init.vim	/^let g:go_highlight_build_constraints = 1$/;"	v
+g:go_highlight_chan_whitespace_error	nvim/.config/nvim/init.vim	/^let g:go_highlight_chan_whitespace_error = 1$/;"	v
+g:go_highlight_extra_types	nvim/.config/nvim/init.vim	/^let g:go_highlight_extra_types = 1$/;"	v
+g:go_highlight_fields	nvim/.config/nvim/init.vim	/^let g:go_highlight_fields = 1$/;"	v
+g:go_highlight_function_calls	nvim/.config/nvim/init.vim	/^let g:go_highlight_function_calls = 1$/;"	v
+g:go_highlight_function_parameters	nvim/.config/nvim/init.vim	/^let g:go_highlight_function_parameters = 1$/;"	v
+g:go_highlight_functions	nvim/.config/nvim/init.vim	/^let g:go_highlight_functions = 1$/;"	v
+g:go_highlight_generate_tags	nvim/.config/nvim/init.vim	/^let g:go_highlight_generate_tags = 1$/;"	v
+g:go_highlight_operators	nvim/.config/nvim/init.vim	/^let g:go_highlight_operators = 1$/;"	v
+g:go_highlight_space_tab_error	nvim/.config/nvim/init.vim	/^let g:go_highlight_space_tab_error = 1$/;"	v
+g:go_highlight_trailing_whitespace_error	nvim/.config/nvim/init.vim	/^let g:go_highlight_trailing_whitespace_error = 1$/;"	v
+g:go_highlight_types	nvim/.config/nvim/init.vim	/^let g:go_highlight_types = 1$/;"	v
+g:go_highlight_variable_assignments	nvim/.config/nvim/init.vim	/^let g:go_highlight_variable_assignments = 1$/;"	v
+g:go_highlight_variable_declarations	nvim/.config/nvim/init.vim	/^let g:go_highlight_variable_declarations = 1$/;"	v
+g:go_imports_autosave	nvim/.config/nvim/init.vim	/^let g:go_imports_autosave = 1$/;"	v
+g:go_info_mode	nvim/.config/nvim/init.vim	/^let g:go_info_mode = 'guru'$/;"	v
+g:go_list_type	nvim/.config/nvim/init.vim	/^let g:go_list_type = 'quickfix'$/;"	v
+g:go_play_browser_command	nvim/.config/nvim/init.vim	/^let g:go_play_browser_command = "chromium"$/;"	v
+g:go_play_open_browser	nvim/.config/nvim/init.vim	/^let g:go_play_open_browser = 0$/;"	v
+g:go_statusline_duration	nvim/.config/nvim/init.vim	/^let g:go_statusline_duration = 1000$/;"	v
+g:go_test_show_name	nvim/.config/nvim/init.vim	/^let g:go_test_show_name = 1$/;"	v
+g:go_test_timeout	nvim/.config/nvim/init.vim	/^let g:go_test_timeout= '10s'$/;"	v
+g:go_updatetime	nvim/.config/nvim/init.vim	/^let g:go_updatetime = 0$/;"	v
+g:goyo_height	nvim/.config/nvim/init.vim	/^let g:goyo_height="85%"$/;"	v
+g:goyo_linenr	nvim/.config/nvim/init.vim	/^let g:goyo_linenr="0"$/;"	v
+g:goyo_width	nvim/.config/nvim/init.vim	/^let g:goyo_width="80"$/;"	v
+g:markdown_fenced_languages	nvim/.config/nvim/init.vim	/^let g:markdown_fenced_languages = ["vim", "lua", "javascript", "typescript", "go", "json", "xml"]$/;"	v
+g:neovide_no_idle	nvim/.config/nvim/init.vim	/^let g:neovide_no_idle=v:true$/;"	v
+g:neovide_refresh_rate	nvim/.config/nvim/init.vim	/^let g:neovide_refresh_rate=75$/;"	v
+g:neovide_transparency	nvim/.config/nvim/init.vim	/^let g:neovide_transparency=1$/;"	v
+g:nord_cursor_line_number_background	nvim/.config/nvim/init.vim	/^let g:nord_cursor_line_number_background = 1$/;"	v
+g:nord_italic	nvim/.config/nvim/init.vim	/^let g:nord_italic = 1$/;"	v
+g:nord_italic_comments	nvim/.config/nvim/init.vim	/^let g:nord_italic_comments = 1$/;"	v
+g:nord_uniform_diff_background	nvim/.config/nvim/init.vim	/^let g:nord_uniform_diff_background = 1$/;"	v
+g:nord_uniform_status_lines	nvim/.config/nvim/init.vim	/^let g:nord_uniform_status_lines = 1$/;"	v
+g:peekaboo_compact	nvim/.config/nvim/init.vim	/^let g:peekaboo_compact=0$/;"	v
+g:peekaboo_window	nvim/.config/nvim/init.vim	/^let g:peekaboo_window="vert bo ". winwidth(0)\/2 . "new"$/;"	v
+g:ranger_command_override	nvim/.config/nvim/init.vim	/^let g:ranger_command_override = 'ranger --cmd "set show_hidden=false"'$/;"	v
+g:ranger_map_keys	nvim/.config/nvim/init.vim	/^let g:ranger_map_keys = 0$/;"	v
+g:ranger_replace_netrw	nvim/.config/nvim/init.vim	/^let g:ranger_replace_netrw = 1$/;"	v
+g:wheel#line#threshold	nvim/.config/nvim/init.vim	/^let g:wheel#line#threshold = 5$/;"	v
+g:wheel#map#down	nvim/.config/nvim/init.vim	/^let g:wheel#map#down = '<PageDown>'$/;"	v
+g:wheel#map#mouse	nvim/.config/nvim/init.vim	/^let g:wheel#map#mouse = 1$/;"	v
+g:wheel#map#up	nvim/.config/nvim/init.vim	/^let g:wheel#map#up   = '<PageUp>'$/;"	v
+g:wheel#scroll_on_wrap	nvim/.config/nvim/init.vim	/^let g:wheel#scroll_on_wrap = 1$/;"	v
+getCurVol	polybar/.config/polybar/scripts/pavolume.sh	/^function getCurVol {$/;"	f
+getSinkInputs	polybar/.config/polybar/scripts/pavolume.sh	/^function getSinkInputs {$/;"	f
+handle_extension	ranger/.config/ranger/scope.sh	/^handle_extension() {$/;"	f
+handle_fallback	ranger/.config/ranger/scope.sh	/^handle_fallback() {$/;"	f
+handle_image	ranger/.config/ranger/scope.sh	/^handle_image() {$/;"	f
+handle_mime	ranger/.config/ranger/scope.sh	/^handle_mime() {$/;"	f
+i,	nvim/.config/nvim/init.vim	/^omap i, <Plug>(swap-textobject-i)$/;"	m
+listen	polybar/.config/polybar/scripts/pavolume.sh	/^function listen {$/;"	f
+main	polybar/.config/polybar/scripts/spotify1.sh	/^main() {$/;"	f
+mapleader	nvim/.config/nvim/init.vim	/^let mapleader="\\<Space>"$/;"	v
+nord	nvim/.config/nvim/init.vim	/^augroup nord-overrides$/;"	a
+output	polybar/.config/polybar/scripts/pavolume.sh	/^function output() {$/;"	f
+reloadSink	polybar/.config/polybar/scripts/pavolume.sh	/^reloadSink() {$/;"	f
+requests	polybar/.config/polybar/scripts/weather.py	/^import requests$/;"	i
+vim_chore	scripts/ocs-operator/setup-debug-env.sh	/^vim_chore() {$/;"	f
+volDown	polybar/.config/polybar/scripts/pavolume.sh	/^function volDown {$/;"	f
+volMute	polybar/.config/polybar/scripts/pavolume.sh	/^function volMute {$/;"	f
+volMuteStatus	polybar/.config/polybar/scripts/pavolume.sh	/^function volMuteStatus {$/;"	f
+volSync	polybar/.config/polybar/scripts/pavolume.sh	/^function volSync {$/;"	f
+volUp	polybar/.config/polybar/scripts/pavolume.sh	/^function volUp {$/;"	f

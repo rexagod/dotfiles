@@ -3,68 +3,81 @@
 " Plugins {{{
 
 call plug#begin('~/.vim/plugged')
-" coc.nvim {{{
+" Internal {{{
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" LSP {{{
+
+Plug 'hrsh7th/cmp-nvim-lsp' | Plug 'hrsh7th/cmp-buffer' | Plug 'hrsh7th/cmp-path' | Plug 'hrsh7th/cmp-cmdline' | Plug 'hrsh7th/nvim-cmp'
+Plug 'neovim/nvim-lspconfig'
+Plug 'onsails/lspkind-nvim'
+Plug 'ray-x/lsp_signature.nvim'
 " }}}
+" nvim-treesitter {{{
+
+Plug 'nvim-treesitter/nvim-treesitter'
+" }}}
+Plug 'aymericbeaumet/vim-symlink'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-sleuth'
+Plug 'voldikss/vim-floaterm'
+" }}}
+
 " Go {{{
 
 Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'branch': 'master', 'do': ':GoUpdateBinaries' }
 " }}}
 " Git {{{
 
+Plug 'aacunningham/vim-fuzzy-stash'
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
-Plug 'aacunningham/vim-fuzzy-stash'
-" }}}
-" Internal {{{
-
-Plug 'aymericbeaumet/vim-symlink'
-Plug 'gelguy/wilder.nvim'
-Plug 'romgrk/fzy-lua-native'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-sleuth'
-Plug 'voldikss/vim-floaterm'
 " }}}
 " Navigation {{{
 
+Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
 Plug 'kevinhwang91/nvim-bqf'
 Plug 'preservim/vim-wheel'
-Plug 'tpope/vim-unimpaired'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
-Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
 Plug 'rhysd/clever-f.vim'
+Plug 'tpope/vim-unimpaired'
 " }}}
 " Text Manipulations {{{
 
 Plug 'editorconfig/editorconfig-vim'
-Plug 'machakann/vim-swap'
+Plug 'flwyd/vim-conjoin'
 Plug 'godlygeek/tabular'
+"{{{
+"                                          *ac* *cac* *dac* *vac* *yac*
+" ac     "a column", a column based on "a word" |aw|.
+"                                          *ic* *cic* *dic* *vic* *yic*
+" ic     "inner column", a column based on the "inner word" |iw|.
+"                                          *aC* *caC* *daC* *vaC* *yaC*
+" aC     "a COLUMN", a column based on "a WORD" |aW|.
+"                                          *iC* *ciC* *diC* *viC* *yiC*
+" iC     "inner COLUMN", a column based on "inner WORD" |iW|.
+"}}}
+Plug 'kana/vim-textobj-user' | Plug 'coderifous/textobj-word-column.vim' | Plug 'adolenc/vim-textobj-toplevel'
+Plug 'machakann/vim-swap'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'flwyd/vim-conjoin'
 " }}}
 " Visuals {{{
 
 Plug 'junegunn/goyo.vim' | Plug 'junegunn/limelight.vim'
-Plug 'mbbill/undotree'
 Plug 'junegunn/vim-peekaboo'
 Plug 'markonm/traces.vim'
+Plug 'mbbill/undotree'
 Plug 'vim-airline/vim-airline'
-" }}}
-" Syntax {{{
-
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " }}}
 " Themes {{{
 
 Plug 'arcticicestudio/nord-vim'
-" needs to be loaded after all plugins have been initialized
-" to patch w/o changing the current font,
-" visit https://powerline.readthedocs.io/en/master/installation/linux.html#fontconfig
-" prefer this over 'ryanoasis/vim-devicons', since this supports a wider
-" render range
+" needs to be loaded after all plugins have been initialized to patch w/o
+" changing the current font, visit
+" https://powerline.readthedocs.io/en/master/installation/linux.html#fontconfig
+" prefer this over 'ryanoasis/vim-devicons', since apparently this supports a
+" wider render range
 Plug 'kyazdani42/nvim-web-devicons'
 " }}}
 call plug#end()
@@ -80,266 +93,35 @@ set t_Co=256
 set termguicolors
 " }}}
 
+let g:nord_cursor_line_number_background = 1
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
 let g:nord_uniform_status_lines = 1
-let g:nord_cursor_line_number_background = 1
 
 augroup nord-overrides
   autocmd!
-  autocmd ColorScheme nord highlight Folded cterm=italic,bold ctermbg=0 ctermfg=12 guibg=#3B4252 guifg=#81A1C1
   autocmd ColorScheme nord highlight Comment ctermfg=12 guifg=#EBCB8B
-  autocmd ColorScheme nord highlight clear CursorLine
   autocmd ColorScheme nord highlight CursorLineNR cterm=bold
+  autocmd ColorScheme nord highlight Folded cterm=italic,bold ctermbg=0 ctermfg=12 guibg=#3B4252 guifg=#81A1C1
+  autocmd ColorScheme nord highlight clear CursorLine
 augroup END
 
 colorscheme nord
 " }}}
 " Statusline (vim-airline) {{{
 
-" Listed all themes for autocompletion {{{
-"     * alduin
-"     * angr
-"     * apprentice
-"     * atomic
-"     * ayu_light
-"     * ayu_mirage
-"     * ayu_dark
-"     * badwolf
-"     * base16 (|airline-theme-base16|)
-"     * base16_vim (|airline-theme-base16_vim|)
-"     * base16_shell (|airline-theme-base16_shell|)
-"     * base16_3024
-"     * base16_adwaita
-"     * base16_apathy
-"     * base16_ashes
-"     * base16_atelier_cave
-"     * base16_atelier_cave_light
-"     * base16_atelier_dune
-"     * base16_atelier_dune_light
-"     * base16_atelier_estuary
-"     * base16_atelier_estuary_light
-"     * base16_atelier_forest
-"     * base16_atelier_forest_light
-"     * base16_atelier_heath
-"     * base16_atelier_heath_light
-"     * base16_atelier_lakeside
-"     * base16_atelier_lakeside_light
-"     * base16_atelier_plateau
-"     * base16_atelier_plateau_light
-"     * base16_atelier_savanna
-"     * base16_atelier_savanna_light
-"     * base16_atelier_seaside
-"     * base16_atelier_seaside_light
-"     * base16_atelier_sulphurpool
-"     * base16_atelier_sulphurpool_light
-"     * base16_atelierdune
-"     * base16_atelierforest
-"     * base16_atelierheath
-"     * base16_atelierlakeside
-"     * base16_atelierseaside
-"     * base16_atlas
-"     * base16_bespin
-"     * base16_black_metal
-"     * base16_black_metal_bathory
-"     * base16_black_metal_burzum
-"     * base16_black_metal_dark_funeral
-"     * base16_black_metal_gorgoroth
-"     * base16_black_metal_immortal
-"     * base16_black_metal_khold
-"     * base16_black_metal_marduk
-"     * base16_black_metal_mayhem
-"     * base16_black_metal_nile
-"     * base16_black_metal_venom
-"     * base16_brewer
-"     * base16_bright
-"     * base16_brogrammer
-"     * base16_brushtrees
-"     * base16_brushtrees_dark
-"     * base16_chalk
-"     * base16_circus
-"     * base16_classic
-"     * base16_classic_dark
-"     * base16_classic_light
-"     * base16_codeschool
-"     * base16_colors
-"     * base16_cupcake
-"     * base16_cupertino
-"     * base16_darktooth
-"     * base16_decaf
-"     * base16_default
-"     * base16_default_dark
-"     * base16_default_light
-"     * base16_dracula
-"     * base16_edge_dark
-"     * base16_edge_light
-"     * base16_eighties
-"     * base16_embers
-"     * base16_espresso
-"     * base16_flat
-"     * base16_framer
-"     * base16_fruit_soda
-"     * base16_gigavolt
-"     * base16_github
-"     * base16_google
-"     * base16_google_dark
-"     * base16_google_light
-"     * base16_grayscale
-"     * base16_grayscale_dark
-"     * base16_grayscale_light
-"     * base16_greenscreen
-"     * base16_gruvbox_dark_hard (|airline-theme-base-gruvbox-dark-hard|)
-"     * base16_gruvbox_dark_medium
-"     * base16_gruvbox_dark_pale
-"     * base16_gruvbox_dark_soft
-"     * base16_gruvbox_light_hard
-"     * base16_gruvbox_light_medium
-"     * base16_gruvbox_light_soft
-"     * base16_harmonic16
-"     * base16_harmonic_dark
-"     * base16_harmonic_light
-"     * base16_heetch
-"     * base16_heetch_light
-"     * base16_helios
-"     * base16_hopscotch
-"     * base16_horizon_dark
-"     * base16_horizon_light
-"     * base16_horizon_terminal_dark
-"     * base16_horizon_terminal_light
-"     * base16_ia_dark
-"     * base16_ia_light
-"     * base16_icy
-"     * base16_irblack
-"     * base16_isotope
-"     * base16_londontube
-"     * base16_macintosh
-"     * base16_marrakesh
-"     * base16_materia
-"     * base16_material
-"     * base16_material_darker
-"     * base16_material_lighter
-"     * base16_material_palenight
-"     * base16_material_vivid
-"     * base16_mellow_purple
-"     * base16_mexico_light
-"     * base16_mocha
-"     * base16_monokai
-"     * base16_nord
-"     * base16_nova
-"     * base16_ocean
-"     * base16_oceanicnext
-"     * base16_one_light
-"     * base16_onedark
-"     * base16_outrun_dark
-"     * base16_papercolor_dark
-"     * base16_papercolor_light
-"     * base16_paraiso
-"     * base16_phd
-"     * base16_pico
-"     * base16_pop
-"     * base16_porple
-"     * base16_railscasts
-"     * base16_rebecca
-"     * base16_sandcastle
-"     * base16_seti
-"     * base16_shapeshifter
-"     * base16_snazzy
-"     * base16_solarflare
-"     * base16_solarized
-"     * base16_solarized_dark
-"     * base16_solarized_light
-"     * base16_spacemacs
-"     * base16_summerfruit
-"     * base16_summerfruit_dark
-"     * base16_summerfruit_light
-"     * base16_synth_midnight_dark
-"     * base16_tomorrow
-"     * base16_tomorrow_night
-"     * base16_tomorrow_night_eighties
-"     * base16_tube
-"     * base16_twilight
-"     * base16_vim
-"     * base16_unikitty_dark
-"     * base16_unikitty_light
-"     * base16_woodland
-"     * base16_xcode_dusk
-"     * base16_zenburn
-"     * base16color
-"     * behelit
-"     * biogoo
-"     * bubblegum
-"     * cobalt2
-"     * cool
-"     * dark
-"     * dark_minimal
-"     * desertink
-"     * deus
-"     * distinguished
-"     * durant
-"     * faryfloss
-"     * fruit_punch
-"     * google_dark
-"     * google_light
-"     * hybrid
-"     * hybridline
-"     * jay
-"     * jellybeans
-"     * jet
-"     * kalisi
-"     * kolor
-"     * laederon
-"     * lessnoise
-"     * light
-"     * lighthaus
-"     * lucius
-"     * luna
-"     * minimalist (|airline-theme-minimalist|)
-"     * molokai
-"     * monochrome
-"     * murmur
-"     * night_owl
-"     * nord-minimal
-"     * onedark (|airline-theme-onedark|)
-"     * ouo
-"     * owo
-"     * papercolor
-"     * peaksea
-"     * powerlineish
-"     * qwq
-"     * raven
-"     * ravenpower
-"     * seagull
-"     * seoul256
-"     * serene
-"     * sierra
-"     * silver
-"     * simple
-"     * soda
-"     * sol
-"     * solarized (|airline-theme-solarized|)
-"     * solarized_flood
-"     * term
-"     * term_light
-"     * tomorrow
-"     * ubaryd
-"     * understated
-"     * violet
-"     * wombat
-"     * xtermlight
-"     * zenburn
-"     * transparent
-" }}}
+" List all themes for autocompletion: alduin, angr, apprentice, atomic, ayu_light, ayu_mirage, ayu_dark, badwolf, base16 (|airline-theme-base16|), base16_vim (|airline-theme-base16_vim|), base16_shell (|airline-theme-base16_shell|), base16_3024, base16_adwaita, base16_apathy, base16_ashes, base16_atelier_cave, base16_atelier_cave_light, base16_atelier_dune, base16_atelier_dune_light, base16_atelier_estuary, base16_atelier_estuary_light, base16_atelier_forest, base16_atelier_forest_light, base16_atelier_heath, base16_atelier_heath_light, base16_atelier_lakeside, base16_atelier_lakeside_light, base16_atelier_plateau, base16_atelier_plateau_light, base16_atelier_savanna, base16_atelier_savanna_light, base16_atelier_seaside, base16_atelier_seaside_light, base16_atelier_sulphurpool, base16_atelier_sulphurpool_light, base16_atelierdune, base16_atelierforest, base16_atelierheath, base16_atelierlakeside, base16_atelierseaside, base16_atlas, base16_bespin, base16_black_metal, base16_black_metal_bathory, base16_black_metal_burzum, base16_black_metal_dark_funeral, base16_black_metal_gorgoroth, base16_black_metal_immortal, base16_black_metal_khold, base16_black_metal_marduk, base16_black_metal_mayhem, base16_black_metal_nile, base16_black_metal_venom, base16_brewer, base16_bright, base16_brogrammer, base16_brushtrees, base16_brushtrees_dark, base16_chalk, base16_circus, base16_classic, base16_classic_dark, base16_classic_light, base16_codeschool, base16_colors, base16_cupcake, base16_cupertino, base16_darktooth, base16_decaf, base16_default, base16_default_dark, base16_default_light, base16_dracula, base16_edge_dark, base16_edge_light, base16_eighties, base16_embers, base16_espresso, base16_flat, base16_framer, base16_fruit_soda, base16_gigavolt, base16_github, base16_google, base16_google_dark, base16_google_light, base16_grayscale, base16_grayscale_dark, base16_grayscale_light, base16_greenscreen, base16_gruvbox_dark_hard (|airline-theme-base-gruvbox-dark-hard|), base16_gruvbox_dark_medium, base16_gruvbox_dark_pale, base16_gruvbox_dark_soft, base16_gruvbox_light_hard, base16_gruvbox_light_medium, base16_gruvbox_light_soft, base16_harmonic16, base16_harmonic_dark, base16_harmonic_light, base16_heetch, base16_heetch_light, base16_helios, base16_hopscotch, base16_horizon_dark, base16_horizon_light, base16_horizon_terminal_dark, base16_horizon_terminal_light, base16_ia_dark, base16_ia_light, base16_icy, base16_irblack, base16_isotope, base16_londontube, base16_macintosh, base16_marrakesh, base16_materia, base16_material, base16_material_darker, base16_material_lighter, base16_material_palenight, base16_material_vivid, base16_mellow_purple, base16_mexico_light, base16_mocha, base16_monokai, base16_nord, base16_nova, base16_ocean, base16_oceanicnext, base16_one_light, base16_onedark, base16_outrun_dark, base16_papercolor_dark, base16_papercolor_light, base16_paraiso, base16_phd, base16_pico, base16_pop, base16_porple, base16_railscasts, base16_rebecca, base16_sandcastle, base16_seti, base16_shapeshifter, base16_snazzy, base16_solarflare, base16_solarized, base16_solarized_dark, base16_solarized_light, base16_spacemacs, base16_summerfruit, base16_summerfruit_dark, base16_summerfruit_light, base16_synth_midnight_dark, base16_tomorrow, base16_tomorrow_night, base16_tomorrow_night_eighties, base16_tube, base16_twilight, base16_vim, base16_unikitty_dark, base16_unikitty_light, base16_woodland, base16_xcode_dusk, base16_zenburn, base16color, behelit, biogoo, bubblegum, cobalt2, cool, dark, dark_minimal, desertink, deus, distinguished, durant, faryfloss, fruit_punch, google_dark, google_light, hybrid, hybridline, jay, jellybeans, jet, kalisi, kolor, laederon, lessnoise, light, lighthaus, lucius, luna, minimalist (|airline-theme-minimalist|), molokai, monochrome, murmur, night_owl, nord-minimal, onedark (|airline-theme-onedark|), ouo, owo, papercolor, peaksea, powerlineish, qwq, raven, ravenpower, seagull, seoul256, serene, sierra, silver, simple, soda, sol, solarized (|airline-theme-solarized|), solarized_flood, term, term_light, tomorrow, ubaryd, understated, violet, wombat, xtermlight, zenburn, transparent
+" {{{
 let airline#extensions#tabline#current_first = 0
-let g:airline#extensions#coc#enabled = 1
 let g:airline#extensions#tabline#buf_label_first = 1
 let g:airline#extensions#tabline#buffer_min_count = 2
 let g:airline#extensions#tabline#buffer_nr_show = 0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#exclude_preview = 0
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_splits = 1
 let g:airline#extensions#tabline#show_tab_count = 0
 let g:airline#extensions#tabline#show_tab_nr = 0
@@ -350,13 +132,14 @@ let g:airline#extensions#tabline#tabnr_formatter = 'tabnr'
 let g:airline#extensions#whitespace#checks = ['conflicts']
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline_base16_improved_contrast = 1
+let g:airline_inactive_alt_sep = 0
+let g:airline_left_alt_sep = "\ue0b9"
+let g:airline_left_sep = "\ue0b8"
+let g:airline_powerline_fonts = 1
+let g:airline_right_alt_sep = "\ue0bb"
+let g:airline_right_sep = "\ue0ba"
 let g:airline_symbols_ascii = 1
-" let g:airline_inactive_alt_sep = 0
-" let g:airline_left_alt_sep = "\ue0b9"
-" let g:airline_left_sep = "\ue0b8"
-" let g:airline_powerline_fonts = 1
-" let g:airline_right_alt_sep = "\ue0bb"
-" let g:airline_right_sep = "\ue0ba"
+" }}}
 
 function! SanitizeModified() " {{{
   if &modified
@@ -368,43 +151,13 @@ endfunction
 let g:airline_section_a = airline#section#create(['mode', 'iminsert'])
 let g:airline_section_b = airline#section#create(['%{expand("%f")}', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
 let g:airline_section_c = airline#section#create(['readonly'])
-let g:airline_section_x = airline#section#create(['%{coc#status()} ', '⎇  %{fugitive#head()}'])
+let g:airline_section_x = airline#section#create(['%{nvim_treesitter#statusline()}', ' ⎇  %{fugitive#head()}'])
 let g:airline_section_y = airline#section#create(['filetype'])
 let g:airline_section_z = airline#section#create(['%l', ':', '%v  ', '%p', '%%'])
 " }}}
 " Variables {{{
 
-let g:markdown_fenced_languages = ["vim","lua","javascript","typescript","go"]
-" }}}
-" Functions {{{
-
-function! s:ToggleQuickFixList() " {{{
-  if empty(filter(getwininfo(), 'v:val.quickfix'))
-    6copen
-  else
-    cclose
-  endif
-endfunction
-" }}}
-function! s:SourceScriptImplicit() " {{{
-  if !&readonly && &filetype !=# ''
-    w
-  endif
-  if &filetype ==# ''
-    return ''
-  endif
-  let l:bin=system("which " . &filetype)[:-2]
-  if l:bin==# ''
-    return ''
-  endif
-  let l:sourcecommand=
-        \ {
-        \ "vim": "source %",
-        \ }
-  let l:ispresent=has_key(l:sourcecommand, split(l:bin, "/")[-1])
-  return l:ispresent ? l:sourcecommand[split(l:bin, "/")[-1]] : ''
-endfunction
-" }}}
+let g:markdown_fenced_languages = ["vim", "lua", "javascript", "typescript", "go", "json", "xml"]
 " }}}
 " Options {{{
 
@@ -415,6 +168,7 @@ set autowrite
 set backupcopy=yes
 set clipboard+=unnamedplus
 set colorcolumn=80
+set completeopt=menu,menuone,noselect
 set conceallevel=0
 set confirm
 set cursorline
@@ -574,13 +328,13 @@ aug END
 " }}}
 " Commands {{{
 
-command! CC :let b:coc_suggest_disable = 1
 command! CI PlugClean | PlugInstall
 command! CM delm!
 command! QQ qall
+command! S w | source %
 command! SS mks! ~/.session.vim
 command! W w | e
-command! YY PlugClean | PlugInstall | PlugUpdate | PlugUpgrade | CocUpdate
+command! YY PlugUpgrade | PlugClean | PlugInstall | PlugUpdate 
 " }}}
 " Plugin Configurations {{{
 
@@ -600,134 +354,10 @@ let g:bclose_no_plugin_maps=1
 " Use f<CR> to repeat previous search.
 
 let g:clever_f_mark_direct = 1
-let g:clever_f_across_no_line = 0
+let g:clever_f_across_no_line = 1
 let g:clever_f_fix_key_direction = 0
 
 let g:clever_f_chars_match_any_signs = ';' " f;
-" }}}
-" coc.nvim {{{
-
-" coc-snippets {{{
-
-" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-let g:coc_snippet_prev = '<c-k>'
-let g:coc_snippet_next = '<c-l>'
-
-" Use <leader>x for convert visual selected code to snippet
-xm <leader>x  <Plug>(coc-convert-snippet)
-" }}}
-" Functions {{{
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-"}}}
-" Commands {{{
-
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
-"}}}
-" Normal Mode Mappings {{{
-
-inoremap <silent><expr> <c-space> coc#refresh()
-" *g* Maps {{{
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nm <silent> [g <Plug>(coc-diagnostic-prev)
-nm <silent> ]g <Plug>(coc-diagnostic-next)
-nm <silent> gd <Plug>(coc-definition)
-nm <silent> gy <Plug>(coc-type-definition)
-nm <silent> gI <Plug>(coc-implementation)
-nm <silent> gr <Plug>(coc-references)
-nm <silent> gR <Plug>(coc-rename)
-"}}}
-" Mappings for CoCList {{{
-" Show all diagnostics.
-nn <silent><nowait> <M-a> :<C-u>CocList diagnostics<cr>
-" Manage extensions.
-nn <silent><nowait> <M-e> :<C-u>CocList extensions<cr>
-" Show commands.
-nn <silent><nowait> <M-c> :<C-u>CocList commands<cr>
-" Find symbol of current document.
-nn <silent><nowait> <M-o> :<C-u>CocList outline<cr>
-" Search workspace symbols.
-nn <silent><nowait> <M-s> :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nn <silent><nowait> <M-j> :<C-u>CocNext<CR>
-" Do default action for previous item.
-nn <silent><nowait> <M-k> :<C-u>CocPrev<CR>
-" Resume latest coc list.
-nn <silent><nowait> <M-p> :<C-u>CocListResume<CR>
-"}}}
-" Applying codeAction to the selected region. {{{
-" Example: `<leader>aap` for current paragraph
-xm \a  <Plug>(coc-codeaction-selected)
-nm \a  <Plug>(coc-codeaction-selected)
-" Remap keys for applying codeAction to the current buffer.
-nm \ac  <Plug>(coc-codeaction)
-" Apply AutoFix to problem on the current line.
-nm \Q  <Plug>(coc-fix-current)
-"}}}
-" Show documentation in preview window. {{{
-nn <silent> K :call <SID>show_documentation()<CR>
-"}}}
-" Map function and class text objects{{{
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-"}}}
-"}}}
-" Insert Mode Mappings {{{
-
-" Use tab for trigger completion with characters ahead and navigate.
-ino <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-ino <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-" Use <c-space> to trigger completion.
-ino <silent><expr> <C-space> coc#refresh()
-
-" Use complete_info() to confirm completion only when there's selected complete item (this allows for single-enter breaks)
-if exists('*complete_info')
-  ino <silent><expr> <cr> complete_info(['selected'])['selected'] != -1 ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
-" }}}
-" Autocommands {{{
-aug CoC
-  au!
-  " Highlight the symbol and its references when holding the cursor.
-  au CursorHold * silent call CocActionAsync('highlight')
-  " Setup formatexpr specified filetype(s).
-  au FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  " Disable autocomplete
-  au BufReadPost * let b:coc_suggest_disable = 0
-aug END
-"}}}
-" Remap <C-f> and <C-b> for scroll float windows/popups. {{{
-nn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-f>"
-nn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-b>"
-vn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-f>"
-vn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-b>"
-ino <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Right>"
-ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Left>"
-"}}}
 " }}}
 " editorconfig-vim {{{
 
@@ -814,49 +444,6 @@ autocmd! User GoyoLeave Limelight!
 " filterr        create new list for non-signed items 						  zN
 " fzffilter      enter fzf mode 														        zf
 " }}}
-" Variables {{{
-
-let g:coc_enable_locationlist = 0
-" }}}
-" Functions {{{
-
-function! Coc_qf_jump2loc(locs) abort "{{{
-    let loc_ranges = map(deepcopy(a:locs), 'v:val.range')
-    call setloclist(0, [], ' ', {'title': 'CocLocationList', 'items': a:locs,
-                \ 'context': {'bqf': 
-                \ {'lsp_ranges_hl': loc_ranges}
-                \ }})
-    let winid = getloclist(0, {'winid': 0}).winid
-    if winid == 0
-        aboveleft lwindow
-    else
-        call win_gotoid(winid)
-    endif
-endfunction "}}}
-" }}}
-" Autocommands {{{
-
-aug Coc
-    au!
-    au User CocLocationsChange ++nested call Coc_qf_jump2loc(g:coc_jump_locations)
-aug END
-" }}}
-" }}}
-" nvim-treesitter {{{
-
-lua << EOF
-require'nvim-treesitter.configs'.setup {
-  highlight = {
-    enable = true,
-    disable = {},
-  },
-  indent = {
-    enable = true,
-  },
-}
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.tsx.used_by = { "javascript", "typescript.tsx" }
-EOF
 " }}}
 " ranger.vim {{{
 
@@ -968,7 +555,6 @@ aug GO
   au FileType go nm <silent>'s :GoSameIdsToggle<cr>
   au FileType go nm <silent>'t :GoCallstack<cr>
   " Also, :GoCallees and :GoCallers.
-  au FileType go nm <silent>K :call CocActionAsync('doHover')<cr>
 aug END
 " }}}
 " }}}
@@ -993,39 +579,6 @@ let g:wheel#map#mouse = 1
 let g:wheel#line#threshold = 5
 let g:wheel#scroll_on_wrap = 1
 " }}}
-" wilder.nvim {{{
-
-call wilder#setup({'modes': [':', '/', '?']})
-call wilder#set_option('use_python_remote_plugin', 0)
-
-call wilder#set_option('pipeline', [
-      \   wilder#branch(
-      \     wilder#cmdline_pipeline({
-      \       'use_python': 0,
-      \       'fuzzy': 1,
-      \       'fuzzy_filter': wilder#lua_fzy_filter(),
-      \     }),
-      \     wilder#vim_search_pipeline(),
-      \   ),
-      \ ])
-
-call wilder#set_option('renderer', wilder#renderer_mux({
-      \ ':': wilder#popupmenu_renderer({
-      \   'highlighter': wilder#lua_fzy_highlighter(),
-      \   'left': [
-      \     wilder#popupmenu_devicons(),
-      \   ],
-      \   'right': [
-      \     ' ',
-      \     wilder#popupmenu_scrollbar(),
-      \   ],
-      \ }),
-      \ '/': wilder#wildmenu_renderer({
-      \   'highlighter': wilder#lua_fzy_highlighter(),
-      \ }),
-      \ }))
-" }}}
-" }}}
 
 " Neovide {{{
 
@@ -1033,3 +586,232 @@ let g:neovide_refresh_rate=75
 let g:neovide_transparency=1
 let g:neovide_no_idle=v:true
 " }}}
+" }}}
+" LSP Configurations {{{
+
+" LSP {{{
+
+lua << EOF
+local nvim_lsp = require('lspconfig')
+-- on_attach {{{
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+  -- Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+-- }}}
+end
+-- Initialize LSPs {{{
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = {
+  'bashls',
+  'cmake',
+  'cssls',
+  'cssmodules_ls',
+  'diagnosticls',
+  'dockerls',
+  'eslint',
+  'golangci_lint_ls',
+  'gopls',
+  'html',
+  'jsonls',
+  'sumneko_lua',
+  'texlab',
+  'tsserver',
+  'vimls',
+  'yamlls',
+}
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
+end
+-- }}}
+-- lsp_signature.nvim {{{
+require "lsp_signature".setup({
+  bind = true, -- This is mandatory, otherwise border config won't get registered.
+               -- If you want to hook lspsaga or other signature handler, pls set to false
+  doc_lines = 20, -- will show two lines of comment/doc(if there are more than two lines in doc, will be truncated);
+                 -- set to 0 if you DO NOT want any API comments be shown
+                 -- This setting only take effect in insert mode, it does not affect signature help in normal
+                 -- mode, 10 by default
+  floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
+  floating_window_above_cur_line = true, -- try to place the floating above the current line when possible Note:
+  -- will set to true when fully tested, set to false will use whichever side has more space
+  -- this setting will be helpful if you do not want the PUM and floating win overlap
+  fix_pos = false,  -- set to true, the floating window will not auto-close until finish all parameters
+  hint_enable = true, -- virtual hint enable
+  hint_prefix = " ",
+  use_lspsaga = false,  -- set to true if you want to use lspsaga popup
+  max_height = 50, -- max height of signature floating_window, if content is more than max_height, you can scroll down
+                   -- to view the hiding contents
+  max_width = 120, -- max_width of signature floating_window, line will be wrapped if exceed max_width
+  handler_opts = {
+    border = "shadow"   -- double, rounded, single, shadow, none
+  },
+  transparency = 20, -- disabled by default, allow floating win transparent value 1~100
+  shadow_blend = 36, -- if you using shadow as border use this set the opacity
+  shadow_guibg = 'Black', -- if you using shadow as border use this set the color e.g. 'Green' or '#121315'
+  timer_interval = 200, -- default timer check interval set to lower value if you want to reduce latency
+})
+-- }}}
+EOF
+" LSP commands {{{
+
+command! ES EslintFixAll
+" }}}
+" LSP maps {{{
+
+nn <silent>\A <cmd>lua vim.lsp.buf.code_action()<CR>
+nn <silent>\a <cmd>lua vim.lsp.buf.range_code_action()<CR>
+nn <silent>\D <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nn <silent>\d <cmd>lua vim.diagnostic.open_float()<CR>
+nn <silent>\F <cmd>lua vim.lsp.buf.formatting()<CR>
+nn <silent>\f <cmd>lua vim.lsp.buf.range_formatting()<CR>
+nn <silent>\i <cmd>lua vim.lsp.buf.incoming_calls()<CR>
+nn <silent>\o <cmd>lua vim.lsp.buf.outgoing_calls()<CR>
+nn <silent>\q <cmd>lua vim.diagnostic.setloclist()<CR>
+nn <silent>K  <cmd>lua vim.lsp.buf.hover()<CR>
+nn <silent>Z  <cmd>lua vim.lsp.buf.signature_help()<CR>
+nn <silent>[z <cmd>lua vim.diagnostic.goto_prev()<CR>
+nn <silent>]z <cmd>lua vim.diagnostic.goto_next()<CR>
+nn <silent>gD <cmd>lua vim.lsp.buf.declaration()<CR>
+nn <silent>gR <cmd>lua vim.lsp.buf.rename()<CR>
+nn <silent>gd <cmd>lua vim.lsp.buf.definition()<CR>
+nn <silent>gi <cmd>lua vim.lsp.buf.implementation()<CR>
+nn <silent>gr <cmd>lua vim.lsp.buf.references()<CR>
+nn <silent>gt <cmd>lua vim.lsp.buf.type_definition()<CR>
+" }}}
+" }}}
+" nvim-cmp {{{
+
+lua <<EOF
+  -- Setup nvim-cmp {{{
+  local cmp = require'cmp'
+  -- Used for Super-TAB behavior emulation.
+  local has_words_before = function()
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
+  end
+  cmp.setup({
+  -- }}} 
+  -- Mappings {{{
+    mapping = {
+      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      -- Accept currently selected item. If none selected, `select` first item.
+      -- Set `select` to `false` to only confirm explicitly selected items.
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      ['<C-Space>'] = cmp.mapping.confirm {
+        behavior = cmp.ConfirmBehavior.Insert,
+        select = true,
+      },
+      ['<Tab>'] = function(fallback)
+        if not cmp.select_next_item() then
+          if vim.bo.buftype ~= 'prompt' and has_words_before() then
+            cmp.complete()
+          else
+            fallback()
+          end
+        end
+      end,
+
+      ['<S-Tab>'] = function(fallback)
+        if not cmp.select_prev_item() then
+          if vim.bo.buftype ~= 'prompt' and has_words_before() then
+            cmp.complete()
+          else
+            fallback()
+          end
+        end
+      end,
+    },
+    -- }}}
+    -- Sources {{{
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Use buffer source for `/`
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':'
+  cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+  -- }}}
+  -- Setup lspconfig {{{
+  local servers = {
+    'bashls',
+    'cmake',
+    'cssls',
+    'cssmodules_ls',
+    'diagnosticls',
+    'dockerls',
+    'eslint',
+    'golangci_lint_ls',
+    'gopls',
+    'html',
+    'jsonls',
+    'tsserver',
+    'vimls',
+    'yamlls',
+  }
+
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  for _, lsp in ipairs(servers) do
+    require('lspconfig')[lsp].setup {
+      capabilities = capabilities
+    }
+  end
+  -- }}}
+  -- lspkind-nvim {{{
+
+  local lspkind = require('lspkind')
+  cmp.setup {
+    formatting = {
+      format = lspkind.cmp_format({
+        with_text = true, -- show metadata alongside icons
+      })
+    }
+  }
+  -- }}}
+EOF
+" }}}
+" }}}
+" nvim-treesitter {{{
+
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", 
+  highlight = {
+    enable = true,
+    disable = {},
+  },
+  indent = {
+    enable = true,
+  },
+}
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.tsx.used_by = { "javascript", "typescript.tsx" }
+EOF
+" }}}
+

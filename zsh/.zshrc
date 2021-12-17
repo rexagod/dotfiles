@@ -112,10 +112,10 @@ alias gSp="git stash pop"
 alias goland="/home/rexagod/.local/GoLand-2021.1/bin/goland.sh"
 alias hgrep="history | grep "
 alias k="kubectl"
-alias l="ls -1Sh --sort version"
-alias la="ls -1SAh --sort version"
-alias ll="ls -1lSh --sort version"
-alias ls="lsd --sort version"
+alias l="ls -1S"
+alias la="ls -1SA"
+alias ll="ls -1lS"
+alias ls="lsd"
 alias nv="${EDITOR}"
 alias pacman="sudo pacman"
 alias rr="ranger"
@@ -127,7 +127,7 @@ alias vif="fzf --preview-window=right:50% --preview=\"bat --theme ${BAT_THEME} -
 alias vpn="nmcli con up id \"1 - Red Hat Global VPN\" --ask"
 alias vpnd="nmcli con down id \"1 - Red Hat Global VPN\" --ask"
 alias vr="${EDITOR} ${VIMRC}"
-alias vrs="${EDITOR} -- -S ${VIM_SESSION}"
+alias vrs="${EDITOR} -S ${VIM_SESSION}"
 alias zr="${EDITOR} ${ZSHRC}"
 # }}}
 # Functions {{{
@@ -233,3 +233,5 @@ alias k8make="make WHAT=cmd/$1 GOGCFLAGS='-N -l'"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+alias luamake=/home/rexagod/lua-language-server/3rd/luamake/luamake
