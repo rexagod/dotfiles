@@ -1,27 +1,23 @@
 " Maintainer: @rexagod
 
+" Todos {{{
+" map caps to backspace
+" Fix kp for :h
+" fix the god-awful formatting
+" }}}
 " Plugins {{{
 
 call plug#begin('~/.vim/plugged')
-" Internal {{{
+" Grammar {{{
+" coc.nvim {{{
 
-" LSP {{{
-
-Plug 'hrsh7th/cmp-nvim-lsp' | Plug 'hrsh7th/cmp-buffer' | Plug 'hrsh7th/cmp-path' | Plug 'hrsh7th/cmp-cmdline' | Plug 'hrsh7th/nvim-cmp'
-Plug 'neovim/nvim-lspconfig'
-Plug 'onsails/lspkind-nvim'
-Plug 'ray-x/lsp_signature.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " }}}
 " nvim-treesitter {{{
 
 Plug 'nvim-treesitter/nvim-treesitter'
 " }}}
-Plug 'aymericbeaumet/vim-symlink'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-sleuth'
-Plug 'voldikss/vim-floaterm'
 " }}}
-
 " Go {{{
 
 Plug 'ctrlpvim/ctrlp.vim' | Plug 'fatih/vim-go', { 'branch': 'master', 'do': ':GoUpdateBinaries' }
@@ -32,10 +28,19 @@ Plug 'aacunningham/vim-fuzzy-stash'
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 " }}}
+" Internal {{{
+
+Plug 'github/copilot.vim'
+Plug 'aymericbeaumet/vim-symlink'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-sleuth'
+Plug 'romgrk/fzy-lua-native' | Plug 'gelguy/wilder.nvim'
+" }}}
 " Navigation {{{
 
 Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
 Plug 'kevinhwang91/nvim-bqf'
+Plug 'phaazon/hop.nvim'
 Plug 'preservim/vim-wheel'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
 Plug 'rhysd/clever-f.vim'
@@ -69,6 +74,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'markonm/traces.vim'
 Plug 'mbbill/undotree'
 Plug 'vim-airline/vim-airline'
+Plug 'voldikss/vim-floaterm'
 " }}}
 " Themes {{{
 
@@ -132,13 +138,13 @@ let g:airline#extensions#tabline#tabnr_formatter = 'tabnr'
 let g:airline#extensions#whitespace#checks = ['conflicts']
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline_base16_improved_contrast = 1
-let g:airline_inactive_alt_sep = 0
-let g:airline_left_alt_sep = "\ue0b9"
-let g:airline_left_sep = "\ue0b8"
-let g:airline_powerline_fonts = 1
-let g:airline_right_alt_sep = "\ue0bb"
-let g:airline_right_sep = "\ue0ba"
-let g:airline_symbols_ascii = 1
+" let g:airline_inactive_alt_sep = 0
+" let g:airline_left_alt_sep = "\ue0b9"
+" let g:airline_left_sep = "\ue0b8"
+" let g:airline_powerline_fonts = 1
+" let g:airline_right_alt_sep = "\ue0bb"
+" let g:airline_right_sep = "\ue0ba"
+" let g:airline_symbols_ascii = 1
 " }}}
 
 function! SanitizeModified() " {{{
@@ -151,7 +157,7 @@ endfunction
 let g:airline_section_a = airline#section#create(['mode', 'iminsert'])
 let g:airline_section_b = airline#section#create(['%{expand("%f")}', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
 let g:airline_section_c = airline#section#create(['readonly'])
-let g:airline_section_x = airline#section#create(['%{nvim_treesitter#statusline()}', ' ⎇  %{fugitive#head()}'])
+let g:airline_section_x = airline#section#create([' ⎇  %{fugitive#head()}'])
 let g:airline_section_y = airline#section#create(['filetype'])
 let g:airline_section_z = airline#section#create(['%l', ':', '%v  ', '%p', '%%'])
 " }}}
@@ -195,7 +201,7 @@ set re=0
 set relativenumber
 set rtp+=/home/linuxbrew/.linuxbrew/opt/fzf
 set ruler
-set scroll=5
+set scroll=10
 set scrolloff=0
 set shiftwidth=2
 set shortmess+=c
@@ -221,120 +227,92 @@ set pumblend=30
 
 " Insert Mode Mappings {{{
 
-ino   <esc>         <C-c>
-ino   <C-j>         <esc>5ja
-ino   <C-k>         <esc>5ka
-ino   <C-h>         <esc>5ha
-ino   <C-l>         <esc>5la
-imap  <C-Right>     <esc>5la
-imap  <C-Left>      <esc>5ha
-imap  <C-Up>        <esc>5ka
-imap  <C-Down>      <esc>5ja
-imap  <C-PageUp>    <esc><C-b>a
-imap  <C-PageDown>  <esc><C-f>a
+imap <C-j> 5<Left>
+imap <C-k> 5<Right>
+imap <C-l> 5<Down>
+imap <C-h> 5<Up>
 
-ino   <S-Right>   <Nop>
-ino   <S-Left>    <Nop>
-ino   <S-Up>      <esc><C-e>a
-ino   <S-Down>    <esc><C-y>a
-
-ino   <PageUp>    <NOP>
-ino   <PageDown>  <NOP>
+imap <C-Left> <C-h>
+imap <C-Right> <C-l>
+imap <C-Down> <C-j>
+imap <C-Up> <C-k>
 " }}}
 " Visual Mode Mappings {{{
 
-vn    <C-j>        5j
-vn    <C-k>        5k
-vn    <C-h>        5h
-vn    <C-l>        5l
-vm    <C-Right>    <C-l>
-vm    <C-Left>     <C-h>
-vm    <C-Up>       <C-k>
-vm    <C-Down>     <C-j>
-vn    <C-PageUp>   <C-b>
-vn    <C-PageDown> <C-f>
+vm <C-j>     5j
+vm <C-k>     5k
+vm <C-l>     5l
+vm <C-h>     5h
+vm <S-Down> <C-y>
+vm <S-Up>   <C-e>
+vn <C-s>    :sort<cr> " implicitly inserts the visual marker range
 
-vn    <S-Right>   <Nop>
-vn    <S-Left>    <Nop>
-vn    <S-Up>      <C-e>
-vn    <S-Down>    <C-y>
-
-vn    <PageUp>    <Nop>
-vn    <PageDown>  <Nop>
-
-vn    <C-s>       :sort<cr> " implicitly inserts the visual marker range
-
+vm <C-Left> <C-h>
+vm <C-Right> <C-l>
+vm <C-Down> <C-j>
+vm <C-Up> <C-k>
 " }}}
 " Normal Mode Mappings {{{
 
-nm    <tab>          ]b 
-nm    <s-tab>        [b
+nn <C-h>        b
+nn <C-l>        w
+nn <C-j>        5j
+nn <C-k>        5k
+nn <F1>         <NOP>
+nn <S-j>        <C-y>
+nn <S-k>        <C-e>
+nn <Tab>        :bnext<cr>
+nn <S-Tab>      :bprev<cr>
+nn <silent><F2> :messages<cr>
+nn <silent><F4> :only<cr>
+nn <silent>QQ   :bd<cr>
+nn j            gj
+nn k            gk
 
-nn    j              gj
-nn    k              gk
-
-nn    <Left>         h
-nn    <Right>        l
-
-nn    <C-j>          5j
-nn    <C-k>          5k
-nn    <C-h>          5h
-nn    <C-l>          5l
-nm    <C-Right>      <C-l>
-nm    <C-Left>       <C-h>
-nm    <C-Up>         <C-k>
-nm    <C-Down>       <C-j>
-nn    <C-PageUp>     2j
-nn    <C-PageDown>   2k
-
-nn    <S-Right>      <Nop>
-nn    <S-Left>       <Nop>
-nn    <S-Up>         <C-y>
-nn    <S-Down>       <C-e>
-
-nn    <silent><F4>   :only<cr>
-nn    <silent><F2>   :messages<cr>
-nn    <silent>QQ     :bd<cr>
-nn    <F1>           <NOP>
-
-nn    <Tab> <C-w>l
-nn    <S-Tab> <C-w>h
+nm <S-Down>     <C-y>
+nm <S-Up>       <C-e>
+nm <C-Left>     <C-h>
+nm <C-Right>    <C-l>
+nm <C-Down>     <C-j>
+nm <C-Up>       <C-k>
+nm <Up> k
+nm <Down> j
+nm <Left> h
+nm <Right> l
 " }}}
 " Leader Mappings {{{
 
 let mapleader="\<Space>"
 
-nn <silent><leader>gs        :enew $GOSANDBOX<cr>
 nn <silent><leader>vr        :vsp $VIMRC<cr>
 nn <silent><leader>zr        :vsp $ZSHRC<cr>
 nn <silent><leader>tr        :vsp $TMUXRC<cr>
 nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
-nn <silent><nowait><leader>q :silent! call <SID>ToggleQuickFixList()<cr>
-nn <silent><nowait><leader>s :silent! exec <SID>SourceScriptImplicit()<cr>
 " }}}
 " }}}
 " Autocommands {{{
 
 aug FOO
   au!
-  au BufWritePost * silent! !ctags -R &
+  " au BufWritePost * silent! !ctags -R &
   au Filetype *.js,*.ts setl suffixesadd=.js,.ts,.jsx,.tsx
-  au Filetype *.js,*.ts,*.jsx,*.tsx nm = <leader>f
   au BufNewFile,BufRead * if @% =~ "Dockerfile" | setl filetype=dockerfile | endif
   au Filetype help,qf nn <silent><buffer>q :q<cr>
+  " au Filetype help setl keywordprg=:Man
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exec "normal! g`\"" | endif
   au ColorScheme * highlight Comment cterm=italic gui=italic
 aug END
 " }}}
 " Commands {{{
 
+command! CC cclose
 command! CI PlugClean | PlugInstall
 command! CM delm!
 command! QQ qall
 command! S w | source %
 command! SS mks! ~/.session.vim
 command! W w | e
-command! YY PlugUpgrade | PlugClean | PlugInstall | PlugUpdate 
+command! YY PlugClean | PlugInstall | PlugUpdate | PlugUpgrade | CocUpdate
 " }}}
 " Plugin Configurations {{{
 
@@ -347,17 +325,133 @@ packadd! matchit
 
 let g:bclose_no_plugin_maps=1
 " }}}
-" clever-f.vim {{{
+" coc.nvim {{{
 
-" Alt.: hop.nvim, fzf.vim
+" coc-snippets {{{
 
-" Use f<CR> to repeat previous search.
+let g:coc_snippet_prev = '<C-a>'
+let g:coc_snippet_next = '<C-s>'
 
-let g:clever_f_mark_direct = 1
-let g:clever_f_across_no_line = 1
-let g:clever_f_fix_key_direction = 0
+xm <leader>x <Plug>(coc-convert-snippet)
+" }}}
+" Functions {{{
 
-let g:clever_f_chars_match_any_signs = ';' " f;
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+"}}}
+" Commands {{{
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+"}}}
+" Normal Mode Mappings {{{
+
+inoremap <silent><expr><c-space> coc#refresh()
+" *g* Maps {{{
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nm <silent>[g <Plug>(coc-diagnostic-prev)
+nm <silent>]g <Plug>(coc-diagnostic-next)
+nm <silent>gd <Plug>(coc-definition)
+nm <silent>gy <Plug>(coc-type-definition)
+nm <silent>gI <Plug>(coc-implementation)
+nm <silent>gr <Plug>(coc-references)
+nm <silent>gR <Plug>(coc-rename)
+" }}}
+" Mappings for CoCList {{{
+" Show all diagnostics.
+nn <silent><nowait><M-a> :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nn <silent><nowait><M-e> :<C-u>CocList extensions<cr>
+" Show commands.
+nn <silent><nowait><M-c> :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nn <silent><nowait><M-o> :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nn <silent><nowait><M-s> :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nn <silent><nowait><M-j> :<C-u>CocNext<CR>
+" Do default action for previous item.
+nn <silent><nowait><M-k> :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nn <silent><nowait><M-p> :<C-u>CocListResume<CR>
+" }}}
+" Applying codeAction to the selected region. {{{
+" Example: `<leader>aap` for current paragraph
+xm <silent>\a  <Plug>(coc-codeaction-selected)
+nm <silent>\a  <Plug>(coc-codeaction-selected)
+" Remap keys for applying codeAction to the current buffer.
+nm <silent>\ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nm <silent>\Q  <Plug>(coc-fix-current)
+" }}}
+" Show documentation in preview window. {{{
+nn <silent>K :call <SID>show_documentation()<CR>
+" }}}
+" Map function and class text objects {{{
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap <silent><leader>f <Plug>(coc-format-selected)
+nmap <silent><leader>f <Plug>(coc-format-selected)
+xmap <silent>if        <Plug>(coc-funcobj-i)
+omap <silent>if        <Plug>(coc-funcobj-i)
+xmap <silent>af        <Plug>(coc-funcobj-a)
+omap <silent>af        <Plug>(coc-funcobj-a)
+xmap <silent>ic        <Plug>(coc-classobj-i)
+omap <silent>ic        <Plug>(coc-classobj-i)
+xmap <silent>ac        <Plug>(coc-classobj-a)
+omap <silent>ac        <Plug>(coc-classobj-a)
+" }}}
+" }}}
+" Insert Mode Mappings {{{
+
+" Use tab for trigger completion with characters ahead and navigate.
+ino <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+ino <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+" Use <c-space> to trigger completion.
+ino <silent><expr> <C-space> coc#refresh()
+
+" Use complete_info() to confirm completion only when there's selected complete item (this allows for single-enter breaks)
+if exists('*complete_info')
+  ino <silent><expr> <cr> complete_info(['selected'])['selected'] != -1 ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+" }}}
+" Autocommands {{{
+aug CoC
+  au!
+  " Highlight the symbol and its references when holding the cursor.
+  au CursorHold * silent call CocActionAsync('highlight')
+  " Setup formatexpr specified filetype(s).
+  au FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  " Disable autocomplete
+  au BufReadPost * let b:coc_suggest_disable = 0
+aug END
+"}}}
+" Remap <C-f> and <C-b> for scroll float windows/popups. {{{
+nn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-f>"
+nn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-b>"
+vn <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-f>"
+vn <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-b>"
+ino <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Right>"
+ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Left>"
+" }}}
+" }}}
+" copilot.vim {{{
+
+let g:copilot_no_tab_map = v:true
+
+imap <silent><script><expr><C-z> copilot#Accept("\<CR>")
 " }}}
 " editorconfig-vim {{{
 
@@ -410,6 +504,17 @@ let g:goyo_width="80"
 let g:goyo_height="85%"
 let g:goyo_linenr="0"
 " }}}
+" hop.nvim {{{
+
+augroup HOP
+  autocmd!
+  autocmd VimEnter * lua require'hop'.setup()
+augroup END
+
+nn <silent><M-w> :HopWord<cr>
+nn <silent><M-1> :HopChar1<cr>
+nn <silent><M-2> :HopChar2<cr>
+" }}}
 " limelight.vim {{{
 
 autocmd! User GoyoEnter Limelight
@@ -418,7 +523,6 @@ autocmd! User GoyoLeave Limelight!
 " nvim-bqf {{{
 
 " {{{
-
 " open           open the item under the cursor 										<CR>
 " openc          like open, and close quickfix window 							o
 " tab            open the item under the cursor in a new tab 				t
@@ -444,6 +548,50 @@ autocmd! User GoyoLeave Limelight!
 " filterr        create new list for non-signed items 						  zN
 " fzffilter      enter fzf mode 														        zf
 " }}}
+" Variables {{{
+
+let g:coc_enable_locationlist = 0
+" }}}
+" Functions {{{
+
+function! Coc_qf_jump2loc(locs) abort "{{{
+    let loc_ranges = map(deepcopy(a:locs), 'v:val.range')
+    call setloclist(0, [], ' ', {'title': 'CocLocationList', 'items': a:locs,
+                \ 'context': {'bqf': 
+                \ {'lsp_ranges_hl': loc_ranges}
+                \ }})
+    let winid = getloclist(0, {'winid': 0}).winid
+    if winid == 0
+        aboveleft lwindow
+    else
+        call win_gotoid(winid)
+    endif
+endfunction " }}}
+" }}}
+" Autocommands {{{
+
+aug Coc
+    au!
+    au User CocLocationsChange ++nested call Coc_qf_jump2loc(g:coc_jump_locations)
+aug END
+" }}}
+" }}}
+" nvim-treesitter {{{
+
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", 
+  highlight = {
+    enable = true,
+    disable = {},
+  },
+  indent = {
+    enable = true,
+  },
+}
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.tsx.used_by = { "javascript", "typescript.tsx" }
+EOF
 " }}}
 " ranger.vim {{{
 
@@ -480,13 +628,14 @@ nm <silent><leader>b :Git blame<cr>
 " }}}
 " vim-fuzzy-stash {{{
 
-command! GS GStashList
 command! GSL GStashList
 
-let g:fuzzy_stash_actions = {
+let g:fuzzy_stash_actions =
+  \ {
   \ 'ctrl-d': 'drop',
   \ 'ctrl-p': 'pop',
-  \ 'ctrl-a': 'apply' }
+  \ 'ctrl-a': 'apply',
+  \ }
 " }}}
 " vim-go {{{
 
@@ -495,7 +644,7 @@ let g:fuzzy_stash_actions = {
 let g:go_auto_sameids = 0
 let g:go_auto_type_info = 0
 let g:go_diagnostics_level = 2
-let g:go_doc_keywordprg_enabled = 0
+let g:go_doc_keywordprg_enabled = 1
 let g:go_doc_popup_window = 1
 let g:go_fmt_command = "goimports"
 let g:go_highlight_array_whitespace_error = 1
@@ -516,7 +665,7 @@ let g:go_highlight_variable_declarations = 1
 let g:go_imports_autosave = 1
 let g:go_info_mode = 'guru'
 let g:go_list_type = 'quickfix'
-let g:go_play_browser_command = "chromium"
+let g:go_play_browser_command = "${BROWSER}"
 let g:go_play_open_browser = 0
 let g:go_statusline_duration = 1000
 let g:go_test_show_name = 1
@@ -555,6 +704,7 @@ aug GO
   au FileType go nm <silent>'s :GoSameIdsToggle<cr>
   au FileType go nm <silent>'t :GoCallstack<cr>
   " Also, :GoCallees and :GoCallers.
+  " au FileType go nm <silent>K :call CocActionAsync('doHover')<cr>
 aug END
 " }}}
 " }}}
@@ -563,21 +713,42 @@ aug END
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
 let g:peekaboo_compact=0
 " }}}
-" vim-swap {{{
-
-" g<, g>, and gs
-omap i, <Plug>(swap-textobject-i)
-xmap i, <Plug>(swap-textobject-i)
-omap a, <Plug>(swap-textobject-a)
-xmap a, <Plug>(swap-textobject-a)
-" }}}
 " vim-wheel {{{
 
-let g:wheel#map#up   = '<PageUp>'
-let g:wheel#map#down = '<PageDown>'
-let g:wheel#map#mouse = 1
-let g:wheel#line#threshold = 5
+let g:wheel#line#threshold = 1
+let g:wheel#map#down       = '<PageDown>'
+let g:wheel#map#mouse      = 1
+let g:wheel#map#up         = '<PageUp>'
 let g:wheel#scroll_on_wrap = 1
+" }}}
+" wilder.nvim {{{
+
+call wilder#setup({
+      \ 'modes': [':', '/', '?'],
+      \ 'next_key': '<Tab>',
+      \ 'previous_key': '<S-Tab>',
+      \ 'accept_key': '<Space>',
+      \ 'reject_key': '<Del>',
+      \ })
+
+call wilder#set_option('use_python_remote_plugin', 0)
+
+call wilder#set_option('pipeline', [
+      \   wilder#branch(
+      \     wilder#cmdline_pipeline({
+      \       'fuzzy': 1,
+      \       'fuzzy_filter': wilder#lua_fzy_filter(),
+      \     }),
+      \     wilder#vim_search_pipeline(),
+      \   ),
+      \ ])
+
+call wilder#set_option('renderer', wilder#wildmenu_renderer(
+      \ wilder#wildmenu_airline_theme({
+      \   'highlights': {},
+      \   'highlighter': wilder#basic_highlighter(),
+      \   'separator': ' · ',
+      \ })))
 " }}}
 
 " Neovide {{{
@@ -586,232 +757,5 @@ let g:neovide_refresh_rate=75
 let g:neovide_transparency=1
 let g:neovide_no_idle=v:true
 " }}}
-" }}}
-" LSP Configurations {{{
-
-" LSP {{{
-
-lua << EOF
-local nvim_lsp = require('lspconfig')
--- on_attach {{{
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-  -- Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
--- }}}
-end
--- Initialize LSPs {{{
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
-local servers = {
-  'bashls',
-  'cmake',
-  'cssls',
-  'cssmodules_ls',
-  'diagnosticls',
-  'dockerls',
-  'eslint',
-  'golangci_lint_ls',
-  'gopls',
-  'html',
-  'jsonls',
-  'sumneko_lua',
-  'texlab',
-  'tsserver',
-  'vimls',
-  'yamlls',
-}
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
-    }
-  }
-end
--- }}}
--- lsp_signature.nvim {{{
-require "lsp_signature".setup({
-  bind = true, -- This is mandatory, otherwise border config won't get registered.
-               -- If you want to hook lspsaga or other signature handler, pls set to false
-  doc_lines = 20, -- will show two lines of comment/doc(if there are more than two lines in doc, will be truncated);
-                 -- set to 0 if you DO NOT want any API comments be shown
-                 -- This setting only take effect in insert mode, it does not affect signature help in normal
-                 -- mode, 10 by default
-  floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
-  floating_window_above_cur_line = true, -- try to place the floating above the current line when possible Note:
-  -- will set to true when fully tested, set to false will use whichever side has more space
-  -- this setting will be helpful if you do not want the PUM and floating win overlap
-  fix_pos = false,  -- set to true, the floating window will not auto-close until finish all parameters
-  hint_enable = true, -- virtual hint enable
-  hint_prefix = " ",
-  use_lspsaga = false,  -- set to true if you want to use lspsaga popup
-  max_height = 50, -- max height of signature floating_window, if content is more than max_height, you can scroll down
-                   -- to view the hiding contents
-  max_width = 120, -- max_width of signature floating_window, line will be wrapped if exceed max_width
-  handler_opts = {
-    border = "shadow"   -- double, rounded, single, shadow, none
-  },
-  transparency = 20, -- disabled by default, allow floating win transparent value 1~100
-  shadow_blend = 36, -- if you using shadow as border use this set the opacity
-  shadow_guibg = 'Black', -- if you using shadow as border use this set the color e.g. 'Green' or '#121315'
-  timer_interval = 200, -- default timer check interval set to lower value if you want to reduce latency
-})
--- }}}
-EOF
-" LSP commands {{{
-
-command! ES EslintFixAll
-" }}}
-" LSP maps {{{
-
-nn <silent>\A <cmd>lua vim.lsp.buf.code_action()<CR>
-nn <silent>\a <cmd>lua vim.lsp.buf.range_code_action()<CR>
-nn <silent>\D <cmd>lua vim.lsp.buf.document_symbol()<CR>
-nn <silent>\d <cmd>lua vim.diagnostic.open_float()<CR>
-nn <silent>\F <cmd>lua vim.lsp.buf.formatting()<CR>
-nn <silent>\f <cmd>lua vim.lsp.buf.range_formatting()<CR>
-nn <silent>\i <cmd>lua vim.lsp.buf.incoming_calls()<CR>
-nn <silent>\o <cmd>lua vim.lsp.buf.outgoing_calls()<CR>
-nn <silent>\q <cmd>lua vim.diagnostic.setloclist()<CR>
-nn <silent>K  <cmd>lua vim.lsp.buf.hover()<CR>
-nn <silent>Z  <cmd>lua vim.lsp.buf.signature_help()<CR>
-nn <silent>[z <cmd>lua vim.diagnostic.goto_prev()<CR>
-nn <silent>]z <cmd>lua vim.diagnostic.goto_next()<CR>
-nn <silent>gD <cmd>lua vim.lsp.buf.declaration()<CR>
-nn <silent>gR <cmd>lua vim.lsp.buf.rename()<CR>
-nn <silent>gd <cmd>lua vim.lsp.buf.definition()<CR>
-nn <silent>gi <cmd>lua vim.lsp.buf.implementation()<CR>
-nn <silent>gr <cmd>lua vim.lsp.buf.references()<CR>
-nn <silent>gt <cmd>lua vim.lsp.buf.type_definition()<CR>
-" }}}
-" }}}
-" nvim-cmp {{{
-
-lua <<EOF
-  -- Setup nvim-cmp {{{
-  local cmp = require'cmp'
-  -- Used for Super-TAB behavior emulation.
-  local has_words_before = function()
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
-  end
-  cmp.setup({
-  -- }}} 
-  -- Mappings {{{
-    mapping = {
-      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-      -- Accept currently selected item. If none selected, `select` first item.
-      -- Set `select` to `false` to only confirm explicitly selected items.
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
-      ['<C-Space>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Insert,
-        select = true,
-      },
-      ['<Tab>'] = function(fallback)
-        if not cmp.select_next_item() then
-          if vim.bo.buftype ~= 'prompt' and has_words_before() then
-            cmp.complete()
-          else
-            fallback()
-          end
-        end
-      end,
-
-      ['<S-Tab>'] = function(fallback)
-        if not cmp.select_prev_item() then
-          if vim.bo.buftype ~= 'prompt' and has_words_before() then
-            cmp.complete()
-          else
-            fallback()
-          end
-        end
-      end,
-    },
-    -- }}}
-    -- Sources {{{
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-    }, {
-      { name = 'buffer' },
-    })
-  })
-
-  -- Use buffer source for `/`
-  cmp.setup.cmdline('/', {
-    sources = {
-      { name = 'buffer' }
-    }
-  })
-
-  -- Use cmdline & path source for ':'
-  cmp.setup.cmdline(':', {
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      { name = 'cmdline' }
-    })
-  })
-  -- }}}
-  -- Setup lspconfig {{{
-  local servers = {
-    'bashls',
-    'cmake',
-    'cssls',
-    'cssmodules_ls',
-    'diagnosticls',
-    'dockerls',
-    'eslint',
-    'golangci_lint_ls',
-    'gopls',
-    'html',
-    'jsonls',
-    'tsserver',
-    'vimls',
-    'yamlls',
-  }
-
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  for _, lsp in ipairs(servers) do
-    require('lspconfig')[lsp].setup {
-      capabilities = capabilities
-    }
-  end
-  -- }}}
-  -- lspkind-nvim {{{
-
-  local lspkind = require('lspkind')
-  cmp.setup {
-    formatting = {
-      format = lspkind.cmp_format({
-        with_text = true, -- show metadata alongside icons
-      })
-    }
-  }
-  -- }}}
-EOF
-" }}}
-" }}}
-" nvim-treesitter {{{
-
-lua << EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", 
-  highlight = {
-    enable = true,
-    disable = {},
-  },
-  indent = {
-    enable = true,
-  },
-}
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.tsx.used_by = { "javascript", "typescript.tsx" }
-EOF
 " }}}
 

@@ -140,27 +140,89 @@ cc () { # {{{
   CLUSTER_ID="$USER-$RANDOM" # Cluster name = <Your RH id> + $RANDOM
   CLUSTER_ID_STATIC="$CLUSTER_ID"
 
+  export OCS_REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE:-rexagod} OCS_IMAGE_TAG=${IMAGE_TAG:-latest} OCS_SOURCE=${OCS_SOURCE:-redhat-operators}
+
   if [[ $1 == "d" ]]; then
     cd ~
     openshift-install destroy cluster --dir="$DIR"
     cd -
-  elif [[ $1 == "ocs" ]]; then
-    oc apply -f https://raw.githubusercontent.com/openshift/ocs-operator/master/deploy/deploy-with-olm.yaml
+  elif [[ $1 == "build-ocs" ]]; then
+    # Make targets and push images {{{
+    make ocs-operator && 
+      podman push quay.io/${OCS_REGISTRY_NAMESPACE}/ocs-operator:${OCS_IMAGE_TAG} && \
+      make gen-latest-csv && \
+      make operator-bundle && \
+      podman push quay.io/${OCS_REGISTRY_NAMESPACE}/ocs-operator-bundle:${OCS_IMAGE_TAG} && \
+      make operator-index && \
+      podman push quay.io/${OCS_REGISTRY_NAMESPACE}/ocs-operator-index:${OCS_IMAGE_TAG}
+    # }}}
+  elif [[ $1 == "deploy-ocs" ]]; then
+# CatalogSource Spec {{{
+k create ns openshift-storage
+cat <<EOF | k apply -f -
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: ${OCS_SOURCE}
+  namespace: openshift-marketplace
+spec:
+  sourceType: grpc
+  image: quay.io/${OCS_REGISTRY_NAMESPACE}/ocs-operator-index:${OCS_IMAGE_TAG}
+  displayName: OpenShift Container Storage
+  publisher: Red Hat
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: ocs-dev-subscription
+  namespace: openshift-storage
+spec:
+  channel: stable-4.9
+  name: ocs-operator
+  source: ${OCS_SOURCE}
+  sourceNamespace: openshift-marketplace
+EOF
+# }}}
   elif [[ $1 == "odf" ]]; then
 # CatalogSource Spec {{{
-    cat <<EOF | k apply -f -
+cat <<EOF | k apply -f -
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    openshift.io/cluster-monitoring: "true"
+  name: openshift-storage
+spec: {}
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: openshift-storage-operatorgroup
+  namespace: openshift-storage
+spec:
+  targetNamespaces:
+  - openshift-storage
+---
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
   labels:
-    odf-operator-internal: "true"
-  name: odf-catalogsource
+    ocs-operator-internal: 'true'
+  name: redhat-operators
   namespace: openshift-marketplace
 spec:
-  sourceType: grpc
-  image: quay.io/ocs-dev/odf-operator-catalog:latest
-  displayName: OpenShift Data Foundation [Internal]
+  displayName: Openshift Data Foundation
+  icon:
+    base64data: ''
+    mediatype: ''
+  image: quay.io/rhceph-dev/ocs-registry:latest-stable-4.9
+  priority: 100
   publisher: Red Hat
+  sourceType: grpc
+  updateStrategy:
+    registryPoll:
+      interval: 15m
 EOF
 # }}}
   else
@@ -169,10 +231,10 @@ EOF
     mkdir "$DIR"
     cp .aws/"$CONF" "$DIR"/
     sed -i "s/$NAME/$CLUSTER_ID_STATIC/" "$DIR"/"$CONF"
-    openshift-install create cluster --dir="$DIR"
+    ${OSI_PATH:-"openshift-install"} create cluster --dir="$DIR"
     oc login "https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`
     OCP_LOGIN_STRING="oc login \"https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443\" -u kubeadmin -p "`cat "$DIR/auth/kubeadmin-password"`
-    echo $OCP_LOGIN_STRING > ~/.ocp-login-string.txt
+    echo $OCP_LOGIN_STRING >> ~/.ocp-login-string.txt
     cd -
   fi
 }
@@ -234,4 +296,3 @@ alias k8make="make WHAT=cmd/$1 GOGCFLAGS='-N -l'"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-alias luamake=/home/rexagod/lua-language-server/3rd/luamake/luamake
