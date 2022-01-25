@@ -7,8 +7,5 @@
   "diagnostic.messageTarget": "float",
   "coc.preferences.silentAutoupdate": true,
   "suggest.autoTrigger": "always",
-  "suggest.floatEnable": true,
-  "yaml.schemas": {
-      "kubernetes": "/*.yaml"
-  }
+  "suggest.floatEnable": true
 }

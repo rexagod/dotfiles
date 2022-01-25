@@ -15,40 +15,39 @@ setopt noautomenu
 
 COMPLETION_WAITING_DOTS="true"
 DISABLE_AUTO_TITLE="false"
-ENABLE_CORRECTION="false"
+ENABLE_CORRECTION="true"
 HISTCONTROL=ignoreboth
 HISTFILESIZE=10000
 HISTSIZE=10000
 HIST_STAMPS="mm/dd/yyyy"
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#fff,underline"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="darkblood"
 # }}}
 # PATH {{{
 
 export PATH="\
-$GOPATH/bin:\
-$HOME/go/bin:\
-/home/rexagod/.local/bin:\
+$GOBIN:\
+/bin:\
 /home/linuxbrew/.linuxbrew/bin:\
+/home/rexagod/.local/bin:\
+/sbin:\
 /usr/bin:\
 /usr/lib:\
 /usr/local/bin:\
+/usr/local/sbin:\
+/usr/sbin:\
 /usr/share:\
-/snap/bin:\
-/home/linuxbrew/.linuxbrew/opt/node@14/bin\
+/home/linuxbrew/.linuxbrew/opt/node@14/bin:\
 " # $PATH intentially not included here.
 # }}}
 # Exports{{{
 
-# export KUBECONFIG="$HOME/.openshift-cluster/auth/kubeconfig"
-# export LDFLAGS="-L/home/linuxbrew/.linuxbrew/opt/node@14/lib"
+export KUBECONFIG="$HOME/.openshift-cluster/auth/kubeconfig"
 export AWS_PROFILE='openshift-dev'
 export BASHRC='~/.bashrc'
-export BAT_THEME='Nord'
+export BAT_THEME='ansi'
 export BROWSER='firefox'
-export CPPFLAGS="-I/home/linuxbrew/.linuxbrew/opt/node@14/include"
 export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
 export FZF_ALT_C_COMMAND="fd -t d . $HOME"
@@ -56,18 +55,14 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git/*' --color auto"
 export FZF_DEFAULT_OPTS=""
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-export GO111MODULE="on"
-export GOBIN="$HOME/go/bin"
-export GOPATH="$HOME/go"
-export GOSANDBOX="${HOME}/.local/go-test/main.go"
+export GOBIN="$HOME/go/bin/"
+export GOPATH="$HOME/go/"
 export LANG=en_US.UTF-8
 export MANPAGER="${EDITOR} +Man!"
-export NEOVIDE_FRAMELESS=1
-export NEOVIDE_MAXIMIZED=1
-export NEOVIDE_MULTIGRID=1
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 export PAGER="bat --paging=auto --italic-text=always --color=always --number --theme ${BAT_THEME}"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
+export REGISTRY_NAMESPACE="rexagod"
 export TMUXRC='~/.config/tmux/tmux.conf'
 export UPDATE_ZSH_DAYS=15
 export VIMRC='~/.config/nvim/init.vim'
@@ -81,11 +76,11 @@ export ZSHRC='~/.zshrc'
 plugins=(
   fzf
   git
-  zsh-256color
   zsh-syntax-highlighting
   zsh-z
 )
 
+# zsh-256color
 # fzf-tab {{{
 
 # disable sort when completing `git checkout`
@@ -107,25 +102,22 @@ source $ZSH/oh-my-zsh.sh
 alias bat="bat --theme ${BAT_THEME} --style grid,numbers,changes"
 alias bb="./bin/bridge"
 alias c="clear"
+alias dnf="sudo dnf"
 alias gS="git stash"
 alias gSp="git stash pop"
-alias goland="/home/rexagod/.local/GoLand-2021.1/bin/goland.sh"
 alias hgrep="history | grep "
 alias k="kubectl"
 alias l="ls -1S"
 alias la="ls -1SA"
 alias ll="ls -1lS"
-alias ls="lsd"
 alias nv="${EDITOR}"
-alias pacman="sudo pacman"
+alias dnf="sudo dnf"
 alias rr="ranger"
 alias soc="source ./contrib/oc-environment.sh"
 alias sshd="sudo /usr/sbin/sshd"
 alias szr="source ~/.zshrc"
 alias tr="${EDITOR} ${TMUXRC}"
 alias vif="fzf --preview-window=right:50% --preview=\"bat --theme ${BAT_THEME} --color always {}\" --bind \"enter:execute(${EDITOR} {})\""
-alias vpn="nmcli con up id \"1 - Red Hat Global VPN\" --ask"
-alias vpnd="nmcli con down id \"1 - Red Hat Global VPN\" --ask"
 alias vr="${EDITOR} ${VIMRC}"
 alias vrs="${EDITOR} -S ${VIM_SESSION}"
 alias zr="${EDITOR} ${ZSHRC}"
@@ -216,7 +208,7 @@ spec:
   icon:
     base64data: ''
     mediatype: ''
-  image: quay.io/rhceph-dev/ocs-registry:latest-stable-4.9
+  image: quay.io/rhceph-dev/ocs-registry:latest-stable-4.8
   priority: 100
   publisher: Red Hat
   sourceType: grpc
@@ -242,57 +234,207 @@ EOF
 # }}}
 # Misc. {{{
 
-# Ranger {{{
+# nnn {{{
+
+export NNN_PLUG='f:finder;o:fzopen;p:mocplay;d:diffs;t:nmount;v:imgview'
+# }}}
+# nvm {{{
+
+export PATH="/home/linuxbrew/.linuxbrew/opt/go@1.17/bin:$PATH"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# }}}
+# operator-sdk {{{
+
+#compdef _operator-sdk operator-sdk
+
+# zsh completion for operator-sdk                         -*- shell-script -*-
+
+__operator-sdk_debug()
+{
+    local file="$BASH_COMP_DEBUG_FILE"
+    if [[ -n ${file} ]]; then
+        echo "$*" >> "${file}"
+    fi
+}
+
+_operator-sdk()
+{
+    local shellCompDirectiveError=1
+    local shellCompDirectiveNoSpace=2
+    local shellCompDirectiveNoFileComp=4
+    local shellCompDirectiveFilterFileExt=8
+    local shellCompDirectiveFilterDirs=16
+
+    local lastParam lastChar flagPrefix requestComp out directive comp lastComp noSpace
+    local -a completions
+
+    __operator-sdk_debug "\n========= starting completion logic =========="
+    __operator-sdk_debug "CURRENT: ${CURRENT}, words[*]: ${words[*]}"
+
+    # The user could have moved the cursor backwards on the command-line.
+    # We need to trigger completion from the $CURRENT location, so we need
+    # to truncate the command-line ($words) up to the $CURRENT location.
+    # (We cannot use $CURSOR as its value does not work when a command is an alias.)
+    words=("${=words[1,CURRENT]}")
+    __operator-sdk_debug "Truncated words[*]: ${words[*]},"
+
+    lastParam=${words[-1]}
+    lastChar=${lastParam[-1]}
+    __operator-sdk_debug "lastParam: ${lastParam}, lastChar: ${lastChar}"
+
+    # For zsh, when completing a flag with an = (e.g., operator-sdk -n=<TAB>)
+    # completions must be prefixed with the flag
+    setopt local_options BASH_REMATCH
+    if [[ "${lastParam}" =~ '-.*=' ]]; then
+        # We are dealing with a flag with an =
+        flagPrefix="-P ${BASH_REMATCH}"
+    fi
+
+    # Prepare the command to obtain completions
+    requestComp="${words[1]} __complete ${words[2,-1]}"
+    if [ "${lastChar}" = "" ]; then
+        # If the last parameter is complete (there is a space following it)
+        # We add an extra empty parameter so we can indicate this to the go completion code.
+        __operator-sdk_debug "Adding extra empty parameter"
+        requestComp="${requestComp} \"\""
+    fi
+
+    __operator-sdk_debug "About to call: eval ${requestComp}"
+
+    # Use eval to handle any environment variables and such
+    out=$(eval ${requestComp} 2>/dev/null)
+    __operator-sdk_debug "completion output: ${out}"
+
+    # Extract the directive integer following a : from the last line
+    local lastLine
+    while IFS='\n' read -r line; do
+        lastLine=${line}
+    done < <(printf "%s\n" "${out[@]}")
+    __operator-sdk_debug "last line: ${lastLine}"
+
+    if [ "${lastLine[1]}" = : ]; then
+        directive=${lastLine[2,-1]}
+        # Remove the directive including the : and the newline
+        local suffix
+        (( suffix=${#lastLine}+2))
+        out=${out[1,-$suffix]}
+    else
+        # There is no directive specified.  Leave $out as is.
+        __operator-sdk_debug "No directive found.  Setting do default"
+        directive=0
+    fi
+
+    __operator-sdk_debug "directive: ${directive}"
+    __operator-sdk_debug "completions: ${out}"
+    __operator-sdk_debug "flagPrefix: ${flagPrefix}"
+
+    if [ $((directive & shellCompDirectiveError)) -ne 0 ]; then
+        __operator-sdk_debug "Completion received error. Ignoring completions."
+        return
+    fi
+
+    while IFS='\n' read -r comp; do
+        if [ -n "$comp" ]; then
+            # If requested, completions are returned with a description.
+            # The description is preceded by a TAB character.
+            # For zsh's _describe, we need to use a : instead of a TAB.
+            # We first need to escape any : as part of the completion itself.
+            comp=${comp//:/\\:}
+
+            local tab=$(printf '\t')
+            comp=${comp//$tab/:}
+
+            __operator-sdk_debug "Adding completion: ${comp}"
+            completions+=${comp}
+            lastComp=$comp
+        fi
+    done < <(printf "%s\n" "${out[@]}")
+
+    if [ $((directive & shellCompDirectiveNoSpace)) -ne 0 ]; then
+        __operator-sdk_debug "Activating nospace."
+        noSpace="-S ''"
+    fi
+
+    if [ $((directive & shellCompDirectiveFilterFileExt)) -ne 0 ]; then
+        # File extension filtering
+        local filteringCmd
+        filteringCmd='_files'
+        for filter in ${completions[@]}; do
+            if [ ${filter[1]} != '*' ]; then
+                # zsh requires a glob pattern to do file filtering
+                filter="\*.$filter"
+            fi
+            filteringCmd+=" -g $filter"
+        done
+        filteringCmd+=" ${flagPrefix}"
+
+        __operator-sdk_debug "File filtering command: $filteringCmd"
+        _arguments '*:filename:'"$filteringCmd"
+    elif [ $((directive & shellCompDirectiveFilterDirs)) -ne 0 ]; then
+        # File completion for directories only
+        local subDir
+        subdir="${completions[1]}"
+        if [ -n "$subdir" ]; then
+            __operator-sdk_debug "Listing directories in $subdir"
+            pushd "${subdir}" >/dev/null 2>&1
+        else
+            __operator-sdk_debug "Listing directories in ."
+        fi
+
+        local result
+        _arguments '*:dirname:_files -/'" ${flagPrefix}"
+        result=$?
+        if [ -n "$subdir" ]; then
+            popd >/dev/null 2>&1
+        fi
+        return $result
+    else
+        __operator-sdk_debug "Calling _describe"
+        if eval _describe "completions" completions $flagPrefix $noSpace; then
+            __operator-sdk_debug "_describe found some completions"
+
+            # Return the success of having called _describe
+            return 0
+        else
+            __operator-sdk_debug "_describe did not find completions."
+            __operator-sdk_debug "Checking if we should do file completion."
+            if [ $((directive & shellCompDirectiveNoFileComp)) -ne 0 ]; then
+                __operator-sdk_debug "deactivating file completion"
+
+                # We must return an error code here to let zsh know that there were no
+                # completions found by _describe; this is what will trigger other
+                # matching algorithms to attempt to find completions.
+                # For example zsh can match letters in the middle of words.
+                return 1
+            else
+                # Perform file completion
+                __operator-sdk_debug "Activating file completion"
+
+                # We must return the result of this command, so it must be the
+                # last command, or else we must store its result to return it.
+                _arguments '*:filename:_files'" ${flagPrefix}"
+            fi
+        fi
+    fi
+}
+
+# don't run the completion function when being source-ed or eval-ed
+if [ "$funcstack[1]" = "_operator-sdk" ]; then
+	_operator-sdk
+fi
+# }}}
+# g {{{
+
+export GOPATH="$HOME/go/"; export GOROOT="$HOME/sdk/go1.17"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+alias gvm=~/go/bin/g
+# }}}
+# ranger {{{
 
 if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 # }}}
-# OCS {{{
-
-# export WATCH_NAMESPACE="openshift-storage"
-# export ROOK_CEPH_IMAGE="rook/ceph:v1.6.0.95.gf4cfc7a"
-# export CEPH_IMAGE="ceph/daemon-base:latest-pacific"
-# export NOOBAA_CORE_IMAGE="noobaa/noobaa-core:master-20210609"
-# export NOOBAA_DB_IMAGE="centos/postgresql-12-centos7"
-# export NOOBAA_IMAGE="noobaa/noobaa-operator:master-20210609"
-# export ROOK_IMAGE="rook/ceph:v1.6.5-2.gb78358e"
-# alias make-ocs="make gen-latest-csv && make verify-latest-csv && make update-generated && make ocs-operator-ci
-# }}}
-# K8s {{{
-
-export PATH="${PATH}:${HOME}/.krew/bin"
-
-[[ /bin/kubectl ]] && source <(kubectl completion zsh)
-
-K8S_KUBECONFIG="/var/run/kubernetes/admin.kubeconfig"
-export KUBE_ENABLE_CLUSTER_DNS=true
-export KUBE_DNS_SERVER_IP="10.0.0.10"
-export KUBE_DNS_DOMAIN="cluster.local"
-## etcd
-export PATH="${PATH}:${HOME}/kubernetes/third_party/etcd"
-## custom k9s monitoring
-alias k89s="k9s --kubeconfig ${K8S_KUBECONFIG}"
-## up the cluster
-alias k8c="sudo ${HOME}/kubernetes/hack/local-up-cluster.sh" # -O to avoid rebuilding
-## interact with this cluster
-alias k8ctl="KUBECONFIG=${K8S_KUBECONFIG} ${HOME}/kubernetes/cluster/kubectl.sh"
-## make subsystem
-alias k8make="make WHAT=cmd/$1 GOGCFLAGS='-N -l'"
-# To cross-compile Kubernetes for all platforms, run the following command:
-# make cross
-# To build binaries for a specific platform, add KUBE_BUILD_PLATFORMS=<os>/<arch>. For example:
-# make cross KUBE_BUILD_PLATFORMS=windows/amd64
-
-# # Prioritize GNU bins in PATH
-# GNUBINS="$(find /usr/local/opt -type d -follow -name gnubin -print)"
-# for bindir in ${GNUBINS[@]}
-# do
-#   export PATH=$bindir:$PATH
-# done
-# export PATH
+# kubectl {{{
+source <(kubectl completion zsh)
+compdef __start_kubectl k
 # }}}
 # }}}
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-

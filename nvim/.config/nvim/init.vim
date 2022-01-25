@@ -13,10 +13,6 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " }}}
-" nvim-treesitter {{{
-
-Plug 'nvim-treesitter/nvim-treesitter'
-" }}}
 " }}}
 " Go {{{
 
@@ -30,16 +26,14 @@ Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 " }}}
 " Internal {{{
 
-Plug 'github/copilot.vim'
 Plug 'aymericbeaumet/vim-symlink'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-sleuth'
-Plug 'romgrk/fzy-lua-native' | Plug 'gelguy/wilder.nvim'
 " }}}
 " Navigation {{{
 
 Plug 'Shougo/neomru.vim' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() }} | Plug 'junegunn/fzf.vim' | Plug 'chengzeyi/fzf-preview.vim'
-Plug 'kevinhwang91/nvim-bqf'
+" Plug 'kevinhwang91/nvim-bqf'
 Plug 'phaazon/hop.nvim'
 Plug 'preservim/vim-wheel'
 Plug 'rbgrouleff/bclose.vim' | Plug 'francoiscabrol/ranger.vim'
@@ -49,18 +43,7 @@ Plug 'tpope/vim-unimpaired'
 " Text Manipulations {{{
 
 Plug 'editorconfig/editorconfig-vim'
-Plug 'flwyd/vim-conjoin'
 Plug 'godlygeek/tabular'
-"{{{
-"                                          *ac* *cac* *dac* *vac* *yac*
-" ac     "a column", a column based on "a word" |aw|.
-"                                          *ic* *cic* *dic* *vic* *yic*
-" ic     "inner column", a column based on the "inner word" |iw|.
-"                                          *aC* *caC* *daC* *vaC* *yaC*
-" aC     "a COLUMN", a column based on "a WORD" |aW|.
-"                                          *iC* *ciC* *diC* *viC* *yiC*
-" iC     "inner COLUMN", a column based on "inner WORD" |iW|.
-"}}}
 Plug 'kana/vim-textobj-user' | Plug 'coderifous/textobj-word-column.vim' | Plug 'adolenc/vim-textobj-toplevel'
 Plug 'machakann/vim-swap'
 Plug 'tpope/vim-commentary'
@@ -69,97 +52,10 @@ Plug 'tpope/vim-surround'
 " }}}
 " Visuals {{{
 
-Plug 'junegunn/goyo.vim' | Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'markonm/traces.vim'
-Plug 'mbbill/undotree'
-Plug 'vim-airline/vim-airline'
-Plug 'voldikss/vim-floaterm'
-" }}}
-" Themes {{{
-
-Plug 'arcticicestudio/nord-vim'
-" needs to be loaded after all plugins have been initialized to patch w/o
-" changing the current font, visit
-" https://powerline.readthedocs.io/en/master/installation/linux.html#fontconfig
-" prefer this over 'ryanoasis/vim-devicons', since apparently this supports a
-" wider render range
-Plug 'kyazdani42/nvim-web-devicons'
 " }}}
 call plug#end()
-" }}}
-" Theme {{{
-" Configuration {{{
-
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-filetype indent on
-filetype plugin on
-syntax on
-set t_Co=256
-set termguicolors
-" }}}
-
-let g:nord_cursor_line_number_background = 1
-let g:nord_italic = 1
-let g:nord_italic_comments = 1
-let g:nord_uniform_diff_background = 1
-let g:nord_uniform_status_lines = 1
-
-augroup nord-overrides
-  autocmd!
-  autocmd ColorScheme nord highlight Comment ctermfg=12 guifg=#EBCB8B
-  autocmd ColorScheme nord highlight CursorLineNR cterm=bold
-  autocmd ColorScheme nord highlight Folded cterm=italic,bold ctermbg=0 ctermfg=12 guibg=#3B4252 guifg=#81A1C1
-  autocmd ColorScheme nord highlight clear CursorLine
-augroup END
-
-colorscheme nord
-" }}}
-" Statusline (vim-airline) {{{
-
-" List all themes for autocompletion: alduin, angr, apprentice, atomic, ayu_light, ayu_mirage, ayu_dark, badwolf, base16 (|airline-theme-base16|), base16_vim (|airline-theme-base16_vim|), base16_shell (|airline-theme-base16_shell|), base16_3024, base16_adwaita, base16_apathy, base16_ashes, base16_atelier_cave, base16_atelier_cave_light, base16_atelier_dune, base16_atelier_dune_light, base16_atelier_estuary, base16_atelier_estuary_light, base16_atelier_forest, base16_atelier_forest_light, base16_atelier_heath, base16_atelier_heath_light, base16_atelier_lakeside, base16_atelier_lakeside_light, base16_atelier_plateau, base16_atelier_plateau_light, base16_atelier_savanna, base16_atelier_savanna_light, base16_atelier_seaside, base16_atelier_seaside_light, base16_atelier_sulphurpool, base16_atelier_sulphurpool_light, base16_atelierdune, base16_atelierforest, base16_atelierheath, base16_atelierlakeside, base16_atelierseaside, base16_atlas, base16_bespin, base16_black_metal, base16_black_metal_bathory, base16_black_metal_burzum, base16_black_metal_dark_funeral, base16_black_metal_gorgoroth, base16_black_metal_immortal, base16_black_metal_khold, base16_black_metal_marduk, base16_black_metal_mayhem, base16_black_metal_nile, base16_black_metal_venom, base16_brewer, base16_bright, base16_brogrammer, base16_brushtrees, base16_brushtrees_dark, base16_chalk, base16_circus, base16_classic, base16_classic_dark, base16_classic_light, base16_codeschool, base16_colors, base16_cupcake, base16_cupertino, base16_darktooth, base16_decaf, base16_default, base16_default_dark, base16_default_light, base16_dracula, base16_edge_dark, base16_edge_light, base16_eighties, base16_embers, base16_espresso, base16_flat, base16_framer, base16_fruit_soda, base16_gigavolt, base16_github, base16_google, base16_google_dark, base16_google_light, base16_grayscale, base16_grayscale_dark, base16_grayscale_light, base16_greenscreen, base16_gruvbox_dark_hard (|airline-theme-base-gruvbox-dark-hard|), base16_gruvbox_dark_medium, base16_gruvbox_dark_pale, base16_gruvbox_dark_soft, base16_gruvbox_light_hard, base16_gruvbox_light_medium, base16_gruvbox_light_soft, base16_harmonic16, base16_harmonic_dark, base16_harmonic_light, base16_heetch, base16_heetch_light, base16_helios, base16_hopscotch, base16_horizon_dark, base16_horizon_light, base16_horizon_terminal_dark, base16_horizon_terminal_light, base16_ia_dark, base16_ia_light, base16_icy, base16_irblack, base16_isotope, base16_londontube, base16_macintosh, base16_marrakesh, base16_materia, base16_material, base16_material_darker, base16_material_lighter, base16_material_palenight, base16_material_vivid, base16_mellow_purple, base16_mexico_light, base16_mocha, base16_monokai, base16_nord, base16_nova, base16_ocean, base16_oceanicnext, base16_one_light, base16_onedark, base16_outrun_dark, base16_papercolor_dark, base16_papercolor_light, base16_paraiso, base16_phd, base16_pico, base16_pop, base16_porple, base16_railscasts, base16_rebecca, base16_sandcastle, base16_seti, base16_shapeshifter, base16_snazzy, base16_solarflare, base16_solarized, base16_solarized_dark, base16_solarized_light, base16_spacemacs, base16_summerfruit, base16_summerfruit_dark, base16_summerfruit_light, base16_synth_midnight_dark, base16_tomorrow, base16_tomorrow_night, base16_tomorrow_night_eighties, base16_tube, base16_twilight, base16_vim, base16_unikitty_dark, base16_unikitty_light, base16_woodland, base16_xcode_dusk, base16_zenburn, base16color, behelit, biogoo, bubblegum, cobalt2, cool, dark, dark_minimal, desertink, deus, distinguished, durant, faryfloss, fruit_punch, google_dark, google_light, hybrid, hybridline, jay, jellybeans, jet, kalisi, kolor, laederon, lessnoise, light, lighthaus, lucius, luna, minimalist (|airline-theme-minimalist|), molokai, monochrome, murmur, night_owl, nord-minimal, onedark (|airline-theme-onedark|), ouo, owo, papercolor, peaksea, powerlineish, qwq, raven, ravenpower, seagull, seoul256, serene, sierra, silver, simple, soda, sol, solarized (|airline-theme-solarized|), solarized_flood, term, term_light, tomorrow, ubaryd, understated, violet, wombat, xtermlight, zenburn, transparent
-" {{{
-let airline#extensions#tabline#current_first = 0
-let g:airline#extensions#tabline#buf_label_first = 1
-let g:airline#extensions#tabline#buffer_min_count = 2
-let g:airline#extensions#tabline#buffer_nr_show = 0
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#exclude_preview = 0
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#tabline#show_buffers = 1
-let g:airline#extensions#tabline#show_close_button = 0
-let g:airline#extensions#tabline#show_splits = 1
-let g:airline#extensions#tabline#show_tab_count = 0
-let g:airline#extensions#tabline#show_tab_nr = 0
-let g:airline#extensions#tabline#show_tab_type = 1
-let g:airline#extensions#tabline#show_tabs = 1
-let g:airline#extensions#tabline#tab_nr_type = 0
-let g:airline#extensions#tabline#tabnr_formatter = 'tabnr'
-let g:airline#extensions#whitespace#checks = ['conflicts']
-let g:airline#extensions#whitespace#enabled = 1
-let g:airline_base16_improved_contrast = 1
-" let g:airline_inactive_alt_sep = 0
-" let g:airline_left_alt_sep = "\ue0b9"
-" let g:airline_left_sep = "\ue0b8"
-" let g:airline_powerline_fonts = 1
-" let g:airline_right_alt_sep = "\ue0bb"
-" let g:airline_right_sep = "\ue0ba"
-" let g:airline_symbols_ascii = 1
-" }}}
-
-function! SanitizeModified() " {{{
-  if &modified
-    return ' [+]'
-  endif
-  return ''
-endfunction
-" }}}
-let g:airline_section_a = airline#section#create(['mode', 'iminsert'])
-let g:airline_section_b = airline#section#create(['%{expand("%f")}', '%{SanitizeModified()}']) " Use <C-g> for a detailed view.
-let g:airline_section_c = airline#section#create(['readonly'])
-let g:airline_section_x = airline#section#create([' ⎇  %{fugitive#head()}'])
-let g:airline_section_y = airline#section#create(['filetype'])
-let g:airline_section_z = airline#section#create(['%l', ':', '%v  ', '%p', '%%'])
 " }}}
 " Variables {{{
 
@@ -227,10 +123,10 @@ set pumblend=30
 
 " Insert Mode Mappings {{{
 
-imap <C-j> 5<Left>
-imap <C-k> 5<Right>
-imap <C-l> 5<Down>
-imap <C-h> 5<Up>
+ino <C-j> <esc>5<Down>a
+ino <C-k> <esc>5<Up>a
+ino <C-l> <esc>5<Right>a
+ino <C-h> <esc>5<Left>a
 
 imap <C-Left> <C-h>
 imap <C-Right> <C-l>
@@ -295,8 +191,7 @@ nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
 aug FOO
   au!
   " au BufWritePost * silent! !ctags -R &
-  au Filetype *.js,*.ts setl suffixesadd=.js,.ts,.jsx,.tsx
-  au BufNewFile,BufRead * if @% =~ "Dockerfile" | setl filetype=dockerfile | endif
+  " au Filetype *.js,*.ts setl suffixesadd=.js,.ts,.jsx,.tsx
   au Filetype help,qf nn <silent><buffer>q :q<cr>
   " au Filetype help setl keywordprg=:Man
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exec "normal! g`\"" | endif
@@ -447,12 +342,6 @@ ino <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scro
 ino <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Left>"
 " }}}
 " }}}
-" copilot.vim {{{
-
-let g:copilot_no_tab_map = v:true
-
-imap <silent><script><expr><C-z> copilot#Accept("\<CR>")
-" }}}
 " editorconfig-vim {{{
 
 let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
@@ -498,12 +387,6 @@ nn <silent>\t :silent! FZFBTags<cr>
 nn <silent>\w :silent! FZFWindows<cr>
 " }}}
 " }}}
-" goyo.vim {{{
-
-let g:goyo_width="80"
-let g:goyo_height="85%"
-let g:goyo_linenr="0"
-" }}}
 " hop.nvim {{{
 
 augroup HOP
@@ -515,84 +398,62 @@ nn <silent><M-w> :HopWord<cr>
 nn <silent><M-1> :HopChar1<cr>
 nn <silent><M-2> :HopChar2<cr>
 " }}}
-" limelight.vim {{{
+" " nvim-bqf {{{
 
-autocmd! User GoyoEnter Limelight
-autocmd! User GoyoLeave Limelight!
-" }}}
-" nvim-bqf {{{
+" " {{{
+" " open           open the item under the cursor 										<CR>
+" " openc          like open, and close quickfix window 							o
+" " tab            open the item under the cursor in a new tab 				t
+" " tabb           like tab, but stay at quickfix window 							T
+" " split          open the item under the cursor in vertical split  	<C-x>
+" " vsplit         open the item under the cursor in horizontal split	<C-v>
+" " prevfile       go to previous file under the cursor 							<C-p>
+" " nextfile       go to next file under the cursor 								 	<C-n>
+" " prevhist       go to previous quickfix list 										 	<
+" " nexthist       go to next quickfix list 													>
+" " stoggleup      toggle sign and move cursor up 									 	<S-Tab>
+" " stoggledown    toggle sign and move cursor down 								 	<Tab>
+" " stogglevm      toggle multiple signs in visual mode 						 	<Tab>
+" " stogglebuf     toggle signs for same buffers under the cursor 	 	'<Tab>
+" " sclear         clear the signs in current quickfix list 					z<Tab>
+" " pscrollup      scroll up half-page in preview window 							<C-b>
+" " pscrolldown    scroll down half-page in preview window 						<C-f>
+" " pscrollorig    scroll back to original postion in preview window	zo
+" " ptogglemode    toggle preview window between normal and max size  zp
+" " ptoggleitem    toggle preview for an item of quickfix list 			 	p
+" " ptoggleauto    toggle auto preview when cursor moved 						 	P
+" " filter         create new list for signed items 								  zn
+" " filterr        create new list for non-signed items 						  zN
+" " fzffilter      enter fzf mode 														        zf
+" " }}}
+" " Variables {{{
 
-" {{{
-" open           open the item under the cursor 										<CR>
-" openc          like open, and close quickfix window 							o
-" tab            open the item under the cursor in a new tab 				t
-" tabb           like tab, but stay at quickfix window 							T
-" split          open the item under the cursor in vertical split  	<C-x>
-" vsplit         open the item under the cursor in horizontal split	<C-v>
-" prevfile       go to previous file under the cursor 							<C-p>
-" nextfile       go to next file under the cursor 								 	<C-n>
-" prevhist       go to previous quickfix list 										 	<
-" nexthist       go to next quickfix list 													>
-" stoggleup      toggle sign and move cursor up 									 	<S-Tab>
-" stoggledown    toggle sign and move cursor down 								 	<Tab>
-" stogglevm      toggle multiple signs in visual mode 						 	<Tab>
-" stogglebuf     toggle signs for same buffers under the cursor 	 	'<Tab>
-" sclear         clear the signs in current quickfix list 					z<Tab>
-" pscrollup      scroll up half-page in preview window 							<C-b>
-" pscrolldown    scroll down half-page in preview window 						<C-f>
-" pscrollorig    scroll back to original postion in preview window	zo
-" ptogglemode    toggle preview window between normal and max size  zp
-" ptoggleitem    toggle preview for an item of quickfix list 			 	p
-" ptoggleauto    toggle auto preview when cursor moved 						 	P
-" filter         create new list for signed items 								  zn
-" filterr        create new list for non-signed items 						  zN
-" fzffilter      enter fzf mode 														        zf
-" }}}
-" Variables {{{
+" let g:coc_enable_locationlist = 0
+" " }}}
+" " Functions {{{
 
-let g:coc_enable_locationlist = 0
-" }}}
-" Functions {{{
+" function! Coc_qf_jump2loc(locs) abort "{{{
+"     let loc_ranges = map(deepcopy(a:locs), 'v:val.range')
+"     call setloclist(0, [], ' ', {'title': 'CocLocationList', 'items': a:locs,
+"                 \ 'context': {'bqf': 
+"                 \ {'lsp_ranges_hl': loc_ranges}
+"                 \ }})
+"     let winid = getloclist(0, {'winid': 0}).winid
+"     if winid == 0
+"         aboveleft lwindow
+"     else
+"         call win_gotoid(winid)
+"     endif
+" endfunction " }}}
+" " }}}
+" " Autocommands {{{
 
-function! Coc_qf_jump2loc(locs) abort "{{{
-    let loc_ranges = map(deepcopy(a:locs), 'v:val.range')
-    call setloclist(0, [], ' ', {'title': 'CocLocationList', 'items': a:locs,
-                \ 'context': {'bqf': 
-                \ {'lsp_ranges_hl': loc_ranges}
-                \ }})
-    let winid = getloclist(0, {'winid': 0}).winid
-    if winid == 0
-        aboveleft lwindow
-    else
-        call win_gotoid(winid)
-    endif
-endfunction " }}}
-" }}}
-" Autocommands {{{
-
-aug Coc
-    au!
-    au User CocLocationsChange ++nested call Coc_qf_jump2loc(g:coc_jump_locations)
-aug END
-" }}}
-" }}}
-" nvim-treesitter {{{
-
-lua << EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", 
-  highlight = {
-    enable = true,
-    disable = {},
-  },
-  indent = {
-    enable = true,
-  },
-}
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.tsx.used_by = { "javascript", "typescript.tsx" }
-EOF
-" }}}
+" aug Coc
+"     au!
+"     au User CocLocationsChange ++nested call Coc_qf_jump2loc(g:coc_jump_locations)
+" aug END
+" " }}}
+" " }}}
 " ranger.vim {{{
 
 let g:ranger_map_keys = 0
@@ -720,42 +581,6 @@ let g:wheel#map#down       = '<PageDown>'
 let g:wheel#map#mouse      = 1
 let g:wheel#map#up         = '<PageUp>'
 let g:wheel#scroll_on_wrap = 1
-" }}}
-" wilder.nvim {{{
-
-call wilder#setup({
-      \ 'modes': [':', '/', '?'],
-      \ 'next_key': '<Tab>',
-      \ 'previous_key': '<S-Tab>',
-      \ 'accept_key': '<Space>',
-      \ 'reject_key': '<Del>',
-      \ })
-
-call wilder#set_option('use_python_remote_plugin', 0)
-
-call wilder#set_option('pipeline', [
-      \   wilder#branch(
-      \     wilder#cmdline_pipeline({
-      \       'fuzzy': 1,
-      \       'fuzzy_filter': wilder#lua_fzy_filter(),
-      \     }),
-      \     wilder#vim_search_pipeline(),
-      \   ),
-      \ ])
-
-call wilder#set_option('renderer', wilder#wildmenu_renderer(
-      \ wilder#wildmenu_airline_theme({
-      \   'highlights': {},
-      \   'highlighter': wilder#basic_highlighter(),
-      \   'separator': ' · ',
-      \ })))
-" }}}
-
-" Neovide {{{
-
-let g:neovide_refresh_rate=75
-let g:neovide_transparency=1
-let g:neovide_no_idle=v:true
 " }}}
 " }}}
 
