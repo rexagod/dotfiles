@@ -111,19 +111,29 @@ alias l="ls -1S"
 alias la="ls -1SA"
 alias ll="ls -1lS"
 alias nv="${EDITOR}"
-alias dnf="sudo dnf"
+alias odc="ocm describe cluster"
 alias rr="ranger"
 alias soc="source ./contrib/oc-environment.sh"
 alias sshd="sudo /usr/sbin/sshd"
 alias szr="source ~/.zshrc"
-alias tr="${EDITOR} ${TMUXRC}"
 alias vif="fzf --preview-window=right:50% --preview=\"bat --theme ${BAT_THEME} --color always {}\" --bind \"enter:execute(${EDITOR} {})\""
 alias vr="${EDITOR} ${VIMRC}"
-alias vrs="${EDITOR} -S ${VIM_SESSION}"
 alias zr="${EDITOR} ${ZSHRC}"
 # }}}
 # Functions {{{
 
+osd () {
+    if [ -z "$1" ]; then
+        echo "no cluster identifier provided, exiting"
+        return 1
+    fi
+    cluster="$(ocm describe cluster $1 | grep -w 'ID' | awk 'NR==1{print $2}')"
+    password="$(ocm get /api/clusters_mgmt/v1/clusters/$cluster/credentials | jq -r .admin.password)"
+    url="$(ocm describe cluster $cluster | grep -w 'Console URL' | awk 'NR==1{print $3}')"
+    uri="$(ocm describe cluster $cluster | grep -w 'API URL' | awk 'NR==1{print $3}')"
+    echo "oc login ${uri} -u kubeadmin -p ${password}"
+    echo "${url}"
+}
 cc () { # {{{
   DIR='.openshift-cluster'   # Cluster metadata directory
   USER='prasriva'            # RH username
@@ -131,6 +141,7 @@ cc () { # {{{
   NAME='\[new\sname\shere\]' # Template for Cluster ID ('.metadata.name' in your $CONF)
   CLUSTER_ID="$USER-$RANDOM" # Cluster name = <Your RH id> + $RANDOM
   CLUSTER_ID_STATIC="$CLUSTER_ID"
+  LOG='/home/rexagod/.ocp-login-string.txt'
 
   export OCS_REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE:-rexagod} OCS_IMAGE_TAG=${IMAGE_TAG:-latest} OCS_SOURCE=${OCS_SOURCE:-redhat-operators}
 
@@ -208,7 +219,7 @@ spec:
   icon:
     base64data: ''
     mediatype: ''
-  image: quay.io/rhceph-dev/ocs-registry:latest-stable-4.8
+  image: quay.io/rhceph-dev/ocs-registry:latest-stable-4.11
   priority: 100
   publisher: Red Hat
   sourceType: grpc
@@ -226,7 +237,9 @@ EOF
     ${OSI_PATH:-"openshift-install"} create cluster --dir="$DIR"
     oc login "https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`
     OCP_LOGIN_STRING="oc login \"https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443\" -u kubeadmin -p "`cat "$DIR/auth/kubeadmin-password"`
-    echo $OCP_LOGIN_STRING >> ~/.ocp-login-string.txt
+    echo "\n" >> $LOG
+    echo $OCP_LOGIN_STRING >> $LOG
+    echo "https://console-openshift-console.apps.$CLUSTER_ID_STATIC.devcluster.openshift.com" >> $LOG
     cd -
   fi
 }
@@ -234,9 +247,9 @@ EOF
 # }}}
 # Misc. {{{
 
-# nnn {{{
+# broot {{{
 
-export NNN_PLUG='f:finder;o:fzopen;p:mocplay;d:diffs;t:nmount;v:imgview'
+source /home/rexagod/.config/broot/launcher/bash/br
 # }}}
 # nvm {{{
 
@@ -436,5 +449,8 @@ if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 # kubectl {{{
 source <(kubectl completion zsh)
 compdef __start_kubectl k
+# krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # }}}
 # }}}
+
