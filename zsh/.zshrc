@@ -134,6 +134,7 @@ osd () {
     echo "oc login ${uri} -u kubeadmin -p ${password}"
     echo "${url}"
 }
+
 cc () { # {{{
   DIR='.openshift-cluster'   # Cluster metadata directory
   USER='prasriva'            # RH username
@@ -438,7 +439,7 @@ fi
 # }}}
 # g {{{
 
-export GOPATH="$HOME/go/"; export GOROOT="$HOME/sdk/go1.17"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+export GOPATH="$HOME/go/"; export GOROOT="$GOPATH/sdk/go1.17"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 alias gvm=~/go/bin/g
 # }}}
 # ranger {{{
@@ -453,4 +454,6 @@ compdef __start_kubectl k
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # }}}
 # }}}
+
+autoload -U compinit; compinit
 

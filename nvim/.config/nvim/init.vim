@@ -56,7 +56,7 @@ set foldopen=
 set mouse=a
 set noshowmode
 set noswapfile
-set nowrap
+set wrap
 set nowritebackup
 set number
 set path=.,,
