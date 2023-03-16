@@ -24,6 +24,7 @@ $GOBIN:\
 /bin:\
 /home/linuxbrew/.linuxbrew/bin:\
 /home/rexagod/.local/bin:\
+/home/rexagod/scripts:\
 /sbin:\
 /usr/bin:\
 /usr/lib:\
@@ -52,10 +53,11 @@ export MANPAGER="${EDITOR} +Man!"
 export PAGER="bat"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
 export TMUXRC='~/.config/tmux/tmux.conf'
-export UPDATE_ZSH_DAYS=2
+export UPDATE_ZSH_DAYS=15
 export VIMRC='~/.config/nvim/init.vim'
 export VIM_SESSION='~/.session.vim'
 export VISUAL="${EDITOR}"
+export XDG_CONFIG_HOME="/home/rexagod/.config"
 export ZSH="/home/rexagod/.oh-my-zsh"
 export ZSHRC='~/.zshrc'
 #}}}
@@ -80,7 +82,7 @@ alias gSp="git stash pop"
 alias hgrep="history | grep "
 alias k="kubectl"
 alias l="ls -1S"
-alias la="ls -1SA"
+alias la="ls -1Sa"
 alias ll="ls -1lS"
 alias nv="${EDITOR}"
 alias rr="ranger"
@@ -90,6 +92,8 @@ alias vif="fzf --preview-window=right:50% --preview=\"${PAGER} {}\" --bind \"ent
 alias vr="${EDITOR} ${VIMRC}"
 alias vrs="${EDITOR} -S ~/.session.vim"
 alias zr="${EDITOR} ${ZSHRC}"
+
+alias ls="exa"
 # }}}
 # Functions {{{
 
@@ -137,9 +141,20 @@ cc () { # {{{
   fi
 }
 # }}}
+gerrit_stash_as () { # {{{
+  GERRIT_FILE="/home/rexagod/Documents/gerrit/gerrit.py"
+  GERRIT_ARCHIVE="/home/rexagod/Documents/gerrit/archives"
+  cp "${GERRIT_FILE}" "${GERRIT_ARCHIVE}/$1.py" && \
+  rm "${GERRIT_FILE}" && \
+  touch "${GERRIT_FILE}" && \
+  clear
+}
+# }}}
 # }}}
 # Misc. {{{
 
+force_color_prompt=yes
+ulimit -s 2000123
 # g {{{
 
 export GOPATH="$HOME/go/"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g

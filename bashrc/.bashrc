@@ -27,3 +27,6 @@ fi
 unset rc
 
 export GOPATH="$HOME/go/"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+force_color_prompt=yes
+ulimit -s 2000123
+

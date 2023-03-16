@@ -16,10 +16,13 @@
 [alias]
 	fix = !${EDITOR} $(git diff --name-only --relative --diff-filter=U | uniq)
 	biff = bat -d
+	project-summary = !which onefetch && onefetch
+	checkout-to = !which checkout-to.sh && checkout-to.sh
 [pull]
 	rebase = true
 [core]
 	pager = delta
+	excludesfile = /home/rexagod/.gitignore
 [interactive]
 	diffFilter = delta --color-only --features=interactive
 [color]

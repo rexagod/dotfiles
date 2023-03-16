@@ -15,14 +15,15 @@ k9s:
     fullScreenLogs: false
     textWrap: false
     showTime: false
-  currentContext: kind-kind
-  currentCluster: kind-kind
+  currentContext: default/api-prasriva-23638-devcluster-openshift-com:6443/kube:admin
+  currentCluster: api-prasriva-23638-devcluster-openshift-com:6443
   clusters:
-    kind-kind:
+    api-prasriva-23638-devcluster-openshift-com:6443:
       namespace:
         active: all
         lockFavorites: false
         favorites:
+        - all
         - default
       view:
         active: deploy
