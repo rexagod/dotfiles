@@ -8,6 +8,7 @@ k9s:
   readOnly: false
   noExitOnCtrlC: false
   noIcons: false
+  skipLatestRevCheck: false
   logger:
     tail: 100
     buffer: 5000
@@ -15,10 +16,10 @@ k9s:
     fullScreenLogs: false
     textWrap: false
     showTime: false
-  currentContext: default/api-prasriva-23638-devcluster-openshift-com:6443/kube:admin
-  currentCluster: api-prasriva-23638-devcluster-openshift-com:6443
+  currentContext: default/api-prasriva-8403-devcluster-openshift-com:6443/kube:admin
+  currentCluster: api-prasriva-8403-devcluster-openshift-com:6443
   clusters:
-    api-prasriva-23638-devcluster-openshift-com:6443:
+    api-prasriva-8403-devcluster-openshift-com:6443:
       namespace:
         active: all
         lockFavorites: false
@@ -26,7 +27,7 @@ k9s:
         - all
         - default
       view:
-        active: deploy
+        active: pvc
       featureGates:
         nodeShell: false
       shellPod:
@@ -37,6 +38,7 @@ k9s:
         limits:
           cpu: 100m
           memory: 100Mi
+        labels: {}
       portForwardAddress: localhost
   thresholds:
     cpu:

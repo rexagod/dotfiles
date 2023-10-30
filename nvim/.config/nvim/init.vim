@@ -13,10 +13,8 @@ Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 
 Plug 'aymericbeaumet/vim-symlink'
 Plug 'jiangmiao/auto-pairs'
-Plug 'kevinhwang91/nvim-bqf'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-sleuth'
-Plug 'voldikss/vim-floaterm'
 " }}}
 " Languages {{{
 
@@ -33,7 +31,6 @@ Plug 'tpope/vim-unimpaired'
 " }}}
 " Text Manipulations {{{
 
-Plug 'editorconfig/editorconfig-vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'kana/vim-textobj-user' | Plug 'coderifous/textobj-word-column.vim'
 Plug 'machakann/vim-swap'
@@ -87,11 +84,12 @@ set showmatch
 set sidescrolloff=10
 set smartindent
 set tags=
+set textwidth=80
 set undodir=~/.vim-undo-dir
 set undofile
 set wildmode=longest,full
 set wrap
-set wrapmargin=120
+set wrapmargin=80
 " }}}
 " Maps {{{
 
@@ -214,10 +212,6 @@ let g:clever_f_smart_case=1
 let g:clever_f_chars_match_any_signs="."
 let g:clever_f_mark_cursor=1
 " }}}
-" editorconfig-vim {{{
-
-let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']
-" }}}
 " fzf.vim {{{
 
 " Vars {{{
@@ -267,9 +261,9 @@ augroup HOP
   autocmd VimEnter * lua require'hop'.setup()
 augroup END
 
-nn <silent><M-w> :HopWord<cr>
-nn <silent><M-1> :HopChar1<cr>
-nn <silent><M-2> :HopChar2<cr>
+nn <silent><Space>w :HopWord<cr>
+nn <silent><Space>1 :HopChar1<cr>
+nn <silent><Space>2 :HopChar2<cr>
 " }}}
 " lightline.vim {{{
 " landscape
@@ -304,9 +298,6 @@ function! SignifyStats()
   return sy#repo#get_stats_decorated()
 endfunction
 " }}}
-" nvim-bqf {{{
-" https://github.com/kevinhwang91/nvim-bqf#function-table
-" }}}
 " ranger.vim {{{
 
 let g:ranger_map_keys = 0
@@ -325,13 +316,6 @@ xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-" }}}
-" vim-floaterm {{{
-
-let g:floaterm_keymap_new    = '<F7>'
-let g:floaterm_keymap_prev   = '<F8>'
-let g:floaterm_keymap_next   = '<F9>'
-let g:floaterm_keymap_toggle = '<F12>'
 " }}}
 " vim-fugitive {{{
 
@@ -452,36 +436,3 @@ EOF
 " }}}
 " }}}
 
-" Neovide {{{
-
-lua <<EOF
-if vim.g.neovide then
-  vim.g.neovide_input_use_logo = 1 -- enable use of the logo (cmd) key
-  vim.keymap.set('i', '<C-S-v>', '<ESC>l"+Pli') -- Paste insert mode
-end
-
--- Allow clipboard copy paste in neovim
-vim.api.nvim_set_keymap('', '<C-S-v>', '+p<CR>', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('!', '<C-S-v>', '<C-R>+', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('t', '<C-S-v>', '<C-R>+', { noremap = true, silent = true})
-EOF
-
-set guifont=Input\ Mono:h10:#e-antialias:#h-none
-set winblend=90
-set pumblend=90
-
-let g:neovide_transparency = 0.9
-let g:neovide_fullscreen = v:false
-let g:neovide_cursor_vfx_mode = "pixiedust"
-let g:neovide_cursor_vfx_particle_density = 20.0
-let g:neovide_cursor_vfx_particle_lifetime = 2.0
-let g:neovide_cursor_vfx_opacity = 200.0
-let g:neovide_cursor_vfx_particle_speed = 6.0
-
-" Neovide runs in a contrained environment,
-" with no access to exported variables.
-if exists("g:neovide")
-  nn <silent><leader>vr :vsp ~/.config/nvim/init.vim<cr>
-  nn <silent><leader>zr :vsp ~/.zshrc<cr>
-endif
-" }}}

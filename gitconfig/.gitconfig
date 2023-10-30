@@ -1,12 +1,10 @@
 [user]
 	email = rexagod@gmail.com
 	name = "Pranshu Srivastava"
-	signingkey = 3CDBD4D4CEF89B86
+	signingkey = 63938388A4528764
 [diff]
 	renamelimit = 50000
 	colorMoved = default
-[merge]
-	conflictstyle = diff3
 [commit]
 	gpgsign = true
 [url "git@github.com:"]
@@ -22,7 +20,7 @@
 	rebase = true
 [core]
 	pager = delta
-	excludesfile = /home/rexagod/.gitignore
+	excludesfile = /Users/rexagod/.gitignore
 [interactive]
 	diffFilter = delta --color-only --features=interactive
 [color]
@@ -45,7 +43,7 @@
 [rebase]
 	autosquash = false
 [rerere]
-	enabled = true
+	enabled = false
 [delta]
 	navigate = true    # use n and N to move between diff sections
 	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
@@ -61,3 +59,5 @@
 	hunk-header-file-style = red
 	hunk-header-line-number-style = "#067a00"
 	hunk-header-style = file line-number syntax
+[gpg]
+	format = openpgp

@@ -17,28 +17,11 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 ZSH_THEME="darkblood"
 # }}}
-# PATH {{{
-
-export PATH="\
-$GOBIN:\
-/bin:\
-/home/linuxbrew/.linuxbrew/bin:\
-/home/rexagod/.local/bin:\
-/home/rexagod/scripts:\
-/sbin:\
-/usr/bin:\
-/usr/lib:\
-/usr/local/bin:\
-/usr/local/sbin:\
-/usr/sbin:\
-/usr/share:\
-" # $PATH intentially not included here.
-# }}}
 # Exports{{{
 
+export ARCH="arm64"
 export AWS_PROFILE='openshift-dev'
 export BASHRC='~/.bashrc'
-export BROWSER='firefox'
 export DEFAULT_RECIPIENT="rexagod@gmail.com"
 export EDITOR='nvim'
 export FZF_ALT_C_COMMAND="fd -t d . $HOME"
@@ -49,24 +32,41 @@ export GOBIN="$HOME/go/bin"
 export GOPATH="$HOME/go"
 export KUBECONFIG="$HOME/.openshift-cluster/auth/kubeconfig"
 export LANG=en_US.UTF-8
-export MANPAGER="${EDITOR} +Man!"
+export MANPAGER="$EDITOR +Man!"
+export OS="darwin"
 export PAGER="bat"
 export RANGER_LOAD_DEFAULT_RC="FALSE"
-export TMUXRC='~/.config/tmux/tmux.conf'
 export UPDATE_ZSH_DAYS=15
 export VIMRC='~/.config/nvim/init.vim'
 export VIM_SESSION='~/.session.vim'
-export VISUAL="${EDITOR}"
-export XDG_CONFIG_HOME="/home/rexagod/.config"
-export ZSH="/home/rexagod/.oh-my-zsh"
+export VISUAL="$EDITOR"
+export XDG_CONFIG_HOME="$HOME/.config"
+export ZSH="$HOME/.oh-my-zsh"
 export ZSHRC='~/.zshrc'
 #}}}
+# PATH {{{
+
+export PATH="\
+$GOBIN:\
+$HOME/scripts:\
+$HOME/.local/bin:\
+/opt/homebrew/bin:\
+/bin:\
+/sbin:\
+/usr/bin:\
+/usr/lib:\
+/usr/local/bin:\
+/usr/local/sbin:\
+/usr/sbin:\
+/usr/share:\
+/Users/rexagod/sdk/go1.20.6/bin/:\
+" # $PATH intentially not included here.
+# }}}
 # Plugins {{{
 
 plugins=(
   fzf
   git
-  zsh-256color
   zsh-syntax-highlighting
   zsh-z
 )
@@ -76,40 +76,25 @@ source $ZSH/oh-my-zsh.sh
 # Aliases{{{
 
 alias c="clear"
-alias dnf="sudo dnf"
 alias gS="git stash"
+alias gSa="git stash apply"
 alias gSp="git stash pop"
 alias hgrep="history | grep "
 alias k="kubectl"
 alias l="ls -1S"
 alias la="ls -1Sa"
 alias ll="ls -1lS"
-alias nv="${EDITOR}"
-alias rr="ranger"
-alias sshd="sudo /usr/sbin/sshd"
-alias szr="source ~/.zshrc"
-alias vif="fzf --preview-window=right:50% --preview=\"${PAGER} {}\" --bind \"enter:execute(${EDITOR} {})\""
-alias vr="${EDITOR} ${VIMRC}"
-alias vrs="${EDITOR} -S ~/.session.vim"
-alias zr="${EDITOR} ${ZSHRC}"
-
 alias ls="exa"
+alias nv="$EDITOR"
+alias rr="ranger"
+alias szr="source $ZSHRC"
+alias vif="fzf --preview-window=right:50% --preview=\"${PAGER} {}\" --bind \"enter:execute(${EDITOR} {})\""
+alias vr="$EDITOR $VIMRC"
+alias vrs="$EDITOR -S ~/.session.vim"
+alias zr="$EDITOR $ZSHRC"
 # }}}
 # Functions {{{
 
-osd () { # {{{
-    if [ -z "$1" ]; then
-        echo "no cluster identifier provided, exiting"
-        return 1
-    fi
-    cluster="$(ocm describe cluster $1 | grep -w 'ID' | awk 'NR==1{print $2}')"
-    password="$(ocm get /api/clusters_mgmt/v1/clusters/$cluster/credentials | jq -r .admin.password)"
-    url="$(ocm describe cluster $cluster | grep -w 'Console URL' | awk 'NR==1{print $3}')"
-    uri="$(ocm describe cluster $cluster | grep -w 'API URL' | awk 'NR==1{print $3}')"
-    echo "oc login ${uri} -u kubeadmin -p ${password}"
-    echo "${url}"
-}
-# }}}
 cc () { # {{{
   DIR='.openshift-cluster'   # Cluster metadata directory
   USER='prasriva'            # RH username
@@ -117,9 +102,7 @@ cc () { # {{{
   NAME='\[new\sname\shere\]' # Template for Cluster ID ('.metadata.name' in your $CONF)
   CLUSTER_ID="$USER-$RANDOM" # Cluster name = <Your RH id> + $RANDOM
   CLUSTER_ID_STATIC="$CLUSTER_ID"
-  LOG='/home/rexagod/.ocp-login-string.txt'
-
-  export OCS_REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE:-rexagod} OCS_IMAGE_TAG=${IMAGE_TAG:-latest} OCS_SOURCE=${OCS_SOURCE:-redhat-operators}
+  LOG="$HOME/.ocp-login-string.txt"
 
   if [[ $1 == "d" ]]; then
     cd ~
@@ -130,7 +113,7 @@ cc () { # {{{
     rm -rf "$DIR"
     mkdir "$DIR"
     cp .aws/"$CONF" "$DIR"/
-    sed -i "s/$NAME/$CLUSTER_ID_STATIC/" "$DIR"/"$CONF"
+    gsed -i "s/$NAME/$CLUSTER_ID_STATIC/" "$DIR"/"$CONF"
     ${OSI_PATH:-"openshift-install"} create cluster --dir="$DIR"
     oc login "https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`
     OCP_LOGIN_STRING="oc login \"https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443\" -u kubeadmin -p "`cat "$DIR/auth/kubeadmin-password"`
@@ -141,33 +124,23 @@ cc () { # {{{
   fi
 }
 # }}}
-gerrit_stash_as () { # {{{
-  GERRIT_FILE="/home/rexagod/Documents/gerrit/gerrit.py"
-  GERRIT_ARCHIVE="/home/rexagod/Documents/gerrit/archives"
-  cp "${GERRIT_FILE}" "${GERRIT_ARCHIVE}/$1.py" && \
-  rm "${GERRIT_FILE}" && \
-  touch "${GERRIT_FILE}" && \
-  clear
-}
-# }}}
 # }}}
 # Misc. {{{
 
 force_color_prompt=yes
-ulimit -s 2000123
-# g {{{
-
-export GOPATH="$HOME/go/"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
-alias gvm=~/go/bin/g
-# }}}
 # kubectl {{{
+
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 source <(kubectl completion zsh)
 compdef __start_kubectl k
-
-# krew {{{
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # }}}
+# k8s {{{
+
+export PATH="/Users/rexagod/repositories/oss/kubernetes/third_party/etcd:${PATH}"
 # }}}
 # }}}
 
 autoload -U compinit; compinit
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
