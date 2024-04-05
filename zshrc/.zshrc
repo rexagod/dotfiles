@@ -3,6 +3,7 @@
 # Options {{{
 
 setopt noautomenu
+unsetopt correct correct_all
 # }}}
 # Variables {{{
 
@@ -48,8 +49,8 @@ export ZSHRC='~/.zshrc'
 
 export PATH="\
 $GOBIN:\
-$HOME/scripts:\
 $HOME/.local/bin:\
+$HOME/scripts:\
 /opt/homebrew/bin:\
 /bin:\
 /sbin:\
@@ -60,7 +61,7 @@ $HOME/.local/bin:\
 /usr/sbin:\
 /usr/share:\
 /Users/rexagod/sdk/go1.20.6/bin/:\
-" # $PATH intentially not included here.
+" # $PATH intentionally not included here.
 # }}}
 # Plugins {{{
 
@@ -116,7 +117,7 @@ cc () { # {{{
     gsed -i "s/$NAME/$CLUSTER_ID_STATIC/" "$DIR"/"$CONF"
     ${OSI_PATH:-"openshift-install"} create cluster --dir="$DIR"
     oc login "https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443" -u kubeadmin -p `cat "$DIR/auth/kubeadmin-password"`
-    OCP_LOGIN_STRING="oc login \"https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443\" -u kubeadmin -p "`cat "$DIR/auth/kubeadmin-password"`
+    OCP_LOGIN_STRING="oc login --insecure-skip-tls-verify \"https://api.$CLUSTER_ID_STATIC.devcluster.openshift.com:6443\" -u kubeadmin -p "`cat "$DIR/auth/kubeadmin-password"`
     echo "\n" >> $LOG
     echo $OCP_LOGIN_STRING >> $LOG
     echo "https://console-openshift-console.apps.$CLUSTER_ID_STATIC.devcluster.openshift.com" >> $LOG
@@ -138,9 +139,12 @@ compdef __start_kubectl k
 
 export PATH="/Users/rexagod/repositories/oss/kubernetes/third_party/etcd:${PATH}"
 # }}}
-# }}}
+# iterm2 {{{
 
 autoload -U compinit; compinit
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+# }}}
+# }}}
+
 

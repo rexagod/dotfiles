@@ -60,9 +60,8 @@ colorscheme challenger_deep
 
 set autowrite
 set showbreak=+++\ 
-set clipboard+=unnamedplus " bugs 'x' up
+set clipboard+=unnamedplus
 set colorcolumn=72,80,120
-" set columns=120
 set completeopt=menu,menuone,noselect
 set confirm
 set foldmethod=marker
@@ -95,56 +94,41 @@ set wrapmargin=80
 
 " Insert Mode Mappings {{{
 
-ino <C-j> <esc>5<Down>a
-ino <C-k> <esc>5<Up>a
-ino <C-l> <esc>5<Right>a
-ino <C-h> <esc>5<Left>a
+imap ¬ <esc>5<Right>i
+imap ˙ <esc>5<Left>i
+imap ˚ <esc>5<Up>i
+imap ∆ <esc>5<Down>i
 
-imap <C-Left> <C-h>
-imap <C-Right> <C-l>
-imap <C-Down> <C-j>
-imap <C-Up> <C-k>
+imap <M-Down> ∆
+imap <M-Up>   ˚
+imap <M-b>    ˙
+imap <M-f>    ¬
 " }}}
 " Visual Mode Mappings {{{
 
-vn <C-s> :sort<cr> " implicitly inserts the visual marker range
+vn ß :sort<cr> " implicitly inserts the visual marker range
 
-vm <C-Down> <C-j>
-vm <C-Left> <C-h>
-vm <C-Right> <C-l>
-vm <C-Up> <C-k>
-vm <C-h>     5h
-vm <C-j>     5j
-vm <C-k>     5k
-vm <C-l>     5l
-vm <S-Down> <C-y>
-vm <S-Up>   <C-e>
+vm ˙     5h
+vm ∆     5j
+vm ˚     5k
+vm ¬     5l
+
+vm  <M-Down> ∆
+vm  <M-Up>   ˚
+vm  <M-b>    ˙
+vm  <M-f>    ¬
 " }}}
 " Normal Mode Mappings {{{
 
-nn <C-h>        b
-nn <C-l>        w
-nn <C-j>        5j
-nn <C-k>        5k
-nn <F1>         <NOP>
-nn <Tab>        :bnext<cr>
-nn <S-Tab>      :bprev<cr>
+nn <Tab>   :bnext<cr>
+nn <S-Tab> :bprev<cr>
+
+nn <silent>QQ   :bd<cr>
 nn <silent><F2> :messages<cr>
 nn <silent><F4> :only<cr>
-nn <silent>QQ   :bd<cr>
-nn j            gj
-nn k            gk
 
-nm <S-Down>     <C-y>
-nm <S-Up>       <C-e>
-nm <C-Left>     <C-h>
-nm <C-Right>    <C-l>
-nm <C-Down>     <C-j>
-nm <C-Up>       <C-k>
-nm <Up> k
-nm <Down> j
-nm <Left> h
-nm <Right> l
+nm j gj
+nm k gk
 " }}}
 " Leader Mappings {{{
 
@@ -152,7 +136,7 @@ let mapleader="\<Space>"
 
 nn <silent><leader>vr        :vsp $VIMRC<cr>
 nn <silent><leader>zr        :vsp $ZSHRC<cr>
-nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>:echo &hls &is<cr>
+nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>
 " }}}
 " }}}
 " Autocommands {{{
@@ -165,30 +149,12 @@ aug FOO
   au Filetype help,qf nn <silent><buffer>q :q<cr>
 aug END
 " }}}
-" Macros {{{
-
-let @y='"+y' " fix copy without affecting x's behaviour
-" }}}
-" Functions {{{
-
-function! s:ToggleX() " {{{
-  if &clipboard ==# "unnamedplus"
-    set clipboard-=unnamedplus
-  else
-    set clipboard+=unnamedplus
-  endif
-endfunction
-
-nn <silent><nowait><leader>c :silent! call <SID>ToggleX()<cr>
-" }}}
-" }}}
 " Commands {{{
 
 command! CM delm!
 command! MC mapclear | mapclear <buffer> | mapclear! | mapclear! <buffer>
-command! OC set all&
 command! QQ qall
-command! S w | source % " problems when symlinked
+command! S w | source %
 command! SS mks! ~/.session.vim
 command! FI PlugClean | PlugInstall | PlugUpdate | PlugUpgrade
 command! HI PlugClean | PlugInstall
@@ -207,7 +173,7 @@ let g:bclose_no_plugin_maps=1
 " }}}
 " clever-f.vim {{{
 
-let g:clever_f_across_no_line=1
+let g:clever_f_across_no_line=0
 let g:clever_f_smart_case=1
 let g:clever_f_chars_match_any_signs="."
 let g:clever_f_mark_cursor=1
@@ -226,11 +192,9 @@ command! FZFShow call fzf#run(fzf#wrap({
       \ 'sink': 'e',
       \ 'options': '--multi --reverse --preview "git diff HEAD^ HEAD {} | delta --color-only" --preview-window "up,80%,rounded"',
       \ }))
-command! FZF FloatermNew fzf
 " }}}
 " Maps {{{
 
-nn <silent>\/ :silent! FZFGGrep<cr>
 nn <silent>\C :silent! Commits<cr>
 nn <silent>\F :silent! Filetypes<cr>
 nn <silent>\G :silent! GFiles<cr>
@@ -241,7 +205,6 @@ nn <silent>\T :silent! FZFTags<cr>
 nn <silent>\\ :silent! FZFRg<cr>
 nn <silent>\b :silent! Buffers<cr>
 nn <silent>\c :silent! BCommits<cr>
-nn <silent>\d :silent! BD<cr>
 nn <silent>\f :silent! FZFFiles<cr>
 nn <silent>\g :silent! GFiles?<cr>
 nn <silent>\h :silent! FZFHistory<cr>
@@ -262,8 +225,7 @@ augroup HOP
 augroup END
 
 nn <silent><Space>w :HopWord<cr>
-nn <silent><Space>1 :HopChar1<cr>
-nn <silent><Space>2 :HopChar2<cr>
+nn <silent><Space>ww :HopChar2<cr>
 " }}}
 " lightline.vim {{{
 " landscape
@@ -306,9 +268,6 @@ let g:ranger_command_override = 'ranger --cmd "set show_hidden=false"'
 
 nn <silent>\e :RangerCurrentFile<cr>
 " }}}
-" targets.vim {{{
-" https://github.com/wellle/targets.vim/blob/master/cheatsheet.md
-" }}}
 " vim-easy-align {{{
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -332,107 +291,87 @@ let g:fuzzy_stash_actions =
   \ 'ctrl-a': 'apply',
   \ }
 " }}}
-" vim-go {{{
+" " vim-go {{{
 
-" Variables {{{
+" " Variables {{{
 
-let g:go_auto_sameids = 0
-let g:go_auto_type_info = 0
-let g:go_diagnostics_level = 2
-let g:go_doc_keywordprg_enabled = 0
-let g:go_doc_popup_window = 1
-let g:go_fmt_command = "goimports"
-let g:go_highlight_array_whitespace_error = 1
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_chan_whitespace_error = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_function_parameters = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_generate_tags = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_space_tab_error = 1
-let g:go_highlight_trailing_whitespace_error = 1
-let g:go_highlight_types = 1
-let g:go_highlight_variable_assignments = 1
-let g:go_highlight_variable_declarations = 1
-let g:go_imports_autosave = 1
-let g:go_info_mode = 'guru'
-let g:go_list_type = 'quickfix'
-let g:go_play_browser_command = "chromium"
-let g:go_play_open_browser = 0
-let g:go_statusline_duration = 1000
-let g:go_test_show_name = 1
-let g:go_test_timeout= '10s'
-let g:go_updatetime = 0
-let g:go_guru_scope = []
+" let g:go_auto_sameids = 0
+" let g:go_auto_type_info = 0
+" let g:go_diagnostics_level = 2
+" let g:go_doc_keywordprg_enabled = 0
+" let g:go_doc_popup_window = 1
+" let g:go_fmt_command = "goimports"
+" let g:go_highlight_array_whitespace_error = 1
+" let g:go_highlight_build_constraints = 1
+" let g:go_highlight_chan_whitespace_error = 1
+" let g:go_highlight_extra_types = 1
+" let g:go_highlight_fields = 1
+" let g:go_highlight_function_calls = 1
+" let g:go_highlight_function_parameters = 1
+" let g:go_highlight_functions = 1
+" let g:go_highlight_generate_tags = 1
+" let g:go_highlight_operators = 1
+" let g:go_highlight_space_tab_error = 1
+" let g:go_highlight_trailing_whitespace_error = 1
+" let g:go_highlight_types = 1
+" let g:go_highlight_variable_assignments = 1
+" let g:go_highlight_variable_declarations = 1
+" let g:go_imports_autosave = 1
+" let g:go_info_mode = 'guru'
+" let g:go_list_type = 'quickfix'
+" let g:go_play_browser_command = "chromium"
+" let g:go_play_open_browser = 0
+" let g:go_statusline_duration = 1000
+" let g:go_test_show_name = 1
+" let g:go_test_timeout= '10s'
+" let g:go_updatetime = 0
+" let g:go_guru_scope = []
 
-let $GINKGO_EDITOR_INTEGRATION = "true"
-" }}}
-" Mappings {{{
+" let $GINKGO_EDITOR_INTEGRATION = "true"
+" " }}}
+" " Mappings {{{
 
-aug GO
-  au!
-  au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
+" aug GO
+"   au!
+"   au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
 
-  " gd - Goto definition.
-  " C-t - Go back.
-  " if, af - Function selectors.
-  " [[, ]] - Move between functions.
+"   " gd - Goto definition.
+"   " C-t - Go back.
+"   " if, af - Function selectors.
+"   " [[, ]] - Move between functions.
 
-  au FileType go nm <silent>'D :GoDeclsDir<cr>
-  au FileType go nm <silent>'I :GoImports<cr>
-  au FileType go nm <silent>'R :GoRename<cr>
-  au FileType go nm <silent>'a :GoAlternate<cr>
-  au FileType go nm <silent>'b :GoBuild<cr>
-  au FileType go nm <silent>'c :GoCoverageToggle<cr>
-  au FileType go nm <silent>'d :GoDecls<cr>
-  au FileType go nm <silent>'e :GoDescribe<cr>
-  au FileType go nm <silent>'E :GoWhicherrs<cr>
-  au FileType go nm <silent>'f :GoFiles<cr>
-  au FileType go vm <silent>'f :GoFreevars<cr>
-  au FileType go nm <silent>'i :GoInfo<cr>
-  au FileType go nm <silent>'r :GoRun<cr>
-  au FileType go nm <silent>'p :GoImplements<cr>
-  au FileType go vm <silent>'p :GoPeerChannels<cr>
-  au FileType go nm <silent>'s :GoSameIdsToggle<cr>
-  au FileType go nm <silent>'t :GoCallstack<cr>
-  " Also, :GoCallees and :GoCallers.
-aug END
-" }}}
-" }}}
+"   au FileType go nm <silent>'D :GoDeclsDir<cr>
+"   au FileType go nm <silent>'I :GoImports<cr>
+"   au FileType go nm <silent>'R :GoRename<cr>
+"   au FileType go nm <silent>'a :GoAlternate<cr>
+"   au FileType go nm <silent>'b :GoBuild<cr>
+"   au FileType go nm <silent>'c :GoCoverageToggle<cr>
+"   au FileType go nm <silent>'d :GoDecls<cr>
+"   au FileType go nm <silent>'e :GoDescribe<cr>
+"   au FileType go nm <silent>'E :GoWhicherrs<cr>
+"   au FileType go nm <silent>'f :GoFiles<cr>
+"   au FileType go vm <silent>'f :GoFreevars<cr>
+"   au FileType go nm <silent>'i :GoInfo<cr>
+"   au FileType go nm <silent>'r :GoRun<cr>
+"   au FileType go nm <silent>'p :GoImplements<cr>
+"   au FileType go vm <silent>'p :GoPeerChannels<cr>
+"   au FileType go nm <silent>'s :GoSameIdsToggle<cr>
+"   au FileType go nm <silent>'t :GoCallstack<cr>
+"   " Also, :GoCallees and :GoCallers.
+" aug END
+" " }}}
+" " }}}
 " vim-peekaboo {{{
 
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
 let g:peekaboo_compact=0
 " }}}
-" vim-signify {{{
-
-autocmd User SignifyHunk call s:show_current_hunk()
-
-function! s:show_current_hunk() abort
-  let h = sy#util#get_hunk_stats()
-  if !empty(h)
-    echo printf('[Hunk %d/%d]', h.current_hunk, h.total_hunks)
-  endif
-endfunction
-" }}}
-" Lua Configurations {{{
-" (breaks hl)
 " indent-blankline.nvim {{{
 
 lua <<EOF
 vim.opt.list = true
 vim.opt.listchars:append "space:⋅"
 vim.opt.listchars:append "eol:↴"
-
-require("indent_blankline").setup {
-  show_end_of_line = true,
-  space_char_blankline = " ",
-}
 EOF
 " }}}
 " }}}
-" }}}
-
