@@ -1,4 +1,5 @@
 " Maintainer: @rexagod
+" TODO: FZF /f but ignore /vendor.
 
 " Plugins {{{
 
@@ -15,6 +16,7 @@ Plug 'aymericbeaumet/vim-symlink'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-sleuth'
+Plug 'qpkorr/vim-bufkill'
 " }}}
 " Languages {{{
 
@@ -31,7 +33,7 @@ Plug 'tpope/vim-unimpaired'
 " }}}
 " Text Manipulations {{{
 
-Plug 'junegunn/vim-easy-align'
+" Plug 'junegunn/vim-easy-align'
 Plug 'kana/vim-textobj-user' | Plug 'coderifous/textobj-word-column.vim'
 Plug 'machakann/vim-swap'
 Plug 'tpope/vim-commentary'
@@ -41,27 +43,30 @@ Plug 'tpope/vim-surround'
 " }}}
 " Visuals {{{
 
-Plug 'challenger-deep-theme/vim'
+Plug 'f-person/auto-dark-mode.nvim'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'markonm/traces.vim'
+Plug 'bettervim/yugen.nvim'
 " }}}
 call plug#end()
 " }}}
 " Theme {{{
 
-syntax on
+color yugen
 filetype plugin indent on
-
-colorscheme challenger_deep
+highlight NormalFloat guibg=#663300 guifg=#FFDAB9 gui=Italic
+set background=dark
+set termguicolors
+syntax on
 " }}}
 " Options {{{
 
 set autowrite
 set showbreak=+++\ 
 set clipboard+=unnamedplus
-set colorcolumn=72,80,120
+" set colorcolumn=72,80,120
 set completeopt=menu,menuone,noselect
 set confirm
 set foldmethod=marker
@@ -123,6 +128,7 @@ vm  <M-f>    ¬
 nn <Tab>   :bnext<cr>
 nn <S-Tab> :bprev<cr>
 
+nn <silent>Qq   :BD<cr>
 nn <silent>QQ   :bd<cr>
 nn <silent><F2> :messages<cr>
 nn <silent><F4> :only<cr>
@@ -162,7 +168,7 @@ command! W w | e
 " }}}
 " Plugin Configurations {{{
 
-" standard plugins {{{
+" built-ins {{{
 
 packadd! cfilter
 packadd! matchit
@@ -225,14 +231,13 @@ augroup HOP
 augroup END
 
 nn <silent><Space>w :HopWord<cr>
-nn <silent><Space>ww :HopChar2<cr>
+nn <silent><Space>1 :HopChar1<cr>
+nn <silent><Space>2 :HopChar2<cr>
 " }}}
 " lightline.vim {{{
-" landscape
-" powerlineish
-" rosepine
+
 let g:lightline = {
-      \ 'colorscheme': 'powerlineish',
+      \ 'colorscheme': 'apprentice',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'readonly', 'filename', 'gitbranch', 'stats' ] ],
@@ -291,76 +296,64 @@ let g:fuzzy_stash_actions =
   \ 'ctrl-a': 'apply',
   \ }
 " }}}
-" " vim-go {{{
+" vim-go {{{
 
-" " Variables {{{
+" Variables {{{
 
-" let g:go_auto_sameids = 0
-" let g:go_auto_type_info = 0
-" let g:go_diagnostics_level = 2
-" let g:go_doc_keywordprg_enabled = 0
-" let g:go_doc_popup_window = 1
-" let g:go_fmt_command = "goimports"
-" let g:go_highlight_array_whitespace_error = 1
-" let g:go_highlight_build_constraints = 1
-" let g:go_highlight_chan_whitespace_error = 1
-" let g:go_highlight_extra_types = 1
-" let g:go_highlight_fields = 1
-" let g:go_highlight_function_calls = 1
-" let g:go_highlight_function_parameters = 1
-" let g:go_highlight_functions = 1
-" let g:go_highlight_generate_tags = 1
-" let g:go_highlight_operators = 1
-" let g:go_highlight_space_tab_error = 1
-" let g:go_highlight_trailing_whitespace_error = 1
-" let g:go_highlight_types = 1
-" let g:go_highlight_variable_assignments = 1
-" let g:go_highlight_variable_declarations = 1
-" let g:go_imports_autosave = 1
-" let g:go_info_mode = 'guru'
-" let g:go_list_type = 'quickfix'
-" let g:go_play_browser_command = "chromium"
-" let g:go_play_open_browser = 0
-" let g:go_statusline_duration = 1000
-" let g:go_test_show_name = 1
-" let g:go_test_timeout= '10s'
-" let g:go_updatetime = 0
-" let g:go_guru_scope = []
+let g:go_auto_sameids = 1
+let g:go_auto_type_info = 1
+let g:go_decls_mode = 'fzf'
+let g:go_diagnostics_level = 2
+let g:go_doc_balloon = 1
+let g:go_doc_popup_window = 1
+let g:go_highlight_array_whitespace_error = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_chan_whitespace_error = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_function_parameters = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_space_tab_error = 1
+let g:go_highlight_trailing_whitespace_error = 1
+let g:go_highlight_types = 1
+let g:go_highlight_variable_assignments = 1
+let g:go_highlight_variable_declarations = 1
+let g:go_list_type = 'quickfix'
+let g:go_statusline_duration = 5000
+let g:go_test_show_name = 1
+let g:go_test_timeout= '10s'
+let g:go_updatetime = 100
 
-" let $GINKGO_EDITOR_INTEGRATION = "true"
-" " }}}
-" " Mappings {{{
+" }}}
+" Mappings {{{
 
-" aug GO
-"   au!
-"   au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
+aug GO
+  au!
+  au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
 
-"   " gd - Goto definition.
-"   " C-t - Go back.
-"   " if, af - Function selectors.
-"   " [[, ]] - Move between functions.
+  " gd - Goto definition.
+  " C-t - Go back.
+  " if, af - Function selectors.
+  " [[, ]] - Move between functions.
 
-"   au FileType go nm <silent>'D :GoDeclsDir<cr>
-"   au FileType go nm <silent>'I :GoImports<cr>
-"   au FileType go nm <silent>'R :GoRename<cr>
-"   au FileType go nm <silent>'a :GoAlternate<cr>
-"   au FileType go nm <silent>'b :GoBuild<cr>
-"   au FileType go nm <silent>'c :GoCoverageToggle<cr>
-"   au FileType go nm <silent>'d :GoDecls<cr>
-"   au FileType go nm <silent>'e :GoDescribe<cr>
-"   au FileType go nm <silent>'E :GoWhicherrs<cr>
-"   au FileType go nm <silent>'f :GoFiles<cr>
-"   au FileType go vm <silent>'f :GoFreevars<cr>
-"   au FileType go nm <silent>'i :GoInfo<cr>
-"   au FileType go nm <silent>'r :GoRun<cr>
-"   au FileType go nm <silent>'p :GoImplements<cr>
-"   au FileType go vm <silent>'p :GoPeerChannels<cr>
-"   au FileType go nm <silent>'s :GoSameIdsToggle<cr>
-"   au FileType go nm <silent>'t :GoCallstack<cr>
-"   " Also, :GoCallees and :GoCallers.
-" aug END
-" " }}}
-" " }}}
+  au FileType go nm <silent>'C :GoCoverageToggle<cr>
+  au FileType go nm <silent>'D :GoDeclsDir<cr>
+  au FileType go nm <silent>'E :GoErrCheck<cr>
+  au FileType go nm <silent>'H :GoSameIdsToggle<cr>
+  au FileType go nm <silent>'R :GoRename<cr>
+  au FileType go nm <silent>'a :GoAlternate<cr>
+  au FileType go nm <silent>'b :GoBuild<cr>
+  au FileType go nm <silent>'c :GoCallers<cr>
+  au FileType go nm <silent>'d :GoDecls<cr>
+  au FileType go nm <silent>'e :GoDescribe<cr>
+  au FileType go nm <silent>'p :GoImplements<cr>
+  au FileType go nm <silent>'r :GoRun<cr>
+aug END
+" }}}
+" }}}
 " vim-peekaboo {{{
 
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"

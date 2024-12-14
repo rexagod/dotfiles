@@ -16,6 +16,7 @@
 	biff = bat -d
 	project-summary = !which onefetch && onefetch
 	checkout-to = !which checkout-to.sh && checkout-to.sh
+	mod-version = !which mod-version.sh && mod-version.sh
 [pull]
 	rebase = true
 [core]
@@ -48,7 +49,7 @@
 	navigate = true    # use n and N to move between diff sections
 	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
 	features = decorations
-	side-by-side = true
+	side-by-side = false
 [delta "interactive"]
 	keep-plus-minus-markers = false
 [delta "decorations"]

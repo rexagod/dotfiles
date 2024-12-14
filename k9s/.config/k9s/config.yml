@@ -20,7 +20,7 @@ k9s:
   currentContext: kind-kind
   currentCluster: kind-kind
   clusters:
-    a12d051ffb1054aa098d4bcc92c4bbe6-a367889415b58d69-elb-us-east-1-amazonaws-com:6443:
+    a1c086db8a0e442cab2cc90423908ff2-6a9ef04c99a6b72f-elb-us-east-1-amazonaws-com:6443:
       namespace:
         active: all
         lockFavorites: false
@@ -42,7 +42,7 @@ k9s:
           memory: 100Mi
         labels: {}
       portForwardAddress: localhost
-    a1d49504d4d7e4a92acf602b4da75792-07e3cf6bec419fc0-elb-us-east-1-amazonaws-com:6443:
+    a4a5f18084e5948b99be4b912dd1eb20-623e7febe5fde90f-elb-us-east-1-amazonaws-com:6443:
       namespace:
         active: all
         lockFavorites: false
@@ -64,16 +64,16 @@ k9s:
           memory: 100Mi
         labels: {}
       portForwardAddress: localhost
-    a2da01648ce2946c4829d3c3ac1fd8ef-61473f187f4d50d4-elb-us-east-1-amazonaws-com:6443:
+    api-ci-ln-2mw7m7t-76ef8-origin-ci-int-aws-dev-rhcloud-com:6443:
       namespace:
-        active: default
+        active: openshift-monitoring
         lockFavorites: false
         favorites:
         - openshift-monitoring
         - all
         - default
       view:
-        active: proxies
+        active: service
       featureGates:
         nodeShell: false
       shellPod:
@@ -86,60 +86,15 @@ k9s:
           memory: 100Mi
         labels: {}
       portForwardAddress: localhost
-    a9b0865b911d04215b8cc3ab381d3529-31f37a10ce66da84-elb-us-east-1-amazonaws-com:6443:
-      namespace:
-        active: default
-        lockFavorites: false
-        favorites:
-        - openshift-monitoring
-        - all
-        - default
-      view:
-        active: context
-      featureGates:
-        nodeShell: false
-      shellPod:
-        image: busybox:1.35.0
-        command: []
-        args: []
-        namespace: default
-        limits:
-          cpu: 100m
-          memory: 100Mi
-        labels: {}
-      portForwardAddress: localhost
-    ab1b50c86988a49ab9e4f0d376cebebe-93b0443340231c0c-elb-us-east-1-amazonaws-com:6443:
-      namespace:
-        active: default
-        lockFavorites: false
-        favorites:
-        - all
-        - default
-      view:
-        active: crd
-      featureGates:
-        nodeShell: false
-      shellPod:
-        image: busybox:1.35.0
-        command: []
-        args: []
-        namespace: default
-        limits:
-          cpu: 100m
-          memory: 100Mi
-        labels: {}
-      portForwardAddress: localhost
-    ac3d682ba5c344e82aa2d9f1fc1b6e0b-aed660718901be22-elb-us-east-1-amazonaws-com:6443:
+    api-ci-ln-k4129l2-76ef8-origin-ci-int-aws-dev-rhcloud-com:6443:
       namespace:
         active: all
         lockFavorites: false
         favorites:
-        - openshift-monitoring
-        - openshift-cluster-samples-operator
         - all
         - default
       view:
-        active: deploy
+        active: servicemonitor
       featureGates:
         nodeShell: false
       shellPod:
@@ -152,12 +107,53 @@ k9s:
           memory: 100Mi
         labels: {}
       portForwardAddress: localhost
-    api-tpxmu-gvo3d-ug9-1np1-p3-openshiftapps-com:443:
+    api-ci-ln-kgxipbb-76ef8-aws-2-ci-openshift-org:6443:
       namespace:
         active: all
         lockFavorites: false
         favorites:
-        - openshift-route-monitor-operator
+        - all
+        - default
+      view:
+        active: po
+      featureGates:
+        nodeShell: false
+      shellPod:
+        image: busybox:1.35.0
+        command: []
+        args: []
+        namespace: default
+        limits:
+          cpu: 100m
+          memory: 100Mi
+        labels: {}
+      portForwardAddress: localhost
+    api-ci-ln-y6kfc2b-76ef8-origin-ci-int-aws-dev-rhcloud-com:6443:
+      namespace:
+        active: all
+        lockFavorites: false
+        favorites:
+        - all
+        - default
+      view:
+        active: prometheus
+      featureGates:
+        nodeShell: false
+      shellPod:
+        image: busybox:1.35.0
+        command: []
+        args: []
+        namespace: default
+        limits:
+          cpu: 100m
+          memory: 100Mi
+        labels: {}
+      portForwardAddress: localhost
+    api-rhamilto-devcluster-openshift-com:6443:
+      namespace:
+        active: all
+        lockFavorites: false
+        favorites:
         - openshift-monitoring
         - all
         - default
@@ -181,10 +177,9 @@ k9s:
         lockFavorites: false
         favorites:
         - all
-        - kube-system
         - default
       view:
-        active: pod
+        active: statefulset
       featureGates:
         nodeShell: false
       shellPod:
