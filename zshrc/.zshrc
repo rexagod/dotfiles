@@ -29,8 +29,8 @@ export FZF_ALT_C_COMMAND="fd -t d . $HOME"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git/*' --color auto"
 export FZF_DEFAULT_OPTS="--bind shift-up:preview-up,shift-down:preview-down,ctrl-u:preview-page-up,ctrl-d:preview-page-down"
-export GOBIN="$HOME/go/bin"
-# export GOPATH="$HOME/.g/go"
+export GOBIN= #"$HOME/go/bin"
+export GOPATH= #"$HOME/.g/go"
 export KUBECONFIG="$HOME/.openshift-cluster/auth/kubeconfig"
 export LANG=en_US.UTF-8
 export MANPAGER="$EDITOR +Man!"
@@ -76,6 +76,7 @@ source $ZSH/oh-my-zsh.sh
 # }}}
 # Aliases{{{
 
+alias top="glances"
 alias c="clear"
 alias gS="git stash"
 alias gSa="git stash apply"
@@ -99,7 +100,7 @@ alias zr="$EDITOR $ZSHRC"
 
 # walk {{{
 function lk {
-  cd "$(walk "$@")"
+  cd "$(walk --fuzzy --preview "$@")"
 }
 # }}}
 # }}}
@@ -339,5 +340,13 @@ _dlv()
 if [ "$funcstack[1]" = "_dlv" ]; then
     _dlv
 fi
+# }}}
+# {{{ direnv
+
+eval "$(direnv hook zsh)"
+# }}}
+# {{{ tkn
+
+eval "$(tkn completion zsh)"
 # }}}
 # }}}

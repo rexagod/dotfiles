@@ -33,7 +33,7 @@ Plug 'tpope/vim-unimpaired'
 " }}}
 " Text Manipulations {{{
 
-" Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-easy-align'
 Plug 'kana/vim-textobj-user' | Plug 'coderifous/textobj-word-column.vim'
 Plug 'machakann/vim-swap'
 Plug 'tpope/vim-commentary'
@@ -46,35 +46,41 @@ Plug 'tpope/vim-surround'
 Plug 'f-person/auto-dark-mode.nvim'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/vim-peekaboo'
-Plug 'lukas-reineke/indent-blankline.nvim'
+" Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'markonm/traces.vim'
 Plug 'bettervim/yugen.nvim'
+Plug 'jonathanfilip/vim-lucius'
+Plug 'folke/zen-mode.nvim'
 " }}}
 call plug#end()
 " }}}
 " Theme {{{
 
-color yugen
 filetype plugin indent on
-highlight NormalFloat guibg=#663300 guifg=#FFDAB9 gui=Italic
 set background=dark
 set termguicolors
 syntax on
+
+color default "yugen
+highlight NormalFloat guibg=#663300 guifg=#FFDAB9 gui=Italic
+highlight ColorColumn guibg=#333333
+:highlight Comment guifg=#FFDA89
+highlight Operator guifg=#E8AF7D
 " }}}
 " Options {{{
 
 set autowrite
-set showbreak=+++\ 
 set clipboard+=unnamedplus
-" set colorcolumn=72,80,120
+set colorcolumn=72,80,120
 set completeopt=menu,menuone,noselect
 set confirm
+set expandtab
 set foldmethod=marker
 set foldopen=
 set is hls
 set linebreak
 set mouse+=a
-set noexpandtab
+set nohidden
 set noshowmode
 set noswapfile
 set nowritebackup
@@ -83,10 +89,14 @@ set pumheight=5
 set relativenumber
 set rtp+=/home/linuxbrew/.linuxbrew/opt/fzf
 set scrolloff=1
+set shiftwidth=2
 set shortmess+=c
+set showbreak=+++\ 
 set showmatch
 set sidescrolloff=10
 set smartindent
+set softtabstop=2
+set tabstop=2
 set tags=
 set textwidth=80
 set undodir=~/.vim-undo-dir
@@ -99,49 +109,44 @@ set wrapmargin=80
 
 " Insert Mode Mappings {{{
 
-imap ¬ <esc>5<Right>i
-imap ˙ <esc>5<Left>i
-imap ˚ <esc>5<Up>i
-imap ∆ <esc>5<Down>i
-
-imap <M-Down> ∆
-imap <M-Up>   ˚
-imap <M-b>    ˙
-imap <M-f>    ¬
+imap <End>      <esc>5<Right>i
+imap <Home>     <esc>5<Left>i
+imap <PageUp>   <esc>5<Up>i
+imap <PageDown> <esc>5<Down>i
 " }}}
 " Visual Mode Mappings {{{
 
-vn ß :sort<cr> " implicitly inserts the visual marker range
+vn  :sort<cr> " implicitly inserts the visual marker range
 
-vm ˙     5h
-vm ∆     5j
-vm ˚     5k
-vm ¬     5l
-
-vm  <M-Down> ∆
-vm  <M-Up>   ˚
-vm  <M-b>    ˙
-vm  <M-f>    ¬
+vm <Home>     5h
+vm <PageDown> 5j
+vm <PageUp>   5k
+vm <End>      5l
 " }}}
 " Normal Mode Mappings {{{
 
 nn <Tab>   :bnext<cr>
 nn <S-Tab> :bprev<cr>
 
+" Don't close the window if no buffers left.
 nn <silent>Qq   :BD<cr>
 nn <silent>QQ   :bd<cr>
 nn <silent><F2> :messages<cr>
 nn <silent><F4> :only<cr>
 
-nm j gj
-nm k gk
+nm j          gj
+nm k          gk
+nm <Home>     5h
+nm <PageDown> 5j
+nm <PageUp>   5k
+nm <End>      5l
 " }}}
 " Leader Mappings {{{
 
-let mapleader="\<Space>"
+let                                            mapleader="\<Space>"
 
-nn <silent><leader>vr        :vsp $VIMRC<cr>
-nn <silent><leader>zr        :vsp $ZSHRC<cr>
+nn <silent><leader>vr        :vsp              $VIMRC<cr>
+nn <silent><leader>zr        :vsp              $ZSHRC<cr>
 nn <silent><nowait><leader>h :set hls!<bar>set is!<cr>
 " }}}
 " }}}
@@ -157,6 +162,7 @@ aug END
 " }}}
 " Commands {{{
 
+command! GoRunZ w | belowright 25split | term bash -c "go run ."
 command! CM delm!
 command! MC mapclear | mapclear <buffer> | mapclear! | mapclear! <buffer>
 command! QQ qall
@@ -237,7 +243,7 @@ nn <silent><Space>2 :HopChar2<cr>
 " lightline.vim {{{
 
 let g:lightline = {
-      \ 'colorscheme': 'apprentice',
+      \ 'colorscheme': 'simpleblack',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'readonly', 'filename', 'gitbranch', 'stats' ] ],
@@ -300,21 +306,21 @@ let g:fuzzy_stash_actions =
 
 " Variables {{{
 
-let g:go_auto_sameids = 1
+let g:go_auto_sameids = 0
 let g:go_auto_type_info = 1
 let g:go_decls_mode = 'fzf'
 let g:go_diagnostics_level = 2
 let g:go_doc_balloon = 1
 let g:go_doc_popup_window = 1
 let g:go_highlight_array_whitespace_error = 1
-let g:go_highlight_build_constraints = 1
+let g:go_highlight_build_constraints = 0
 let g:go_highlight_chan_whitespace_error = 1
 let g:go_highlight_extra_types = 1
-let g:go_highlight_fields = 1
+let g:go_highlight_fields = 0
 let g:go_highlight_function_calls = 1
 let g:go_highlight_function_parameters = 1
 let g:go_highlight_functions = 1
-let g:go_highlight_generate_tags = 1
+let g:go_highlight_generate_tags = 0
 let g:go_highlight_operators = 1
 let g:go_highlight_space_tab_error = 1
 let g:go_highlight_trailing_whitespace_error = 1
@@ -326,14 +332,10 @@ let g:go_statusline_duration = 5000
 let g:go_test_show_name = 1
 let g:go_test_timeout= '10s'
 let g:go_updatetime = 100
-
 " }}}
 " Mappings {{{
 
 aug GO
-  au!
-  au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
-
   " gd - Goto definition.
   " C-t - Go back.
   " if, af - Function selectors.
@@ -341,16 +343,18 @@ aug GO
 
   au FileType go nm <silent>'C :GoCoverageToggle<cr>
   au FileType go nm <silent>'D :GoDeclsDir<cr>
-  au FileType go nm <silent>'E :GoErrCheck<cr>
-  au FileType go nm <silent>'H :GoSameIdsToggle<cr>
   au FileType go nm <silent>'R :GoRename<cr>
   au FileType go nm <silent>'a :GoAlternate<cr>
   au FileType go nm <silent>'b :GoBuild<cr>
   au FileType go nm <silent>'c :GoCallers<cr>
   au FileType go nm <silent>'d :GoDecls<cr>
-  au FileType go nm <silent>'e :GoDescribe<cr>
+  au FileType go nm <silent>'e :GoErrCheck<cr>
+  au FileType go nm <silent>'h :GoSameIdsToggle<cr>
   au FileType go nm <silent>'p :GoImplements<cr>
-  au FileType go nm <silent>'r :GoRun<cr>
+  au FileType go nm <silent>'r :GoReferrers<cr>
+  au FileType go nm <silent>'z :GoRunZ<cr>
+
+
 aug END
 " }}}
 " }}}
@@ -359,12 +363,19 @@ aug END
 let g:peekaboo_window="vert bo ". winwidth(0)/2 . "new"
 let g:peekaboo_compact=0
 " }}}
-" indent-blankline.nvim {{{
+" " indent-blankline.nvim {{{
 
-lua <<EOF
-vim.opt.list = true
-vim.opt.listchars:append "space:⋅"
-vim.opt.listchars:append "eol:↴"
-EOF
+" lua <<EOF
+" vim.opt.list = true
+" vim.opt.listchars:append "space:⋅"
+" vim.opt.listchars:append "eol:↴"
+" EOF
+" " }}}
 " }}}
+" Internals {{{
+
+" GoRun compatibility
+let g:go_term_enabled = 1
+let g:go_term_close_on_exit = 1
+let g:go_term_mode = "split"
 " }}}
